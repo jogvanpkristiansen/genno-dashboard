@@ -252,8 +252,8 @@
 // ─── DATA ────────────────────────────────────────────────────────────────────
 const CFG = {
   calendar: [
-    { day:'Man', date:18, event:'' },
-    { day:'Tir', date:19, event:'Erik Gulyas\nKøkken/bad' },
+    { day:'Man', date:18, event:'Planlæg\ntilbud' },
+    { day:'Tir', date:19, event:'Erik Gulyas\n+ 6 tilbud' },
     { day:'Ons', date:20, event:'' },
     { day:'Tor', date:21, event:'' },
     { day:'Fre', date:22, event:'' },
@@ -263,8 +263,11 @@ const CFG = {
   contacts: [
     { init:'JK', name:'Jógvan Kristiansen', role:'Indehaver (80%)', phone:'+45 29 90 67 66' },
     { init:'EG', name:'Erik Gulyas', role:'Kunde · Køkken/bad', phone:'' },
+    { init:'KH', name:'Kata Horvath-Sarlos', role:'Lead · Højseng/hems · Valby', phone:'' },
+    { init:'SM', name:'Steen Marty Johansen', role:'Lead · Bryggers+værelse · Rødovre', phone:'' },
+    { init:'OH', name:'Oliver Heldmann', role:'Lead · Vægflytning · Østerbro', phone:'61604911' },
+    { init:'??', name:'Unavngiven kunde', role:'Lead · Indendørs væg · Kbh S', phone:'31391594' },
     { init:'OO', name:'Orri Olason', role:'Kunde · Sandkasse', phone:'' },
-    { init:'GN', name:'Genno Team', role:'Arbejdsmail', phone:'genno@genno.dk' },
   ],
 
   links: [
@@ -289,7 +292,7 @@ const CFG = {
 
   todos: [
     { text:'Mogens: Skitse + færdigt tilbud · skillevæg', done:false, tag:'soon' },
-    { text:'Revisor: Send CSV-fil + alle lønsedler fra 2024', done:false, tag:'soon' },
+    { text:'Revisor: Send CSV-fil + alle lønsedler fra 2024', done:true, tag:'done' },
     { text:'Tilbud til Erik Gulyas · Bille Brahes Vej 11A', done:false, tag:'soon' },
     { text:'e-conomic aktiv → opret Kata Horvath-Sarlos (højseng/hems)', done:false, tag:'wait' },
     { text:'e-conomic aktiv → opret Steen Marty Johansen (bryggers+værelse)', done:false, tag:'wait' },
