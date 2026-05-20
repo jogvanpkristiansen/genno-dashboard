@@ -252,13 +252,13 @@
 // ─── DATA ────────────────────────────────────────────────────────────────────
 const CFG = {
   calendar: [
-    { day:'Man', date:18, event:'Planlæg\ntilbud' },
-    { day:'Tir', date:19, event:'Erik Gulyas\n+ 6 tilbud' },
-    { day:'Ons', date:20, event:'' },
-    { day:'Tor', date:21, event:'' },
+    { day:'Man', date:18, event:'Erik Gulyas\ntilbud' },
+    { day:'Tir', date:19, event:'Oliver Heldmann\nkl. 16:00' },
+    { day:'Ons', date:20, event:'6 tilbud\nfærdiggøres' },
+    { day:'Tor', date:21, event:'e-conomic\nAPI tjek' },
     { day:'Fre', date:22, event:'' },
   ],
-  todayIndex: 0,
+  todayIndex: 2,
 
   contacts: [
     { init:'JK', name:'Jógvan Kristiansen', role:'Indehaver (80%)', phone:'+45 29 90 67 66' },
@@ -295,17 +295,18 @@ const CFG = {
     { text:'Moms august: Sæt ~60.000 kr til side inden 1. aug', done:false, tag:'soon' },
     { text:'Stark: Opbyg kredit til 40.000 kr', done:false, tag:'wait' },
     { text:'Malik: Løn 12.000 kr kører automatisk via Dataløn (ultimo maj)', done:false, tag:'wait' },
-    { text:'Mogens: Skitse + færdigt tilbud · skillevæg', done:false, tag:'soon' },
-    { text:'Revisor: Send CSV-fil + alle lønsedler fra 2024', done:true, tag:'done' },
+    { text:'Mogens: Skitse + færdigt tilbud · skillevæg 160×240 cm', done:false, tag:'soon' },
     { text:'Tilbud til Erik Gulyas · Bille Brahes Vej 11A', done:false, tag:'soon' },
-    { text:'e-conomic aktiv → opret Kata Horvath-Sarlos (højseng/hems)', done:false, tag:'wait' },
-    { text:'e-conomic aktiv → opret Steen Marty Johansen (bryggers+værelse)', done:false, tag:'wait' },
-    { text:'e-conomic aktiv → opret Oliver Heldmann (vægflytning + gulve)', done:false, tag:'wait' },
-    { text:'e-conomic aktiv → opret 31391594 (indendørs væg 4×2,5m + dør + glas)', done:false, tag:'wait' },
-    { text:'Opret Erik Gulyas i Ordrestyring (e-conomic)', done:false, tag:'wait' },
-    { text:'Sæt e-conomic faktura op for april', done:false, tag:'wait' },
-    { text:'Sandkasse tilbud sendt · Orri Olason', done:true, tag:'done' },
+    { text:'Tilbud til Kata Horvath-Sarlos · højseng/hems · Valby', done:false, tag:'soon' },
+    { text:'Tilbud til Steen Marty Johansen · bryggers+værelse · Rødovre', done:false, tag:'soon' },
+    { text:'Tilbud til Oliver Heldmann · vægflytning · Kbh Ø', done:false, tag:'soon' },
+    { text:'Tilbud 793025 · indendørs væg · Edvard Thomsens Vej, Kbh S', done:false, tag:'soon' },
+    { text:'Ring: Gustav 786891 · garderobeskab + køkkenø · Kbh K', done:false, tag:'soon' },
+    { text:'Ring: Mikkel Lyhne Jensen 778131 · vindfang · Brønshøj', done:false, tag:'soon' },
+    { text:'e-conomic API godkendelse afventer (tjek tors 21. maj)', done:false, tag:'wait' },
+    { text:'Revisor: Send CSV-fil + alle lønsedler fra 2024', done:true, tag:'done' },
     { text:'Email signatur oprettet · genno@genno.dk', done:true, tag:'done' },
+    { text:'Sandkasse tilbud sendt · Orri Olason', done:true, tag:'done' },
   ],
 
   metrics: [
@@ -316,6 +317,7 @@ const CFG = {
     { label:'Stark kredit (mål)', val:'40.000 kr', color:'#d4a72c' },
     { label:'Google rating', val:'5.0 ⭐', color:'#c8a96e' },
     { label:'Aktive projekter', val:'7', color:'#4caf6e' },
+    { label:'3bt leads (ubesvaret)', val:'12 🔔', color:'#e05252' },
   ],
 
   company: [
