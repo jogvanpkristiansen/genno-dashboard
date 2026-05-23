@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="30">
+<meta http-equiv="refresh" content="15">
 <title>Genno ApS — Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -122,9 +122,10 @@
   .tag-done { background: #1a2e1e; color: var(--green); }
 
   /* CHART */
-  .chart-row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; height: 180px; flex-shrink: 0; }
-  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; display: flex; flex-direction: column; overflow: hidden; }
-  .chart-wrap { flex: 1; position: relative; overflow: hidden; }
+  .chart-row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; height: 180px !important; max-height: 180px !important; flex-shrink: 0; overflow: hidden; }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; display: flex; flex-direction: column; overflow: hidden; height: 180px !important; max-height: 180px !important; }
+  .chart-wrap { position: relative; overflow: hidden; height: 140px !important; max-height: 140px !important; }
+  .chart-wrap canvas { max-height: 140px !important; }
 
   /* METRICS */
   .metric { padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
