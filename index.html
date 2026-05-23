@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="30">
 <title>Genno ApS — Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -84,8 +85,16 @@
 
   /* QUICK LINKS */
   .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-  .qlink { display: block; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 7px 8px; font-size: 11px; color: var(--text); text-decoration: none; text-align: center; transition: border-color 0.15s; }
+  .qlink { display: block; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 7px 8px; font-size: 11px; color: var(--text); text-decoration: none; text-align: center; transition: border-color 0.15s, color 0.15s; cursor: pointer; }
   .qlink:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ONLINE PRESENCE */
+  .online-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: opacity 0.15s; }
+  .online-item:last-child { border-bottom: none; }
+  .online-item:hover { opacity: 0.75; }
+  .online-icon { font-size: 14px; width: 20px; text-align: center; flex-shrink: 0; }
+  .online-name { font-size: 11px; font-weight: 600; flex: 1; }
+  .online-status { font-size: 9px; color: var(--muted); margin-right: 4px; }
 
   /* STATUS GRID */
   .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
@@ -190,7 +199,11 @@
       </div>
       <div class="card">
         <div class="card-title">Nøglepersoner</div>
-        <div id="contacts"></div>
+        <div id="people"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Online tilstedeværelse</div>
+        <div id="online-presence"></div>
       </div>
       <div class="card">
         <div class="card-title">Genveje</div>
@@ -260,14 +273,15 @@ const CFG = {
   ],
   todayIndex: 2,
 
-  contacts: [
-    { init:'JK', name:'Jógvan Kristiansen', role:'Indehaver (80%)', phone:'+45 29 90 67 66' },
-    { init:'EG', name:'Erik Gulyas', role:'Kunde · Køkken/bad', phone:'' },
-    { init:'KH', name:'Kata Horvath-Sarlos', role:'Lead · Højseng/hems · Valby', phone:'' },
-    { init:'SM', name:'Steen Marty Johansen', role:'Lead · Bryggers+værelse · Rødovre', phone:'' },
-    { init:'OH', name:'Oliver Heldmann', role:'Lead · Vægflytning · Østerbro', phone:'61604911' },
-    { init:'??', name:'Unavngiven kunde', role:'Lead · Indendørs væg · Kbh S', phone:'31391594' },
-    { init:'OO', name:'Orri Olason', role:'Kunde · Sandkasse', phone:'' },
+  online: [
+    { icon:'🌐', name:'gennorenovering.dk',      url:'https://gennorenovering.dk',                                    status:'Live',           dot:'green'  },
+    { icon:'⭐', name:'Anmeld Håndværker',        url:'https://www.anmeld-haandvaerker.dk/tomrer/genno-aps',           status:'5.0 · 27 anm.',  dot:'green'  },
+    { icon:'📍', name:'Google Erhverv',            url:'https://business.google.com',                                   status:'Aktiv',          dot:'green'  },
+    { icon:'📊', name:'Generaxion',               url:'https://generaxion.com',                                         status:'Aktiv',          dot:'green'  },
+    { icon:'💡', name:'Adwise',                   url:'https://adwise.dk',                                              status:'Aktiv',          dot:'green'  },
+    { icon:'🃏', name:'Carrd',                    url:'https://carrd.co',                                               status:'Aktiv',          dot:'green'  },
+    { icon:'📘', name:'Facebook Erhverv',          url:'https://www.facebook.com/business',                              status:'Aktiv',          dot:'green'  },
+    { icon:'📸', name:'Instagram · @gennoDK',      url:'https://www.instagram.com/gennodk',                               status:'Aktiv',          dot:'green'  },
   ],
 
   links: [
@@ -284,17 +298,28 @@ const CFG = {
     { name:'Claude AI', label:'Aktiv', dot:'green' },
     { name:'ImprovMX', label:'Aktiv', dot:'green' },
     { name:'Kalender', label:'Aktiv', dot:'green' },
-    { name:'gennorenovering.dk', label:'Optimeres', dot:'yellow' },
-    { name:'Ordrestyring', label:'Arbejdes på', dot:'blue' },
-    { name:'e-conomic', label:'Genaktiveres', dot:'yellow' },
-    { name:'Generaxion', label:'Evalueres', dot:'yellow' },
+    { name:'gennorenovering.dk', label:'Optimeret', dot:'green' },
+    { name:'Ordrestyring', label:'Aktiv', dot:'green' },
+    { name:'e-conomic', label:'Betalt & Aktiv', dot:'green' },
+    { name:'Generaxion', label:'Aktiv', dot:'green' },
   ],
 
   todos: [
+    // ── IGANGVÆRENDE PROJEKTER ──
+    { text:'META ADS: Publicer "Genno Marketing" app (Live mode) → nyt token → kør kampagne', done:false, tag:'soon' },
+    { text:'INSTAGRAM: Link @gennoDK til Genno Facebook-side · Page Settings → Instagram → Connect', done:false, tag:'soon' },
+    { text:'ADWISE: Send scope-change brev til niv@adwise.dk (Google Ads → SEO = kontraktbrud)', done:false, tag:'soon' },
+    { text:'ADWISE: Formel opsigelse til bogholderi@adwise.dk inden 1. okt 2027', done:false, tag:'wait' },
+    { text:'GENERAXION: Tilføj åbningstider + alt-tekster på gennorenovering.dk (kræver adgang)', done:false, tag:'wait' },
+    { text:'genno.dk: Opsæt URL-forward → gennorenovering.dk via Punktum.dk', done:false, tag:'soon' },
+    { text:'JÓHANNES: Bekræft at genno@genno.dk forward til Gmail virker korrekt', done:false, tag:'wait' },
+    // ── ØKONOMI ──
     { text:'Gældstyrelsen: Betal 33.000 kr ASAP', done:false, tag:'soon' },
     { text:'Moms august: Sæt ~60.000 kr til side inden 1. aug', done:false, tag:'soon' },
     { text:'Stark: Opbyg kredit til 40.000 kr', done:false, tag:'wait' },
     { text:'Malik: Løn 12.000 kr kører automatisk via Dataløn (ultimo maj)', done:false, tag:'wait' },
+    { text:'e-conomic API godkendelse · tjek status', done:false, tag:'wait' },
+    // ── TILBUD ──
     { text:'Mogens: Skitse + færdigt tilbud · skillevæg 160×240 cm', done:false, tag:'soon' },
     { text:'Tilbud til Erik Gulyas · Bille Brahes Vej 11A', done:false, tag:'soon' },
     { text:'Tilbud til Kata Horvath-Sarlos · højseng/hems · Valby', done:false, tag:'soon' },
@@ -303,9 +328,12 @@ const CFG = {
     { text:'Tilbud 793025 · indendørs væg · Edvard Thomsens Vej, Kbh S', done:false, tag:'soon' },
     { text:'Ring: Gustav 786891 · garderobeskab + køkkenø · Kbh K', done:false, tag:'soon' },
     { text:'Ring: Mikkel Lyhne Jensen 778131 · vindfang · Brønshøj', done:false, tag:'soon' },
-    { text:'e-conomic API godkendelse afventer (tjek tors 21. maj)', done:false, tag:'wait' },
+    // ── FÆRDIGE ──
     { text:'Revisor: Send CSV-fil + alle lønsedler fra 2024', done:true, tag:'done' },
     { text:'Email signatur oprettet · genno@genno.dk', done:true, tag:'done' },
+    { text:'Email forward: genno@genno.dk → Gmail opsat', done:true, tag:'done' },
+    { text:'Gmail label "Genno" + filter oprettet', done:true, tag:'done' },
+    { text:'Lead-formular oprettet i Meta · "Genno - Gratis tilbud"', done:true, tag:'done' },
     { text:'Sandkasse tilbud sendt · Orri Olason', done:true, tag:'done' },
   ],
 
@@ -351,6 +379,15 @@ const CFG = {
     colors:['#4caf6e','#e05252','#c8a96e'],
   },
 
+  people: [
+    { initials:'JK', name:'Jógvan Kristiansen', role:'Indehaver · 80%',    phone:'+45 29 90 67 66' },
+    { initials:'JÓ', name:'Jóhannes',           role:'IT-manager · 20%',   phone:'+45 71 74 57 64' },
+    { initials:'MA', name:'Malik',               role:'Lærling',            phone:'+45 20 85 04 03' },
+    { initials:'R1', name:'Revisor1',             role:'Revisor · Østerbro', phone:'+45 25 94 39 55' },
+    { initials:'SE', name:'Sebastian',           role:'Stark · Materialer', phone:'+45 28 10 13 83' },
+    { initials:'GU', name:'Gustav',              role:'Stark · Materialer', phone:'+45 26 47 89 53' },
+  ],
+
   bottomDots:[
     {color:'#4caf6e',tip:'Online'},
     {color:'#4caf6e',tip:'Gmail'},
@@ -376,19 +413,38 @@ CFG.calendar.forEach((d, i) => {
   );
 });
 
-// Contacts
-CFG.contacts.forEach(c => {
+// Helper: open URL in browser (Wallpaper Engine + fallback)
+function openUrl(url) {
+  if (window.wallpaperOpenUrl) { window.wallpaperOpenUrl(url); }
+  else { window.open(url, '_blank'); }
+}
+
+// People
+CFG.people.forEach(p => {
   const div = mk('div','contact',
-    `<div class="contact-avatar">${c.init}</div>
-     <div><div class="contact-name">${c.name}</div><div class="contact-role">${c.role}</div></div>
-     ${c.phone?`<div class="contact-phone">${c.phone}</div>`:''}`);
-  document.getElementById('contacts').appendChild(div);
+    `<div class="contact-avatar">${p.initials}</div>
+     <div><div class="contact-name">${p.name}</div><div class="contact-role">${p.role}</div></div>
+     <div class="contact-phone">${p.phone}</div>`);
+  div.addEventListener('click', () => { window.location.href='tel:'+p.phone.replace(/\s/g,''); });
+  document.getElementById('people').appendChild(div);
+});
+
+// Online presence
+CFG.online.forEach(o => {
+  const div = mk('div','online-item',
+    `<div class="online-icon">${o.icon}</div>
+     <div class="online-name">${o.name}</div>
+     <span class="online-status">${o.status}</span>
+     <div class="status-dot ${o.dot}"></div>`);
+  div.addEventListener('click', () => openUrl(o.url));
+  document.getElementById('online-presence').appendChild(div);
 });
 
 // Quick links
 CFG.links.forEach(l => {
-  const a = mk('a','qlink'); a.href=l.url; a.target='_blank'; a.textContent=l.label;
-  document.getElementById('quick-links').appendChild(a);
+  const div = mk('div','qlink'); div.textContent=l.label;
+  div.addEventListener('click', () => openUrl(l.url));
+  document.getElementById('quick-links').appendChild(div);
 });
 
 // Statuses
@@ -512,6 +568,9 @@ async function fetchWeather() {
   } catch(e) { document.getElementById('w-desc').textContent='Vejr utilgængeligt'; }
 }
 fetchWeather(); setInterval(fetchWeather, 5*60*1000);
+
+// Auto-reload every 30 seconds so Wallpaper Engine picks up changes automatically
+setTimeout(() => location.reload(), 30000);
 </script>
 </body>
 </html>
