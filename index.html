@@ -122,9 +122,9 @@
   .tag-done { background: #1a2e1e; color: var(--green); }
 
   /* CHART */
-  .chart-row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; flex: 1; min-height: 0; }
-  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; display: flex; flex-direction: column; min-height: 0; }
-  .chart-wrap { flex: 1; position: relative; min-height: 0; }
+  .chart-row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; height: 180px; flex-shrink: 0; }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; display: flex; flex-direction: column; overflow: hidden; }
+  .chart-wrap { flex: 1; position: relative; overflow: hidden; }
 
   /* METRICS */
   .metric { padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
