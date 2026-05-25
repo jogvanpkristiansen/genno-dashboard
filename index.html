@@ -3,560 +3,480 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="15">
-<title>Genno ApS — Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<title>Genno — Overblik</title>
 <style>
-  :root {
-    --bg: #111110;
-    --card: #1a1a18;
-    --border: #2a2a28;
-    --text: #e8e6e0;
-    --muted: #888882;
-    --accent: #c8a96e;
-    --green: #4caf6e;
-    --red: #e05252;
-    --yellow: #d4a72c;
-    --blue: #5a9fd4;
-    --radius: 10px;
-    --font: 'Segoe UI', system-ui, sans-serif;
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0d1119;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #e2e8f0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--font); }
 
-  /* LAYOUT */
-  #app { display: grid; grid-template-rows: 56px 1fr 36px; height: 100vh; padding: 10px; gap: 8px; }
-  #topbar { display: flex; align-items: center; justify-content: space-between; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 0 18px; }
-  #main { display: grid; grid-template-columns: 270px 1fr 270px; gap: 8px; min-height: 0; }
-  #bottombar { display: flex; align-items: center; justify-content: space-between; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 0 18px; font-size: 11px; color: var(--muted); }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 24px;
+    background: #131824;
+    border-bottom: 1px solid #1a2235;
+    height: 52px;
+    flex-shrink: 0;
+  }
+  header .logo { font-size: 16px; font-weight: 800; letter-spacing: 1.5px; color: #93c5fd; }
+  header .date { font-size: 11px; color: #3d4f68; }
 
-  /* COLUMNS */
-  .col { display: flex; flex-direction: column; gap: 8px; min-height: 0; overflow: hidden; }
-  .col-mid { overflow: hidden; }
+  /* Main layout */
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
 
-  /* CARDS */
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; flex-shrink: 0; }
-  .card-title { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  /* Mind-map */
+  #map {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+  }
+  svg#lines {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-  /* TOPBAR */
-  .top-brand h1 { font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; }
-  .top-brand span { font-size: 11px; color: var(--muted); }
-  .top-stats { display: flex; gap: 20px; align-items: center; }
-  .top-stat { text-align: center; }
-  .top-stat .val { font-size: 15px; font-weight: 700; }
-  .top-stat .lbl { font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
-  .top-kpi { display: flex; gap: 20px; }
-  .kpi-item { text-align: right; }
-  .kpi-item .k-val { font-size: 14px; font-weight: 700; }
-  .kpi-item .k-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
-  .kpi-rev { color: var(--green); }
-  .kpi-exp { color: var(--red); }
-  .kpi-net { color: var(--accent); }
+  /* Bubbles */
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+    z-index: 2;
+    user-select: none;
+  }
+  .bubble:hover { transform: scale(1.09) !important; }
 
-  /* CLOCK */
-  #clock { font-size: 52px; font-weight: 200; letter-spacing: -2px; color: var(--text); line-height: 1; font-variant-numeric: tabular-nums; }
-  #date-str { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  /* Center */
+  .bubble.center {
+    width: 108px; height: 108px;
+    background: radial-gradient(circle at 35% 35%, #3b6fd4, #1a3a7a);
+    box-shadow: 0 0 0 2px rgba(99,153,255,.18), 0 0 36px rgba(59,111,212,.4);
+    font-size: 18px; font-weight: 900;
+    letter-spacing: 2.5px;
+    color: #dbeafe;
+  }
 
-  /* WEATHER */
-  .weather-row { display: flex; align-items: center; gap: 12px; }
-  .weather-temp { font-size: 36px; font-weight: 300; }
-  .weather-info { flex: 1; }
-  .weather-desc { font-size: 13px; color: var(--muted); }
-  .weather-detail { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .weather-icon { font-size: 32px; }
+  /* Category bubbles */
+  .bubble.cat {
+    width: 76px; height: 76px;
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: #f1f5f9;
+  }
+  .cat.drift   { background: radial-gradient(circle at 35% 35%, #2d8a67, #144d38); box-shadow: 0 0 22px rgba(45,138,103,.3); }
+  .cat.okonomi { background: radial-gradient(circle at 35% 35%, #4a7fb5, #1e3f66); box-shadow: 0 0 22px rgba(74,127,181,.3); }
+  .cat.ads     { background: radial-gradient(circle at 35% 35%, #c46a2a, #6b3010); box-shadow: 0 0 22px rgba(196,106,42,.3); }
+  .cat.ejer    { background: radial-gradient(circle at 35% 35%, #7b52c4, #3b1f72); box-shadow: 0 0 22px rgba(123,82,196,.3); }
+  .cat.ansatte { background: radial-gradient(circle at 35% 35%, #2a7fa8, #103a52); box-shadow: 0 0 22px rgba(42,127,168,.3); }
 
-  /* CALENDAR */
-  .cal-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
-  .cal-day { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 6px 4px; text-align: center; }
-  .cal-day.today { border-color: var(--accent); }
-  .cal-day.has-event { border-color: var(--accent); background: #1f1c14; }
-  .cal-day .d-name { color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; }
-  .cal-day .d-num { font-size: 16px; font-weight: 600; margin: 2px 0; }
-  .cal-day.today .d-num { color: var(--accent); }
-  .cal-day .d-event { font-size: 9px; color: var(--accent); line-height: 1.2; margin-top: 2px; }
+  /* Child bubbles */
+  .bubble.child {
+    width: 62px; height: 62px;
+    font-size: 9.5px; font-weight: 600;
+    background: #17202e;
+    border: 1.5px solid #1f2d40;
+    color: #94a3b8;
+    line-height: 1.25;
+  }
+  .bubble.child:hover { border-color: #2d4159; color: #cbd5e1; }
 
-  /* CONTACTS */
-  .contact { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
-  .contact:last-child { border-bottom: none; }
-  .contact-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
-  .contact-name { font-size: 12px; font-weight: 600; }
-  .contact-role { font-size: 10px; color: var(--muted); }
-  .contact-phone { font-size: 10px; color: var(--muted); margin-left: auto; }
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    position: absolute;
+    top: 6px; right: 6px;
+  }
+  .dot-g { background: #34d399; box-shadow: 0 0 5px rgba(52,211,153,.6); }
+  .dot-y { background: #fbbf24; box-shadow: 0 0 5px rgba(251,191,36,.6); }
+  .dot-r { background: #f87171; box-shadow: 0 0 5px rgba(248,113,113,.6); }
 
-  /* QUICK LINKS */
-  .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-  .qlink { display: block; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 7px 8px; font-size: 11px; color: var(--text); text-decoration: none; text-align: center; transition: border-color 0.15s, color 0.15s; cursor: pointer; }
-  .qlink:hover { border-color: var(--accent); color: var(--accent); }
+  .label { padding: 0 5px; }
+  .sub   { font-size: 8.5px; color: #4a6080; margin-top: 1px; }
 
-  /* ONLINE PRESENCE */
-  .online-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: opacity 0.15s; }
-  .online-item:last-child { border-bottom: none; }
-  .online-item:hover { opacity: 0.75; }
-  .online-icon { font-size: 14px; width: 20px; text-align: center; flex-shrink: 0; }
-  .online-name { font-size: 11px; font-weight: 600; flex: 1; }
-  .online-status { font-size: 9px; color: var(--muted); margin-right: 4px; }
+  /* ── Right panel ── */
+  #panel {
+    width: 300px;
+    flex-shrink: 0;
+    background: #131824;
+    border-left: 1px solid #1a2235;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 
-  /* STATUS GRID */
-  .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-  .status-item { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 7px 9px; display: flex; align-items: center; gap: 7px; }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .status-dot.green { background: var(--green); box-shadow: 0 0 5px var(--green); }
-  .status-dot.yellow { background: var(--yellow); box-shadow: 0 0 5px var(--yellow); }
-  .status-dot.red { background: var(--red); box-shadow: 0 0 5px var(--red); }
-  .status-dot.blue { background: var(--blue); box-shadow: 0 0 5px var(--blue); }
-  .status-dot.grey { background: var(--muted); }
-  .status-name { font-size: 11px; font-weight: 600; flex: 1; }
-  .status-label { font-size: 9px; color: var(--muted); }
+  .panel-section {
+    padding: 14px 16px;
+    border-bottom: 1px solid #1a2235;
+  }
+  .panel-section:last-child { border-bottom: none; flex: 1; overflow-y: auto; }
+  .panel-section h3 {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #3d4f68;
+    margin-bottom: 10px;
+  }
 
-  /* TODOS */
-  .todo-item { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--border); }
-  .todo-item:last-child { border-bottom: none; }
-  .todo-check { width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid var(--border); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; font-size: 9px; }
-  .todo-check.done { border-color: var(--green); background: #1a2e1e; color: var(--green); }
-  .todo-check.pending { border-color: var(--accent); }
-  .todo-text { font-size: 11px; line-height: 1.4; flex: 1; }
-  .todo-text.done { color: var(--muted); text-decoration: line-through; }
-  .todo-tag { font-size: 9px; border-radius: 3px; padding: 1px 5px; flex-shrink: 0; }
-  .tag-soon { background: #2a1e10; color: var(--accent); }
-  .tag-wait { background: #1e1e2a; color: var(--blue); }
-  .tag-done { background: #1a2e1e; color: var(--green); }
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 7px 0;
+    border-bottom: 1px solid #151f2e;
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.35;
+  }
+  .task:last-child { border-bottom: none; }
+  .td {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .task .meta { font-size: 10px; color: #3d4f68; margin-top: 1px; }
+  .task strong { color: #cbd5e1; font-weight: 600; display: block; }
 
-  /* CHART */
-  .chart-row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; height: 180px !important; max-height: 180px !important; flex-shrink: 0; overflow: hidden; }
-  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; display: flex; flex-direction: column; overflow: hidden; height: 180px !important; max-height: 180px !important; }
-  .chart-wrap { position: relative; overflow: hidden; height: 140px !important; max-height: 140px !important; }
-  .chart-wrap canvas { max-height: 140px !important; }
+  /* Legend */
+  #legend {
+    display: flex;
+    gap: 12px;
+    padding: 10px 16px;
+    background: #131824;
+    border-top: 1px solid #1a2235;
+    font-size: 10px;
+    color: #3d4f68;
+    flex-shrink: 0;
+  }
+  #legend span { display: flex; align-items: center; gap: 5px; }
+  #legend .ld { width: 6px; height: 6px; border-radius: 50%; }
 
-  /* METRICS */
-  .metric { padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-  .metric:last-child { border-bottom: none; }
-  .metric-label { font-size: 11px; color: var(--muted); }
-  .metric-value { font-size: 13px; font-weight: 700; }
-
-  /* COMPANY INFO */
-  .info-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 11px; }
-  .info-key { color: var(--muted); }
-
-  /* PROJECT CARD */
-  .proj-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; }
-
-  /* BOTTOM */
-  .bottom-dots { display: flex; gap: 8px; align-items: center; }
-  .b-dot { width: 8px; height: 8px; border-radius: 50%; }
-
-  /* SCROLL */
-  .scroll { overflow-y: auto; flex: 1; min-height: 0; }
-  .scroll::-webkit-scrollbar { width: 3px; }
-  .scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  /* MID INNER */
-  .mid-inner { display: flex; flex-direction: column; gap: 8px; height: 100%; }
+  /* Tooltip */
+  #tip {
+    position: fixed;
+    background: #17202e;
+    border: 1px solid #1f2d40;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 30;
+    display: none;
+    max-width: 210px;
+    line-height: 1.55;
+    color: #64748b;
+    box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  }
+  #tip strong { display: block; color: #e2e8f0; margin-bottom: 3px; font-size: 13px; }
+  #tip .price { color: #34d399; font-weight: 600; font-size: 11px; margin-top: 3px; }
 </style>
 </head>
 <body>
-<div id="app">
 
-  <!-- TOP BAR -->
-  <div id="topbar">
-    <div class="top-brand">
-      <h1>GENNO ApS</h1>
-      <span>CVR 44112671 · København N</span>
+<header>
+  <div class="logo">GENNO ApS</div>
+  <div class="date" id="ds"></div>
+</header>
+
+<div class="main">
+
+  <!-- ── Mind map ── -->
+  <div id="map">
+    <svg id="lines"></svg>
+
+    <!-- CENTER -->
+    <div class="bubble center" id="b-genno" style="left:45%;top:46%;transform:translate(-50%,-50%)">
+      <div class="label">GENNO</div>
     </div>
-    <div class="top-stats">
-      <div class="top-stat"><div class="val">5.0 ⭐</div><div class="lbl">Google rating</div></div>
-      <div class="top-stat"><div class="val">27</div><div class="lbl">Anmeldelser</div></div>
-      <div class="top-stat"><div class="val">80/20</div><div class="lbl">Ejerskab</div></div>
+
+    <!-- DRIFT (top-left) -->
+    <div class="bubble cat drift" id="b-drift" style="left:23%;top:28%">
+      <div class="label">Drift</div>
     </div>
-    <div class="top-kpi">
-      <div class="kpi-item"><div class="k-val kpi-rev">112.760 kr</div><div class="k-lbl">April omsætning</div></div>
-      <div class="kpi-item"><div class="k-val kpi-exp">66.326 kr</div><div class="k-lbl">April udgifter</div></div>
-      <div class="kpi-item"><div class="k-val kpi-net">+46.434 kr</div><div class="k-lbl">April resultat</div></div>
+    <div class="bubble child" id="b-stark" style="left:5%;top:12%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Stark</div>
+      <div class="sub">Leverandør</div>
+    </div>
+    <div class="bubble child" id="b-forsik" style="left:14%;top:8%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Forsikring</div>
+      <div class="sub">Topdanmark</div>
+    </div>
+    <div class="bubble child" id="b-bil" style="left:6%;top:30%">
+      <div class="status-dot dot-y"></div>
+      <div class="label">Bil</div>
+      <div class="sub">Syn juni</div>
+    </div>
+
+    <!-- ØKONOMI (bottom-left) -->
+    <div class="bubble cat okonomi" id="b-okonomi" style="left:21%;top:65%">
+      <div class="label">Økonomi</div>
+    </div>
+    <div class="bubble child" id="b-econo" style="left:4%;top:52%">
+      <div class="status-dot dot-y"></div>
+      <div class="label">E-conomic</div>
+    </div>
+    <div class="bubble child" id="b-ordre" style="left:3%;top:70%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Ordre&shy;styring</div>
+      <div class="sub">Gratis</div>
+    </div>
+    <div class="bubble child" id="b-moms" style="left:10%;top:83%">
+      <div class="status-dot dot-y"></div>
+      <div class="label">Moms</div>
+      <div class="sub">60k til side</div>
+    </div>
+    <div class="bubble child" id="b-bank" style="left:22%;top:87%">
+      <div class="status-dot dot-y"></div>
+      <div class="label">Lunar Bank</div>
+      <div class="sub">40k saldo</div>
+    </div>
+    <div class="bubble child" id="b-skat" style="left:33%;top:83%">
+      <div class="status-dot dot-y"></div>
+      <div class="label">Skat</div>
+    </div>
+
+    <!-- ADS (top-right) -->
+    <div class="bubble cat ads" id="b-ads" style="left:66%;top:25%">
+      <div class="label">Ads</div>
+    </div>
+    <div class="bubble child" id="b-adwise" style="left:72%;top:8%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Adwise</div>
+      <div class="sub">3.700/md</div>
+    </div>
+    <div class="bubble child" id="b-gene" style="left:83%;top:14%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Generaxion</div>
+      <div class="sub">20k/år</div>
+    </div>
+    <div class="bubble child" id="b-meta" style="left:84%;top:30%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Meta / FB</div>
+      <div class="sub">100/dag</div>
+    </div>
+    <div class="bubble child" id="b-insta" style="left:74%;top:40%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Instagram</div>
+      <div class="sub">50/dag</div>
+    </div>
+
+    <!-- EJER (right) -->
+    <div class="bubble cat ejer" id="b-ejer" style="left:67%;top:62%">
+      <div class="label">Ejer</div>
+    </div>
+    <div class="bubble child" id="b-jogvan" style="left:78%;top:54%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Jógvan</div>
+      <div class="sub">80%</div>
+    </div>
+    <div class="bubble child" id="b-johannes" style="left:79%;top:70%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Johannes</div>
+      <div class="sub">20%</div>
+    </div>
+
+    <!-- ANSATTE (bottom-center) -->
+    <div class="bubble cat ansatte" id="b-ansatte" style="left:46%;top:72%">
+      <div class="label">Ansatte</div>
+    </div>
+    <div class="bubble child" id="b-malik" style="left:37%;top:84%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Malik</div>
+      <div class="sub">Lærling</div>
+    </div>
+    <div class="bubble child" id="b-gustav" style="left:49%;top:88%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Gustav</div>
+      <div class="sub">Underent.</div>
+    </div>
+    <div class="bubble child" id="b-seb" style="left:61%;top:84%">
+      <div class="status-dot dot-g"></div>
+      <div class="label">Sebastian</div>
+      <div class="sub">Underent.</div>
     </div>
   </div>
 
-  <!-- MAIN -->
-  <div id="main">
+  <!-- ── Right panel ── -->
+  <div id="panel">
 
-    <!-- LEFT COLUMN -->
-    <div class="col">
-      <div class="card">
-        <div class="card-title">Uge 21 · Maj 2026</div>
-        <div class="cal-grid" id="cal-grid"></div>
+    <div class="panel-section">
+      <h3>Interne opgaver</h3>
+      <div class="task">
+        <div class="td" style="background:#f87171"></div>
+        <div><strong>Gældstyrelsen</strong><div class="meta">Betal 33.000 kr — haster</div></div>
       </div>
-      <div class="card">
-        <div class="card-title">Nøglepersoner</div>
-        <div id="people"></div>
+      <div class="task">
+        <div class="td" style="background:#fbbf24"></div>
+        <div><strong>Moms</strong><div class="meta">Sæt ~60.000 kr til side inden aug</div></div>
       </div>
-      <div class="card">
-        <div class="card-title">Online tilstedeværelse</div>
-        <div id="online-presence"></div>
+      <div class="task">
+        <div class="td" style="background:#fbbf24"></div>
+        <div><strong>Revisor1 — årsrapport</strong><div class="meta">Godkend udkast + send bankudtog</div></div>
       </div>
-      <div class="card">
-        <div class="card-title">Genveje</div>
-        <div class="links-grid" id="quick-links"></div>
+      <div class="task">
+        <div class="td" style="background:#fbbf24"></div>
+        <div><strong>Bil til syn</strong><div class="meta">Juni måned — book tid</div></div>
+      </div>
+      <div class="task">
+        <div class="td" style="background:#60a5fa"></div>
+        <div><strong>E-conomic API</strong><div class="meta">Afventer adgang fra Johannes</div></div>
+      </div>
+      <div class="task">
+        <div class="td" style="background:#60a5fa"></div>
+        <div><strong>Meta Pixel → GTM</strong><div class="meta">Opsæt tracking på gennorenovering.dk</div></div>
+      </div>
+      <div class="task">
+        <div class="td" style="background:#60a5fa"></div>
+        <div><strong>Følger-video</strong><div class="meta">Jógvan filmer nyt indhold til Meta</div></div>
+      </div>
+      <div class="task">
+        <div class="td" style="background:#34d399"></div>
+        <div><strong>Meta kampagner live</strong><div class="meta">150 DKK/dag — Lead Gen + Følgere</div></div>
       </div>
     </div>
 
-    <!-- MIDDLE COLUMN -->
-    <div class="col col-mid">
-      <div class="mid-inner">
-        <div class="card">
-          <div class="card-title">Systemstatus</div>
-          <div class="status-grid" id="status-grid"></div>
-        </div>
-        <div class="chart-row">
-          <div class="chart-card">
-            <div class="card-title">April udgifter</div>
-            <div class="chart-wrap"><canvas id="donut-chart"></canvas></div>
-          </div>
-          <div class="chart-card">
-            <div class="card-title">Pengestrøm · April (kr)</div>
-            <div class="chart-wrap"><canvas id="bar-chart"></canvas></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Næste skridt</div>
-          <div id="todos"></div>
-        </div>
+    <div class="panel-section" style="flex:1;overflow-y:auto;">
+      <h3>Kundeemner &amp; tilbud</h3>
+      <div class="task">
+        <div class="td" style="background:#f87171"></div>
+        <div><strong>3BT — 12 leads</strong><div class="meta">Ikke kontaktet endnu — ring op</div></div>
+      </div>
+      <div class="task">
+        <div class="td" style="background:#fbbf24"></div>
+        <div><strong>3BT tilbud #1</strong><div class="meta">Afventer svar fra kunde</div></div>
+      </div>
+      <div class="task">
+        <div class="td" style="background:#fbbf24"></div>
+        <div><strong>3BT tilbud #2</strong><div class="meta">Afventer svar fra kunde</div></div>
+      </div>
+      <div class="task">
+        <div class="td" style="background:#fbbf24"></div>
+        <div><strong>3BT tilbud #3</strong><div class="meta">Afventer svar fra kunde</div></div>
+      </div>
+      <div class="task">
+        <div class="td" style="background:#60a5fa"></div>
+        <div><strong>Webflow — opdater adresse</strong><div class="meta">Laurids Skaus Gade 5, 1 tv, 2200 Kbh N</div></div>
       </div>
     </div>
 
-    <!-- RIGHT COLUMN -->
-    <div class="col">
-      <div class="card">
-        <div class="card-title">Nøgletal</div>
-        <div id="metrics"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Virksomhedsinfo</div>
-        <div id="company-info"></div>
-      </div>
-      <div class="card" style="flex:1;overflow:hidden;">
-        <div class="card-title">Aktive sager</div>
-        <div id="projects" class="scroll"></div>
-      </div>
+    <div id="legend">
+      <span><div class="ld" style="background:#34d399"></div>OK</span>
+      <span><div class="ld" style="background:#fbbf24"></div>Afventer</span>
+      <span><div class="ld" style="background:#f87171"></div>Haster</span>
+      <span><div class="ld" style="background:#60a5fa"></div>Planlagt</span>
     </div>
-
   </div>
 
-  <!-- BOTTOM BAR -->
-  <div id="bottombar">
-    <div class="bottom-dots" id="bottom-dots"></div>
-    <span id="bottom-time"></span>
-    <span>Genno ApS · Powered by Claude</span>
-  </div>
+</div><!-- .main -->
 
-</div>
+<div id="tip"></div>
+
 <script>
-// ─── DATA ────────────────────────────────────────────────────────────────────
-const CFG = {
-  calendar: [
-    { day:'Man', date:18, event:'Erik Gulyas\ntilbud' },
-    { day:'Tir', date:19, event:'Oliver Heldmann\nkl. 16:00' },
-    { day:'Ons', date:20, event:'6 tilbud\nfærdiggøres' },
-    { day:'Tor', date:21, event:'e-conomic\nAPI tjek' },
-    { day:'Fre', date:22, event:'' },
-  ],
-  todayIndex: 2,
+document.getElementById('ds').textContent = new Date().toLocaleDateString('da-DK',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 
-  online: [
-    { icon:'🌐', name:'gennorenovering.dk',      url:'https://gennorenovering.dk',                                    status:'Live',           dot:'green'  },
-    { icon:'⭐', name:'Anmeld Håndværker',        url:'https://www.anmeld-haandvaerker.dk/tomrer/genno-aps',           status:'5.0 · 27 anm.',  dot:'green'  },
-    { icon:'📍', name:'Google Erhverv',            url:'https://business.google.com',                                   status:'Aktiv',          dot:'green'  },
-    { icon:'📊', name:'Generaxion',               url:'https://generaxion.com',                                         status:'Aktiv',          dot:'green'  },
-    { icon:'💡', name:'Adwise',                   url:'https://adwise.dk',                                              status:'Aktiv',          dot:'green'  },
-    { icon:'🃏', name:'Carrd',                    url:'https://carrd.co',                                               status:'Aktiv',          dot:'green'  },
-    { icon:'📘', name:'Facebook Erhverv',          url:'https://www.facebook.com/business',                              status:'Aktiv',          dot:'green'  },
-    { icon:'📸', name:'Instagram · @gennoDK',      url:'https://www.instagram.com/gennodk',                               status:'Aktiv',          dot:'green'  },
-  ],
-
-  links: [
-    { label:'Ordrestyring', url:'https://ordrestyring.dk' },
-    { label:'e-conomic', url:'https://www.e-conomic.dk' },
-    { label:'Gmail', url:'https://mail.google.com' },
-    { label:'gennorenovering.dk', url:'https://gennorenovering.dk' },
-    { label:'Google Erhverv', url:'https://business.google.com' },
-    { label:'Generaxion', url:'https://generaxion.com' },
-  ],
-
-  statuses: [
-    { name:'Gmail', label:'Aktiv', dot:'green' },
-    { name:'Claude AI', label:'Aktiv', dot:'green' },
-    { name:'ImprovMX', label:'Aktiv', dot:'green' },
-    { name:'Kalender', label:'Aktiv', dot:'green' },
-    { name:'gennorenovering.dk', label:'Optimeret', dot:'green' },
-    { name:'Ordrestyring', label:'Aktiv', dot:'green' },
-    { name:'e-conomic', label:'Betalt & Aktiv', dot:'green' },
-    { name:'Generaxion', label:'Aktiv', dot:'green' },
-  ],
-
-  todos: [
-    // ── IGANGVÆRENDE PROJEKTER ──
-    { text:'META ADS: Publicer "Genno Marketing" app (Live mode) → nyt token → kør kampagne', done:false, tag:'soon' },
-    { text:'INSTAGRAM: Link @gennoDK til Genno Facebook-side · Page Settings → Instagram → Connect', done:false, tag:'soon' },
-    { text:'ADWISE: Send scope-change brev til niv@adwise.dk (Google Ads → SEO = kontraktbrud)', done:false, tag:'soon' },
-    { text:'ADWISE: Formel opsigelse til bogholderi@adwise.dk inden 1. okt 2027', done:false, tag:'wait' },
-    { text:'GENERAXION: Tilføj åbningstider + alt-tekster på gennorenovering.dk (kræver adgang)', done:false, tag:'wait' },
-    { text:'genno.dk: Opsæt URL-forward → gennorenovering.dk via Punktum.dk', done:false, tag:'soon' },
-    { text:'JÓHANNES: Bekræft at genno@genno.dk forward til Gmail virker korrekt', done:false, tag:'wait' },
-    // ── ØKONOMI ──
-    { text:'Gældstyrelsen: Betal 33.000 kr ASAP', done:false, tag:'soon' },
-    { text:'Moms august: Sæt ~60.000 kr til side inden 1. aug', done:false, tag:'soon' },
-    { text:'Stark: Opbyg kredit til 40.000 kr', done:false, tag:'wait' },
-    { text:'Malik: Løn 12.000 kr kører automatisk via Dataløn (ultimo maj)', done:false, tag:'wait' },
-    { text:'e-conomic API godkendelse · tjek status', done:false, tag:'wait' },
-    // ── TILBUD ──
-    { text:'Mogens: Skitse + færdigt tilbud · skillevæg 160×240 cm', done:false, tag:'soon' },
-    { text:'Tilbud til Erik Gulyas · Bille Brahes Vej 11A', done:false, tag:'soon' },
-    { text:'Tilbud til Kata Horvath-Sarlos · højseng/hems · Valby', done:false, tag:'soon' },
-    { text:'Tilbud til Steen Marty Johansen · bryggers+værelse · Rødovre', done:false, tag:'soon' },
-    { text:'Tilbud til Oliver Heldmann · vægflytning · Kbh Ø', done:false, tag:'soon' },
-    { text:'Tilbud 793025 · indendørs væg · Edvard Thomsens Vej, Kbh S', done:false, tag:'soon' },
-    { text:'Ring: Gustav 786891 · garderobeskab + køkkenø · Kbh K', done:false, tag:'soon' },
-    { text:'Ring: Mikkel Lyhne Jensen 778131 · vindfang · Brønshøj', done:false, tag:'soon' },
-    // ── FÆRDIGE ──
-    { text:'Revisor: Send CSV-fil + alle lønsedler fra 2024', done:true, tag:'done' },
-    { text:'Email signatur oprettet · genno@genno.dk', done:true, tag:'done' },
-    { text:'Email forward: genno@genno.dk → Gmail opsat', done:true, tag:'done' },
-    { text:'Gmail label "Genno" + filter oprettet', done:true, tag:'done' },
-    { text:'Lead-formular oprettet i Meta · "Genno - Gratis tilbud"', done:true, tag:'done' },
-    { text:'Sandkasse tilbud sendt · Orri Olason', done:true, tag:'done' },
-  ],
-
-  metrics: [
-    { label:'Konto nu', val:'40.000 kr', color:'#4caf6e' },
-    { label:'Forventet inden månedsslut', val:'~63.000 kr', color:'#4caf6e' },
-    { label:'Gældstyrelsen ⚠️', val:'33.000 kr', color:'#e05252' },
-    { label:'Moms august (est.)', val:'~60.000 kr', color:'#e05252' },
-    { label:'Stark kredit (mål)', val:'40.000 kr', color:'#d4a72c' },
-    { label:'Google rating', val:'5.0 ⭐', color:'#c8a96e' },
-    { label:'Aktive projekter', val:'7', color:'#4caf6e' },
-    { label:'3bt leads (ubesvaret)', val:'12 🔔', color:'#e05252' },
-  ],
-
-  company: [
-    { key:'CVR', val:'44112671' },
-    { key:'Stiftet', val:'2023' },
-    { key:'Adresse', val:'Laurids Skaus Gade 5, 1. tv.' },
-    { key:'By', val:'2200 København N' },
-    { key:'Email', val:'genno@genno.dk' },
-    { key:'Web', val:'gennorenovering.dk' },
-    { key:'Tlf', val:'+45 53 64 34 44' },
-  ],
-
-  projects: [
-    { name:'Erik Gulyas', desc:'Køkken + badeværelse', addr:'Bille Brahes Vej 11A', date:'Opstart 19. maj', status:'Aktiv', dot:'green' },
-    { name:'Mogens', desc:'Skillevæg', addr:'', date:'Skitse mangler', status:'Tilbud under udarbejdelse', dot:'blue' },
-    { name:'Kata Horvath-Sarlos', desc:'Højseng/hems 205×145 cm + trappe + opbevaring', addr:'Maskinfabriksvej 5, 3tv, Valby', date:'Lead #793794', status:'Afventer e-conomic', dot:'yellow' },
-    { name:'Steen Marty Johansen', desc:'Bryggers + værelse → 1 rum, ~24 m²', addr:'Slåvang Alle 4, Rødovre', date:'Lead #793730', status:'Afventer e-conomic', dot:'yellow' },
-    { name:'Oliver Heldmann', desc:'Vægflytning + skillevæg + gulve · Andelslejlighed', addr:'Lipkesgade 30, 4tv, Kbh Ø', date:'Lead #792888', status:'Afventer e-conomic', dot:'yellow' },
-    { name:'Ny kunde · 31391594', desc:'Indendørs væg 4×2,5m + dør + glas øverst · Børneværelse', addr:'Edvard Thomsens Vej 17, 1.th, Kbh S', date:'Lead #793025', status:'Afventer e-conomic · Hverdage 8-16', dot:'yellow' },
-    { name:'Orri Olason', desc:'Sandkasse (båd-form)', addr:'', date:'Tilbud sendt', status:'Afventer svar', dot:'yellow' },
-  ],
-
-  april: {
-    labels:['Løn/A-skat','Materialer','Transport','Forsikring','Software','Marketing','Kontor','Diverse','Tlf/net'],
-    values:[28400, 14200, 5800, 3200, 2100, 4800, 1600, 3926, 2300],
-    colors:['#5a9fd4','#c8a96e','#4caf6e','#d4a72c','#9d7fcd','#e05252','#52b0e0','#888882','#52e0b0'],
-  },
-  cashflow: {
-    labels:['Omsætning','Udgifter','Resultat'],
-    values:[112760, 66326, 46434],
-    colors:['#4caf6e','#e05252','#c8a96e'],
-  },
-
-  people: [
-    { initials:'JK', name:'Jógvan Kristiansen', role:'Indehaver · 80%',    phone:'+45 53 64 34 44' },
-    { initials:'JÓ', name:'Jóhannes',           role:'IT-manager · 20%',   phone:'+45 71 74 57 64' },
-    { initials:'MA', name:'Malik',               role:'Lærling',            phone:'+45 20 85 04 03' },
-    { initials:'R1', name:'Revisor1',             role:'Revisor · Østerbro', phone:'+45 25 94 39 55' },
-    { initials:'SE', name:'Sebastian',           role:'Stark · Materialer', phone:'+45 28 10 13 83' },
-    { initials:'GU', name:'Gustav',              role:'Stark · Materialer', phone:'+45 26 47 89 53' },
-  ],
-
-  bottomDots:[
-    {color:'#4caf6e',tip:'Online'},
-    {color:'#4caf6e',tip:'Gmail'},
-    {color:'#d4a72c',tip:'Web'},
-    {color:'#5a9fd4',tip:'Systemer'},
-    {color:'#d4a72c',tip:'e-conomic'},
-  ],
+const info = {
+  'b-genno':    ['Genno ApS', 'Tømrermester · Professionelt håndværk i København'],
+  'b-drift':    ['Drift', 'Daglig drift — leverandører, køretøj og forsikring'],
+  'b-stark':    ['Stark', 'Primær materialeleverandør — erhvervskonto aktiv'],
+  'b-forsik':   ['Forsikring — Topdanmark', 'Erhvervsansvar + bygningsforsikring\n\nHold over for månedlig pris'],
+  'b-bil':      ['Firmabil', 'Fuldt udbetalt — skal til syn i juni 2026'],
+  'b-okonomi':  ['Økonomi', 'Bogføring, moms, skat og bankkonto'],
+  'b-econo':    ['E-conomic', 'Bogføringsprogram — API-adgang afventer Johannes'],
+  'b-ordre':    ['Ordrestyring', 'Bygget af Johannes — bruges gratis\nSager, tilbud og fakturering'],
+  'b-moms':     ['Moms', 'Sæt ca. 60.000 kr til side inden 1. august'],
+  'b-bank':     ['Lunar Bank', 'Saldo: ~40.000 kr\nUdestående: ~60.000 kr skal ind'],
+  'b-skat':     ['Skat', 'Virksomhedsskat — hold øje med opgørelser'],
+  'b-ads':      ['Ads', 'Betalt annoncering på tværs af platforme'],
+  'b-adwise':   ['Adwise', 'Google Ads bureau\nMånedlig pris: ~3.700 kr'],
+  'b-gene':     ['Generaxion', 'SEO & digital marketing\nÅrlig pris: ~20.000 kr'],
+  'b-meta':     ['Meta / Facebook', '✅ Lead Gen kampagne aktiv\n100 DKK/dag · Husejere Kbh 25+'],
+  'b-insta':    ['Instagram', '✅ Følger-kampagne aktiv\n50 DKK/dag · Byg følgere'],
+  'b-ejer':     ['Ejerskab', 'Selskabsstruktur i Genno ApS'],
+  'b-jogvan':   ['Jógvan Páll Kristiansen', '80% ejer · Daglig leder\n+45 53 64 34 44'],
+  'b-johannes': ['Johannes', '20% ejer · Lead Architect\nSoftwareudvikler — stille partner'],
+  'b-ansatte':  ['Ansatte', 'Fast ansatte og underentreprenører'],
+  'b-malik':    ['Malik', 'Lærling · 12.000 kr/måned\n3 år tilbage til svendebrev'],
+  'b-gustav':   ['Gustav', 'Underentreprenør\nTelefon: —'],
+  'b-seb':      ['Sebastian', 'Underentreprenør\nTelefon: —'],
 };
 
-// ─── RENDER ──────────────────────────────────────────────────────────────────
-function mk(tag, cls, html) {
-  const e = document.createElement(tag);
-  if (cls) e.className = cls;
-  if (html !== undefined) e.innerHTML = html;
-  return e;
+const conns = [
+  ['b-genno','b-drift'],['b-genno','b-okonomi'],['b-genno','b-ads'],
+  ['b-genno','b-ejer'],['b-genno','b-ansatte'],
+  ['b-drift','b-stark'],['b-drift','b-forsik'],['b-drift','b-bil'],
+  ['b-okonomi','b-econo'],['b-okonomi','b-ordre'],['b-okonomi','b-moms'],
+  ['b-okonomi','b-bank'],['b-okonomi','b-skat'],
+  ['b-ads','b-adwise'],['b-ads','b-gene'],['b-ads','b-meta'],['b-ads','b-insta'],
+  ['b-ejer','b-jogvan'],['b-ejer','b-johannes'],
+  ['b-ansatte','b-malik'],['b-ansatte','b-gustav'],['b-ansatte','b-seb'],
+];
+
+function ctr(el) {
+  const r = el.getBoundingClientRect();
+  const m = document.getElementById('map').getBoundingClientRect();
+  return { x: r.left + r.width/2 - m.left, y: r.top + r.height/2 - m.top };
 }
 
-// Calendar
-CFG.calendar.forEach((d, i) => {
-  const cls = ['cal-day', i===CFG.todayIndex?'today':'', d.event?'has-event':''].join(' ').trim();
-  document.getElementById('cal-grid').appendChild(
-    mk('div', cls, `<div class="d-name">${d.day}</div><div class="d-num">${d.date}</div><div class="d-event">${d.event.replace('\n','<br>')}</div>`)
-  );
-});
-
-// Helper: open URL in browser (Wallpaper Engine + fallback)
-function openUrl(url) {
-  if (window.wallpaperOpenUrl) { window.wallpaperOpenUrl(url); }
-  else { window.open(url, '_blank'); }
-}
-
-// People
-CFG.people.forEach(p => {
-  const div = mk('div','contact',
-    `<div class="contact-avatar">${p.initials}</div>
-     <div><div class="contact-name">${p.name}</div><div class="contact-role">${p.role}</div></div>
-     <div class="contact-phone">${p.phone}</div>`);
-  div.addEventListener('click', () => { window.location.href='tel:'+p.phone.replace(/\s/g,''); });
-  document.getElementById('people').appendChild(div);
-});
-
-// Online presence
-CFG.online.forEach(o => {
-  const div = mk('div','online-item',
-    `<div class="online-icon">${o.icon}</div>
-     <div class="online-name">${o.name}</div>
-     <span class="online-status">${o.status}</span>
-     <div class="status-dot ${o.dot}"></div>`);
-  div.addEventListener('click', () => openUrl(o.url));
-  document.getElementById('online-presence').appendChild(div);
-});
-
-// Quick links
-CFG.links.forEach(l => {
-  const div = mk('div','qlink'); div.textContent=l.label;
-  div.addEventListener('click', () => openUrl(l.url));
-  document.getElementById('quick-links').appendChild(div);
-});
-
-// Statuses
-CFG.statuses.forEach(s => {
-  document.getElementById('status-grid').appendChild(
-    mk('div','status-item',`<div class="status-dot ${s.dot}"></div><div class="status-name">${s.name}</div><div class="status-label">${s.label}</div>`)
-  );
-});
-
-// Todos
-const tagMap = {soon:['tag-soon','Snart'],wait:['tag-wait','Afventer'],done:['tag-done','Færdig']};
-CFG.todos.forEach(t => {
-  const [tc,tt] = tagMap[t.tag]||['',''];
-  document.getElementById('todos').appendChild(
-    mk('div','todo-item',
-      `<div class="todo-check ${t.done?'done':'pending'}">${t.done?'✓':''}</div>
-       <div class="todo-text ${t.done?'done':''}">${t.text}</div>
-       <span class="todo-tag ${tc}">${tt}</span>`)
-  );
-});
-
-// Metrics
-CFG.metrics.forEach(m => {
-  document.getElementById('metrics').appendChild(
-    mk('div','metric',`<span class="metric-label">${m.label}</span><span class="metric-value" style="color:${m.color}">${m.val}</span>`)
-  );
-});
-
-// Company
-CFG.company.forEach(r => {
-  document.getElementById('company-info').appendChild(
-    mk('div','info-row',`<span class="info-key">${r.key}</span><span>${r.val}</span>`)
-  );
-});
-
-// Projects
-CFG.projects.forEach(p => {
-  const div = mk('div','proj-card',
-    `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-       <div class="status-dot ${p.dot}"></div>
-       <strong style="font-size:12px;">${p.name}</strong>
-       <span style="font-size:9px;color:var(--muted);margin-left:auto;">${p.date}</span>
-     </div>
-     <div style="font-size:11px;color:var(--muted);">${p.desc}</div>
-     ${p.addr?`<div style="font-size:10px;color:var(--muted);margin-top:2px;">${p.addr}</div>`:''}
-     <div style="font-size:10px;color:var(--accent);margin-top:4px;">${p.status}</div>`);
-  document.getElementById('projects').appendChild(div);
-});
-
-// Bottom dots
-CFG.bottomDots.forEach(d => {
-  const dot = mk('div','b-dot'); dot.style.background=d.color; dot.title=d.tip;
-  document.getElementById('bottom-dots').appendChild(dot);
-});
-
-// ─── CHARTS ──────────────────────────────────────────────────────────────────
-const {labels, values, colors} = CFG.april;
-const total = values.reduce((a,b)=>a+b,0);
-
-new Chart(document.getElementById('donut-chart'), {
-  type:'doughnut',
-  data:{ labels, datasets:[{data:values, backgroundColor:colors, borderWidth:0, hoverBorderWidth:2, hoverBorderColor:'#fff'}] },
-  options:{
-    responsive:true, maintainAspectRatio:false, cutout:'68%',
-    plugins:{
-      legend:{display:false},
-      tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw.toLocaleString('da-DK')} kr (${((c.raw/total)*100).toFixed(1)}%)`}}
-    }
+function draw() {
+  const svg = document.getElementById('lines');
+  svg.innerHTML = '';
+  for (const [a,b] of conns) {
+    const ea = document.getElementById(a), eb = document.getElementById(b);
+    if (!ea || !eb) continue;
+    const ca = ctr(ea), cb = ctr(eb);
+    // Curved line using quadratic bezier
+    const mx = (ca.x + cb.x) / 2;
+    const my = (ca.y + cb.y) / 2;
+    const path = document.createElementNS('http://www.w3.org/2000/svg','line');
+    path.setAttribute('x1', ca.x); path.setAttribute('y1', ca.y);
+    path.setAttribute('x2', cb.x); path.setAttribute('y2', cb.y);
+    path.setAttribute('stroke', '#1a2a3f');
+    path.setAttribute('stroke-width', '1.5');
+    svg.appendChild(path);
   }
-});
-
-new Chart(document.getElementById('bar-chart'), {
-  type:'bar',
-  data:{
-    labels: CFG.cashflow.labels,
-    datasets:[{
-      data: CFG.cashflow.values,
-      backgroundColor: CFG.cashflow.colors,
-      borderRadius: 6,
-      borderWidth: 0,
-    }]
-  },
-  options:{
-    responsive:true, maintainAspectRatio:false,
-    plugins:{
-      legend:{display:false},
-      tooltip:{callbacks:{label:c=>` ${c.raw.toLocaleString('da-DK')} kr`}}
-    },
-    scales:{
-      x:{ticks:{color:'#e8e6e0',font:{size:12,weight:'600'}}, grid:{display:false}},
-      y:{ticks:{color:'#888882',font:{size:9},callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v}, grid:{color:'#2a2a28'}}
-    }
-  }
-});
-
-// ─── CLOCK ───────────────────────────────────────────────────────────────────
-const DAYS=['Søndag','Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag'];
-const MONTHS=['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
-function tick() {
-  const n=new Date();
-  const h=String(n.getHours()).padStart(2,'0');
-  const m=String(n.getMinutes()).padStart(2,'0');
-  const s=String(n.getSeconds()).padStart(2,'0');
-  document.getElementById('clock').textContent=`${h}:${m}:${s}`;
-  document.getElementById('date-str').textContent=`${DAYS[n.getDay()]}, ${n.getDate()}. ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
-  document.getElementById('bottom-time').textContent=`Opdateret ${h}:${m}:${s}`;
 }
-tick(); setInterval(tick,1000);
+setTimeout(draw, 80);
+window.addEventListener('resize', draw);
 
-// ─── WEATHER ─────────────────────────────────────────────────────────────────
-const WMO_ICON={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌦',55:'🌧',61:'🌧',63:'🌧',65:'🌧',71:'❄️',73:'❄️',75:'❄️',77:'🌨',80:'🌦',81:'🌧',82:'⛈',85:'🌨',86:'❄️',95:'⛈',96:'⛈',99:'⛈'};
-const WMO_TEXT={0:'Klart',1:'Mest klart',2:'Delvist skyet',3:'Overskyet',45:'Tåge',48:'Rimtåge',51:'Let tågedryp',53:'Tågedryp',55:'Kraftigt tågedryp',61:'Let regn',63:'Regn',65:'Kraftig regn',71:'Let sne',73:'Sne',75:'Kraftig sne',77:'Snebyger',80:'Regnbyger',81:'Regn & byger',82:'Kraftige byger',85:'Snebyger',86:'Kraftige snebyger',95:'Tordenvejr',96:'Tordenvejr m. hagl',99:'Kraftigt tordenvejr'};
-async function fetchWeather() {
-  try {
-    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.6761&longitude=12.5683&current=temperature_2m,weathercode,windspeed_10m,relativehumidity_2m&wind_speed_unit=ms&timezone=Europe%2FCopenhagen');
-    const d = await r.json(); const c = d.current;
-    document.getElementById('w-temp').textContent = Math.round(c.temperature_2m);
-    document.getElementById('w-icon').textContent = WMO_ICON[c.weathercode]||'🌡';
-    document.getElementById('w-desc').textContent = WMO_TEXT[c.weathercode]||`Kode ${c.weathercode}`;
-    document.getElementById('w-detail').textContent = `💨 ${c.windspeed_10m} m/s · 💧 ${c.relativehumidity_2m}%`;
-  } catch(e) { document.getElementById('w-desc').textContent='Vejr utilgængeligt'; }
-}
-fetchWeather(); setInterval(fetchWeather, 5*60*1000);
-
-// Auto-reload every 30 seconds so Wallpaper Engine picks up changes automatically
-setTimeout(() => location.reload(), 30000);
+// Tooltip
+const tip = document.getElementById('tip');
+document.querySelectorAll('.bubble').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    const d = info[el.id]; if (!d) return;
+    tip.innerHTML = `<strong>${d[0]}</strong>${d[1].replace(/\n/g,'<br>')}`;
+    tip.style.display = 'block';
+  });
+  el.addEventListener('mousemove', e => {
+    const x = e.clientX + 16, y = e.clientY - 10;
+    tip.style.left = Math.min(x, window.innerWidth - 230) + 'px';
+    tip.style.top  = y + 'px';
+  });
+  el.addEventListener('mouseleave', () => tip.style.display = 'none');
+});
 </script>
 </body>
 </html>

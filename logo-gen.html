@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>* { margin:0; padding:0; background:#fff; }</style>
+</head>
+<body>
+<canvas id="c" width="512" height="512"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+// Background
+const grad = ctx.createLinearGradient(0, 0, 512, 512);
+grad.addColorStop(0, '#1a1a18');
+grad.addColorStop(1, '#2a2820');
+ctx.fillStyle = grad;
+ctx.beginPath();
+ctx.roundRect(0, 0, 512, 512, 60);
+ctx.fill();
+
+// Gold circle
+ctx.beginPath();
+ctx.arc(256, 256, 180, 0, Math.PI * 2);
+ctx.strokeStyle = '#c8a96e';
+ctx.lineWidth = 8;
+ctx.stroke();
+
+// Inner glow ring
+ctx.beginPath();
+ctx.arc(256, 256, 165, 0, Math.PI * 2);
+ctx.strokeStyle = 'rgba(200,169,110,0.2)';
+ctx.lineWidth = 20;
+ctx.stroke();
+
+// Letter G
+ctx.font = 'bold 220px Segoe UI, Arial';
+ctx.fillStyle = '#c8a96e';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.fillText('G', 256, 265);
+
+// Small text
+ctx.font = '28px Segoe UI, Arial';
+ctx.fillStyle = 'rgba(200,169,110,0.7)';
+ctx.letterSpacing = '8px';
+ctx.fillText('ENNO', 256, 400);
+
+// Save as downloadable PNG
+canvas.toBlob(blob => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'genno-logo.png';
+  a.click();
+});
+</script>
+</body>
+</html>
