@@ -17,9 +17,7 @@
   --muted:  #3d5068;
   --text:   #dde8f5;
 }
-
 * { margin:0; padding:0; box-sizing:border-box; }
-
 body {
   background: var(--bg);
   font-family: 'Segoe UI', system-ui, sans-serif;
@@ -29,970 +27,713 @@ body {
   display: flex;
   flex-direction: column;
 }
+#starfield { position:fixed; inset:0; z-index:0; pointer-events:none; }
 
-/* ═══════════════════════════════════════════
-   STAR CANVAS
-═══════════════════════════════════════════ */
-#starfield {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* ═══════════════════════════════════════════
-   HEADER
-═══════════════════════════════════════════ */
+/* ── HEADER ── */
 header {
-  position: relative;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 28px;
-  height: 58px;
-  background: rgba(5,8,15,0.92);
-  border-bottom: 1px solid rgba(0,212,255,0.07);
-  backdrop-filter: blur(24px);
-  flex-shrink: 0;
+  position:relative; z-index:20;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 28px; height:58px;
+  background:rgba(5,8,15,0.92);
+  border-bottom:1px solid rgba(0,212,255,0.07);
+  backdrop-filter:blur(24px); flex-shrink:0;
 }
+.logo { display:flex; align-items:baseline; gap:10px; }
+.logo-main { font-size:22px; font-weight:900; letter-spacing:5px; color:#fff; text-shadow:0 0 25px rgba(0,212,255,0.5),0 0 60px rgba(0,212,255,0.2); }
+.logo-sub  { font-size:10px; letter-spacing:2.5px; color:var(--muted); text-transform:uppercase; }
+.kpis { display:flex; gap:5px; }
+.kpi { display:flex; flex-direction:column; align-items:center; padding:5px 14px; border:1px solid rgba(255,255,255,0.04); border-radius:8px; background:rgba(255,255,255,0.015); min-width:95px; }
+.kpi-label { font-size:8.5px; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted); }
+.kpi-val   { font-size:15px; font-weight:800; line-height:1.3; }
+.kpi-val.c-green { color:var(--green);  text-shadow:0 0 12px rgba(0,255,136,0.35); }
+.kpi-val.c-blue  { color:var(--blue);   text-shadow:0 0 12px rgba(0,212,255,0.35); }
+.kpi-val.c-amber { color:var(--amber);  text-shadow:0 0 12px rgba(255,170,0,0.35); }
+.kpi-val.c-pink  { color:var(--pink);   text-shadow:0 0 12px rgba(255,77,141,0.35); }
+.hdr-right { text-align:right; }
+.hdr-date  { font-size:11px; color:var(--muted); }
+.hdr-time  { font-size:18px; font-weight:700; color:rgba(255,255,255,0.15); letter-spacing:2px; }
 
-.logo {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-}
-.logo-main {
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: 5px;
-  color: #fff;
-  text-shadow: 0 0 25px rgba(0,212,255,0.5), 0 0 60px rgba(0,212,255,0.2);
-}
-.logo-sub {
-  font-size: 10px;
-  letter-spacing: 2.5px;
-  color: var(--muted);
-  text-transform: uppercase;
-}
+/* ── MAIN ── */
+.main { display:flex; flex:1; overflow:hidden; position:relative; z-index:1; }
+#map  { position:relative; flex:1; overflow:hidden; }
+#lines { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1; }
 
-/* KPI strip */
-.kpis {
-  display: flex;
-  gap: 5px;
-}
-.kpi {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 5px 14px;
-  border: 1px solid rgba(255,255,255,0.04);
-  border-radius: 8px;
-  background: rgba(255,255,255,0.015);
-  min-width: 95px;
-}
-.kpi-label { font-size: 8.5px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); }
-.kpi-val   { font-size: 15px; font-weight: 800; line-height: 1.3; }
-.kpi-val.c-green  { color: var(--green);  text-shadow: 0 0 12px rgba(0,255,136,0.35); }
-.kpi-val.c-blue   { color: var(--blue);   text-shadow: 0 0 12px rgba(0,212,255,0.35); }
-.kpi-val.c-amber  { color: var(--amber);  text-shadow: 0 0 12px rgba(255,170,0,0.35); }
-.kpi-val.c-pink   { color: var(--pink);   text-shadow: 0 0 12px rgba(255,77,141,0.35); }
-
-.hdr-right { text-align: right; }
-.hdr-date  { font-size: 11px; color: var(--muted); }
-.hdr-time  { font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.15); letter-spacing: 2px; }
-
-/* ═══════════════════════════════════════════
-   MAIN
-═══════════════════════════════════════════ */
-.main {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-}
-
-/* ═══════════════════════════════════════════
-   MIND MAP
-═══════════════════════════════════════════ */
-#map {
-  position: relative;
-  flex: 1;
-  overflow: hidden;
-}
-
-#lines {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* ═══════════════════════════════════════════
-   BUBBLES
-═══════════════════════════════════════════ */
+/* ── BUBBLES ── */
 .bubble {
-  position: absolute;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  cursor: pointer;
-  z-index: 5;
-  user-select: none;
-  transition: transform .3s cubic-bezier(.34,1.56,.64,1),
-              filter .25s ease,
-              box-shadow .25s ease;
+  position:absolute; border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; cursor:pointer; z-index:5; user-select:none;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1), filter .25s ease, box-shadow .25s ease;
 }
-.bubble:hover { filter: brightness(1.35); z-index: 30; }
-.bubble:active { transform: scale(0.93) !important; }
+.bubble:hover { filter:brightness(1.35); z-index:30; }
+.bubble:active { transform:scale(0.93) !important; }
 
-/* Center bubble */
+/* Center */
 .bubble.center {
-  width: 116px; height: 116px;
-  background: radial-gradient(circle at 38% 32%, #1c65e8, #071d6e);
-  box-shadow: 0 0 0 1px rgba(0,100,255,0.18),
-              0 0 35px rgba(0,80,220,0.4),
-              0 0 90px rgba(0,80,220,0.12);
-  font-size: 19px;
-  font-weight: 900;
-  letter-spacing: 3.5px;
-  color: #fff;
-  animation: heartbeat 3.5s ease-in-out infinite;
+  width:116px; height:116px;
+  background:radial-gradient(circle at 38% 32%, #1c65e8, #071d6e);
+  box-shadow:0 0 0 1px rgba(0,100,255,0.18),0 0 35px rgba(0,80,220,0.4),0 0 90px rgba(0,80,220,0.12);
+  font-size:19px; font-weight:900; letter-spacing:3.5px; color:#fff;
+  animation:heartbeat 3.5s ease-in-out infinite;
 }
 @keyframes heartbeat {
-  0%,100% { box-shadow: 0 0 0 1px rgba(0,100,255,0.18), 0 0 35px rgba(0,80,220,0.4), 0 0 90px rgba(0,80,220,0.12); }
-  40%     { box-shadow: 0 0 0 1px rgba(0,150,255,0.35), 0 0 55px rgba(0,120,255,0.6), 0 0 120px rgba(0,120,255,0.2); }
+  0%,100% { box-shadow:0 0 0 1px rgba(0,100,255,0.18),0 0 35px rgba(0,80,220,0.4),0 0 90px rgba(0,80,220,0.12); }
+  40%     { box-shadow:0 0 0 1px rgba(0,150,255,0.35),0 0 55px rgba(0,120,255,0.6),0 0 120px rgba(0,120,255,0.2); }
 }
-
-/* Orbit rings */
 .bubble.center::before {
-  content: '';
-  position: absolute;
-  width: 148px; height: 148px;
-  border-radius: 50%;
-  border: 1px solid rgba(0,212,255,0.12);
-  animation: orbit1 22s linear infinite;
-  pointer-events: none;
+  content:''; position:absolute; width:148px; height:148px; border-radius:50%;
+  border:1px solid rgba(0,212,255,0.12); animation:orbit1 22s linear infinite; pointer-events:none;
 }
 .bubble.center::after {
-  content: '';
-  position: absolute;
-  width: 178px; height: 178px;
-  border-radius: 50%;
-  border: 1px dashed rgba(0,212,255,0.06);
-  animation: orbit1 38s linear infinite reverse;
-  pointer-events: none;
+  content:''; position:absolute; width:178px; height:178px; border-radius:50%;
+  border:1px dashed rgba(0,212,255,0.06); animation:orbit1 38s linear infinite reverse; pointer-events:none;
 }
-@keyframes orbit1 { to { transform: rotate(360deg); } }
-
-.center-label { font-size: 19px; font-weight: 900; letter-spacing: 3.5px; }
-.center-sub   { font-size: 8px; letter-spacing: 1.5px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+@keyframes orbit1 { to { transform:rotate(360deg); } }
+.center-label { font-size:19px; font-weight:900; letter-spacing:3.5px; }
+.center-sub   { font-size:8px; letter-spacing:1.5px; color:rgba(255,255,255,0.35); margin-top:2px; }
 
 /* Category bubbles */
-.bubble.cat {
-  width: 82px; height: 82px;
-  font-size: 10.5px; font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #fff;
-}
-.cat.drift     { background: radial-gradient(circle at 35% 32%, #00d480, #006640); box-shadow: 0 0 28px rgba(0,212,128,0.22), 0 0 70px rgba(0,212,128,0.07); }
-.cat.okonomi   { background: radial-gradient(circle at 35% 32%, #3a8fff, #12368a); box-shadow: 0 0 28px rgba(58,143,255,0.22), 0 0 70px rgba(58,143,255,0.07); }
-.cat.ads       { background: radial-gradient(circle at 35% 32%, #ff9000, #7a3800); box-shadow: 0 0 28px rgba(255,144,0,0.22),   0 0 70px rgba(255,144,0,0.07); }
-.cat.ejer      { background: radial-gradient(circle at 35% 32%, #a060f0, #48169e); box-shadow: 0 0 28px rgba(160,96,240,0.22),  0 0 70px rgba(160,96,240,0.07); }
-.cat.ansatte   { background: radial-gradient(circle at 35% 32%, #00c8ff, #004e6e); box-shadow: 0 0 28px rgba(0,200,255,0.22),   0 0 70px rgba(0,200,255,0.07); }
-.cat.forsikring{ background: radial-gradient(circle at 35% 32%, #ff4d8d, #820030); box-shadow: 0 0 28px rgba(255,77,141,0.22),  0 0 70px rgba(255,77,141,0.07); }
+.bubble.cat { width:82px; height:82px; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#fff; }
+.cat.drift      { background:radial-gradient(circle at 35% 32%,#00d480,#006640); box-shadow:0 0 28px rgba(0,212,128,0.22),0 0 70px rgba(0,212,128,0.07); }
+.cat.okonomi    { background:radial-gradient(circle at 35% 32%,#3a8fff,#12368a); box-shadow:0 0 28px rgba(58,143,255,0.22),0 0 70px rgba(58,143,255,0.07); }
+.cat.ads        { background:radial-gradient(circle at 35% 32%,#ff9000,#7a3800); box-shadow:0 0 28px rgba(255,144,0,0.22),0 0 70px rgba(255,144,0,0.07); }
+.cat.ejer       { background:radial-gradient(circle at 35% 32%,#a060f0,#48169e); box-shadow:0 0 28px rgba(160,96,240,0.22),0 0 70px rgba(160,96,240,0.07); }
+.cat.ansatte    { background:radial-gradient(circle at 35% 32%,#00c8ff,#004e6e); box-shadow:0 0 28px rgba(0,200,255,0.22),0 0 70px rgba(0,200,255,0.07); }
+.cat.forsikring { background:radial-gradient(circle at 35% 32%,#ff4d8d,#820030); box-shadow:0 0 28px rgba(255,77,141,0.22),0 0 70px rgba(255,77,141,0.07); }
 
 /* Child bubbles */
 .bubble.child {
-  width: 62px; height: 62px;
-  font-size: 9px; font-weight: 600;
-  background: rgba(255,255,255,0.025);
-  border: 1px solid rgba(255,255,255,0.055);
-  color: rgba(255,255,255,0.55);
-  line-height: 1.25;
-  backdrop-filter: blur(6px);
+  width:62px; height:62px; font-size:9px; font-weight:600;
+  background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.055);
+  color:rgba(255,255,255,0.55); line-height:1.25; backdrop-filter:blur(6px);
 }
-.bubble.child:hover {
-  border-color: rgba(0,212,255,0.28);
-  color: #fff;
-  box-shadow: 0 0 22px rgba(0,212,255,0.12);
-}
+.bubble.child:hover { border-color:rgba(0,212,255,0.28); color:#fff; box-shadow:0 0 22px rgba(0,212,255,0.12); }
 
-.bname { font-weight: 700; padding: 0 4px; }
-.bsub  { font-size: 7.5px; color: rgba(255,255,255,0.28); margin-top: 1px; }
+/* Logo icon in bubbles */
+.b-icon { font-size:15px; line-height:1; margin-bottom:1px; }
+.b-icon.fb  { font-size:13px; font-weight:900; color:#fff; background:#1877f2; width:18px; height:18px; border-radius:4px; display:flex; align-items:center; justify-content:center; margin-bottom:2px; }
+.b-icon.ig  { font-size:11px; background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); width:18px; height:18px; border-radius:5px; display:flex; align-items:center; justify-content:center; margin-bottom:2px; }
+.b-icon.gg  { font-size:12px; font-weight:900; display:flex; align-items:center; justify-content:center; margin-bottom:2px; }
+.b-icon.gg span:nth-child(1){color:#4285f4;} .b-icon.gg span:nth-child(2){color:#ea4335;} .b-icon.gg span:nth-child(3){color:#fbbc04;} .b-icon.gg span:nth-child(4){color:#34a853;}
 
-/* Status dot */
-.sdot {
-  position: absolute;
-  top: 5px; right: 5px;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-}
-.s-g { background: #00ff88; box-shadow: 0 0 7px rgba(0,255,136,.9); }
-.s-y { background: #ffaa00; box-shadow: 0 0 7px rgba(255,170,0,.9); }
-.s-r { background: #ff3030; box-shadow: 0 0 7px rgba(255,48,48,.9); }
+.bname { font-weight:700; padding:0 4px; }
+.bsub  { font-size:7.5px; color:rgba(255,255,255,0.28); margin-top:1px; }
+.sdot  { position:absolute; top:5px; right:5px; width:7px; height:7px; border-radius:50%; }
+.s-g { background:#00ff88; box-shadow:0 0 7px rgba(0,255,136,.9); }
+.s-y { background:#ffaa00; box-shadow:0 0 7px rgba(255,170,0,.9); }
+.s-r { background:#ff3030; box-shadow:0 0 7px rgba(255,48,48,.9); }
 
-/* ═══════════════════════════════════════════
-   RIGHT PANEL
-═══════════════════════════════════════════ */
+/* ── RIGHT PANEL ── */
 #panel {
-  width: 295px;
-  flex-shrink: 0;
-  background: rgba(5,8,15,0.88);
-  border-left: 1px solid rgba(0,212,255,0.06);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  backdrop-filter: blur(24px);
+  width:295px; flex-shrink:0;
+  background:rgba(5,8,15,0.88); border-left:1px solid rgba(0,212,255,0.06);
+  display:flex; flex-direction:column; overflow:hidden; backdrop-filter:blur(24px);
 }
+.p-hdr { padding:11px 16px; border-bottom:1px solid rgba(255,255,255,0.03); font-size:8.5px; text-transform:uppercase; letter-spacing:1.6px; color:var(--muted); display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.p-hdr-bar { width:3px; height:13px; border-radius:2px; flex-shrink:0; }
+.p-scroll { overflow-y:auto; flex:1; }
+.p-scroll::-webkit-scrollbar { width:2px; }
+.p-scroll::-webkit-scrollbar-thumb { background:rgba(0,212,255,0.12); border-radius:2px; }
+.task { display:flex; align-items:flex-start; gap:10px; padding:8px 16px; border-bottom:1px solid rgba(255,255,255,0.02); transition:background .12s; }
+.task:hover { background:rgba(255,255,255,0.02); }
+.td { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+.task strong { display:block; font-size:11.5px; color:#c0d0e5; font-weight:600; }
+.task .meta  { font-size:9.5px; color:var(--muted); margin-top:1px; }
+.legend { display:flex; gap:12px; padding:9px 16px; border-top:1px solid rgba(255,255,255,0.03); font-size:9px; color:var(--muted); flex-shrink:0; }
+.legend span { display:flex; align-items:center; gap:5px; }
+.ld { width:5px; height:5px; border-radius:50%; }
 
-.p-hdr {
-  padding: 11px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-  font-size: 8.5px;
-  text-transform: uppercase;
-  letter-spacing: 1.6px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
+/* ── SLIDE PANELS (shared styles) ── */
+.slide-panel {
+  position:fixed; top:58px; right:0;
+  width:370px; height:calc(100vh - 58px);
+  z-index:200; transform:translateX(100%);
+  transition:transform .38s cubic-bezier(.25,.46,.45,.94);
+  overflow-y:auto; padding:22px 20px 30px;
+  backdrop-filter:blur(32px);
 }
-.p-hdr-bar {
-  width: 3px; height: 13px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
+.slide-panel.open { transform:translateX(0); }
+.slide-panel::-webkit-scrollbar { width:3px; }
+.slide-panel::-webkit-scrollbar-thumb { border-radius:2px; }
 
-.p-scroll { overflow-y: auto; flex: 1; }
-.p-scroll::-webkit-scrollbar { width: 2px; }
-.p-scroll::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.12); border-radius: 2px; }
+/* Insurance panel */
+#ins-panel { background:rgba(6,9,18,0.97); border-left:1px solid rgba(255,77,141,0.18); }
+#ins-panel::-webkit-scrollbar-thumb { background:rgba(255,77,141,0.2); }
 
-.task {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 8px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.02);
-  transition: background .12s;
-}
-.task:hover { background: rgba(255,255,255,0.02); }
-.td {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-top: 4px;
-}
-.task strong { display: block; font-size: 11.5px; color: #c0d0e5; font-weight: 600; }
-.task .meta  { font-size: 9.5px; color: var(--muted); margin-top: 1px; }
+/* Ads panel */
+#ads-panel { background:rgba(6,9,18,0.97); border-left:1px solid rgba(255,144,0,0.18); }
+#ads-panel::-webkit-scrollbar-thumb { background:rgba(255,144,0,0.2); }
 
-.legend {
-  display: flex;
-  gap: 12px;
-  padding: 9px 16px;
-  border-top: 1px solid rgba(255,255,255,0.03);
-  font-size: 9px;
-  color: var(--muted);
-  flex-shrink: 0;
+.panel-close {
+  position:absolute; top:14px; right:14px; width:30px; height:30px; border-radius:50%;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);
+  color:var(--muted); cursor:pointer; display:flex; align-items:center; justify-content:center;
+  font-size:14px; transition:all .15s;
 }
-.legend span { display: flex; align-items: center; gap: 5px; }
-.ld { width: 5px; height: 5px; border-radius: 50%; }
+.ins-close:hover { background:rgba(255,77,141,0.12); color:var(--pink); border-color:rgba(255,77,141,0.3); }
+.ads-close:hover { background:rgba(255,144,0,0.12);  color:var(--orange); border-color:rgba(255,144,0,0.3); }
 
-/* ═══════════════════════════════════════════
-   INSURANCE SLIDE PANEL
-═══════════════════════════════════════════ */
-#ins-panel {
-  position: fixed;
-  top: 58px;
-  right: 0;
-  width: 370px;
-  height: calc(100vh - 58px);
-  background: rgba(6,9,18,0.97);
-  border-left: 1px solid rgba(255,77,141,0.18);
-  z-index: 200;
-  transform: translateX(100%);
-  transition: transform .38s cubic-bezier(.25,.46,.45,.94);
-  overflow-y: auto;
-  padding: 22px 20px 30px;
-  backdrop-filter: blur(32px);
-}
-#ins-panel.open { transform: translateX(0); }
+.sp-title { font-size:13px; font-weight:900; letter-spacing:2.5px; text-transform:uppercase; margin-bottom:3px; }
+.sp-meta  { font-size:9.5px; color:var(--muted); margin-bottom:18px; letter-spacing:.5px; }
+.ins-title { color:var(--pink);   text-shadow:0 0 18px rgba(255,77,141,0.45); }
+.ads-title { color:var(--orange); text-shadow:0 0 18px rgba(255,144,0,0.45); }
 
-#ins-panel::-webkit-scrollbar { width: 3px; }
-#ins-panel::-webkit-scrollbar-thumb { background: rgba(255,77,141,0.2); border-radius: 2px; }
+.sp-card { border-radius:10px; padding:13px 15px; margin-bottom:9px; transition:background .18s, border-color .18s; }
+.ins-card { background:rgba(255,77,141,0.04);  border:1px solid rgba(255,77,141,0.09); }
+.ins-card:hover { background:rgba(255,77,141,0.08); border-color:rgba(255,77,141,0.16); }
+.ads-card { background:rgba(255,144,0,0.04);   border:1px solid rgba(255,144,0,0.09); }
+.ads-card:hover { background:rgba(255,144,0,0.08); border-color:rgba(255,144,0,0.16); }
 
-.ins-close {
-  position: absolute;
-  top: 14px; right: 14px;
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
-  color: var(--muted);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px;
-  transition: all .15s;
-}
-.ins-close:hover { background: rgba(255,77,141,0.12); color: var(--pink); border-color: rgba(255,77,141,0.3); }
+.sp-card-name { font-size:11.5px; font-weight:700; margin-bottom:7px; letter-spacing:.3px; }
+.ins-card-name { color:#f0a0c0; }
+.ads-card-name { color:#ffc080; }
 
-.ins-title {
-  font-size: 13px; font-weight: 900;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--pink);
-  text-shadow: 0 0 18px rgba(255,77,141,0.45);
-  margin-bottom: 3px;
-}
-.ins-meta { font-size: 9.5px; color: var(--muted); margin-bottom: 18px; letter-spacing: .5px; }
+.sp-row { display:flex; justify-content:space-between; align-items:center; font-size:10px; padding:2.5px 0; border-bottom:1px solid rgba(255,255,255,0.03); color:var(--muted); }
+.sp-row:last-child { border-bottom:none; }
+.sp-row span:last-child { color:#b8cce0; font-weight:500; }
+.sp-row .price-pink { color:var(--pink)   !important; font-weight:700; }
+.sp-row .price-ora  { color:var(--orange) !important; font-weight:700; }
+.sp-row .ok         { color:var(--green)  !important; font-weight:700; }
 
-.ins-card {
-  background: rgba(255,77,141,0.04);
-  border: 1px solid rgba(255,77,141,0.09);
-  border-radius: 10px;
-  padding: 13px 15px;
-  margin-bottom: 9px;
-  transition: background .18s, border-color .18s;
-}
-.ins-card:hover { background: rgba(255,77,141,0.08); border-color: rgba(255,77,141,0.16); }
+.sp-total { margin-top:14px; padding:13px 16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; }
+.sp-total + .sp-total { margin-top:8px; }
+.ins-total { background:rgba(255,77,141,0.07);  border:1px solid rgba(255,77,141,0.18); }
+.ads-total { background:rgba(255,144,0,0.07);   border:1px solid rgba(255,144,0,0.18); }
+.sp-total-lbl { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); }
+.sp-total-sub { font-size:9px; color:rgba(61,80,104,0.7); margin-top:2px; }
+.sp-total-val { font-size:20px; font-weight:900; }
+.ins-total-val { color:var(--pink);   text-shadow:0 0 18px rgba(255,77,141,0.45); }
+.ads-total-val { color:var(--orange); text-shadow:0 0 18px rgba(255,144,0,0.45); }
 
-.ins-card-name {
-  font-size: 11.5px; font-weight: 700;
-  color: #f0a0c0;
-  margin-bottom: 7px;
-  letter-spacing: .3px;
-}
-.ins-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 10px;
-  padding: 2.5px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-  color: var(--muted);
-}
-.ins-row:last-child { border-bottom: none; }
-.ins-row span:last-child { color: #b8cce0; font-weight: 500; }
-.ins-row .price { color: var(--pink) !important; font-weight: 700; }
+/* Platform badge */
+.plat-badge { display:inline-flex; align-items:center; gap:5px; padding:2px 8px; border-radius:20px; font-size:9px; font-weight:700; margin-bottom:8px; }
+.badge-fb   { background:rgba(24,119,242,0.15); border:1px solid rgba(24,119,242,0.3); color:#6ab0ff; }
+.badge-ig   { background:rgba(225,48,108,0.12); border:1px solid rgba(225,48,108,0.3); color:#ff8ab4; }
+.badge-g    { background:rgba(66,133,244,0.12); border:1px solid rgba(66,133,244,0.3); color:#90b8ff; }
+.badge-seo  { background:rgba(52,168,83,0.12);  border:1px solid rgba(52,168,83,0.3);  color:#80e090; }
 
-.ins-total {
-  margin-top: 14px;
-  padding: 13px 16px;
-  background: rgba(255,77,141,0.07);
-  border: 1px solid rgba(255,77,141,0.18);
-  border-radius: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.ins-total + .ins-total { margin-top: 8px; }
-.ins-total-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
-.ins-total-sub { font-size: 9px; color: rgba(61,80,104,0.7); margin-top: 2px; }
-.ins-total-val { font-size: 20px; font-weight: 900; color: var(--pink); text-shadow: 0 0 18px rgba(255,77,141,0.45); }
+/* stat row with icon */
+.stat-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.025); font-size:10px; }
+.stat-row:last-child { border-bottom:none; }
+.stat-label { color:var(--muted); }
+.stat-val { color:#c8d8f0; font-weight:600; font-size:11px; }
+.stat-val.live { color:var(--green); }
 
-/* ═══════════════════════════════════════════
-   TOOLTIP
-═══════════════════════════════════════════ */
-#tip {
-  position: fixed;
-  background: rgba(6,10,20,0.96);
-  border: 1px solid rgba(0,212,255,0.14);
-  border-radius: 12px;
-  padding: 12px 16px;
-  font-size: 12px;
-  pointer-events: none;
-  z-index: 999;
-  display: none;
-  max-width: 230px;
-  line-height: 1.6;
-  color: var(--muted);
-  box-shadow: 0 10px 36px rgba(0,0,0,.65), 0 0 24px rgba(0,212,255,0.05);
-  backdrop-filter: blur(24px);
-}
-#tip strong { display: block; color: #e8f0fa; margin-bottom: 3px; font-size: 13px; font-weight: 700; }
-#tip .t-price { color: var(--green); font-weight: 700; font-size: 11px; margin-top: 4px; }
-#tip .t-hint  { font-size: 9.5px; color: rgba(0,212,255,0.5); margin-top: 4px; font-style: italic; }
+/* ── TOOLTIP ── */
+#tip { position:fixed; background:rgba(6,10,20,0.96); border:1px solid rgba(0,212,255,0.14); border-radius:12px; padding:12px 16px; font-size:12px; pointer-events:none; z-index:999; display:none; max-width:230px; line-height:1.6; color:var(--muted); box-shadow:0 10px 36px rgba(0,0,0,.65),0 0 24px rgba(0,212,255,0.05); backdrop-filter:blur(24px); }
+#tip strong { display:block; color:#e8f0fa; margin-bottom:3px; font-size:13px; font-weight:700; }
+#tip .t-price { color:var(--green); font-weight:700; font-size:11px; margin-top:4px; }
+#tip .t-hint  { font-size:9.5px; color:rgba(0,212,255,0.5); margin-top:4px; font-style:italic; }
+#tip .t-contact { font-size:10px; color:#5a8aaa; margin-top:3px; }
 
-/* Scanline overlay */
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.025) 3px, rgba(0,0,0,0.025) 4px);
-  pointer-events: none;
-  z-index: 500;
-}
+/* Scanlines */
+body::after { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.025) 3px,rgba(0,0,0,0.025) 4px); pointer-events:none; z-index:500; }
 </style>
 </head>
 <body>
 
 <canvas id="starfield"></canvas>
 
-<!-- ══════════════ HEADER ══════════════ -->
+<!-- ══ HEADER ══ -->
 <header>
   <div class="logo">
     <div class="logo-main">GENNO</div>
     <div class="logo-sub">ApS · Tømrermester · København</div>
   </div>
-
   <div class="kpis">
-    <div class="kpi">
-      <div class="kpi-label">Forsikring / år</div>
-      <div class="kpi-val c-pink" id="kpi-ins">46.496 kr</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">7 Policer aktive</div>
-      <div class="kpi-val c-green">● I KRAFT</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Ads / måned</div>
-      <div class="kpi-val c-amber">~7.000 kr</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Team</div>
-      <div class="kpi-val c-blue">5 pers</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Rating</div>
-      <div class="kpi-val c-green">★ 5.0</div>
-    </div>
+    <div class="kpi"><div class="kpi-label">Forsikring / år</div><div class="kpi-val c-pink">46.496 kr</div></div>
+    <div class="kpi"><div class="kpi-label">7 Policer aktive</div><div class="kpi-val c-green">● I KRAFT</div></div>
+    <div class="kpi"><div class="kpi-label">Ads / måned</div><div class="kpi-val c-amber">~7.000 kr</div></div>
+    <div class="kpi"><div class="kpi-label">Team</div><div class="kpi-val c-blue">5 pers</div></div>
+    <div class="kpi"><div class="kpi-label">Rating</div><div class="kpi-val c-green">★ 5.0</div></div>
   </div>
-
   <div class="hdr-right">
     <div class="hdr-time" id="hdr-time"></div>
     <div class="hdr-date" id="hdr-date"></div>
   </div>
 </header>
 
-<!-- ══════════════ MAIN ══════════════ -->
 <div class="main">
+<div id="map">
+  <svg id="lines"></svg>
 
-  <!-- Mind map -->
-  <div id="map">
-    <svg id="lines"></svg>
-
-    <!-- CENTER -->
-    <div class="bubble center" id="b-genno" style="left:44%;top:44%;transform:translate(-50%,-50%)">
-      <div class="center-label">GENNO</div>
-      <div class="center-sub">ApS</div>
-    </div>
-
-    <!-- FORSIKRING (top, slightly right of center) -->
-    <div class="bubble cat forsikring" id="b-forsikring" style="left:44%;top:8%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Forsikring</div>
-      <div class="bsub">7 policer</div>
-    </div>
-
-    <!-- DRIFT (top-left) -->
-    <div class="bubble cat drift" id="b-drift" style="left:18%;top:20%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Drift</div>
-    </div>
-    <div class="bubble child" id="b-stark" style="left:2%;top:6%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Stark</div>
-      <div class="bsub">Materialer</div>
-    </div>
-    <div class="bubble child" id="b-bil" style="left:4%;top:24%">
-      <div class="sdot s-y"></div>
-      <div class="bname">CH64444</div>
-      <div class="bsub">Syn juni</div>
-    </div>
-    <div class="bubble child" id="b-webflow" style="left:13%;top:5%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Webflow</div>
-      <div class="bsub">CMS</div>
-    </div>
-
-    <!-- ØKONOMI (bottom-left) -->
-    <div class="bubble cat okonomi" id="b-okonomi" style="left:17%;top:64%">
-      <div class="sdot s-y"></div>
-      <div class="bname">Økonomi</div>
-    </div>
-    <div class="bubble child" id="b-econo" style="left:1%;top:50%">
-      <div class="sdot s-y"></div>
-      <div class="bname">E-conomic</div>
-    </div>
-    <div class="bubble child" id="b-ordre" style="left:1%;top:69%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Ordre&shy;styring</div>
-      <div class="bsub">Gratis</div>
-    </div>
-    <div class="bubble child" id="b-moms" style="left:7%;top:83%">
-      <div class="sdot s-r"></div>
-      <div class="bname">Moms</div>
-      <div class="bsub">60k</div>
-    </div>
-    <div class="bubble child" id="b-bank" style="left:20%;top:87%">
-      <div class="sdot s-y"></div>
-      <div class="bname">Lunar</div>
-      <div class="bsub">40k saldo</div>
-    </div>
-    <div class="bubble child" id="b-skat" style="left:32%;top:83%">
-      <div class="sdot s-y"></div>
-      <div class="bname">Skat</div>
-    </div>
-
-    <!-- ADS (top-right) -->
-    <div class="bubble cat ads" id="b-ads" style="left:65%;top:20%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Ads</div>
-    </div>
-    <div class="bubble child" id="b-adwise" style="left:70%;top:5%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Adwise</div>
-      <div class="bsub">3.700/md</div>
-    </div>
-    <div class="bubble child" id="b-gene" style="left:82%;top:10%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Generaxion</div>
-      <div class="bsub">SEO</div>
-    </div>
-    <div class="bubble child" id="b-meta" style="left:84%;top:24%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Meta/FB</div>
-      <div class="bsub">100/dag</div>
-    </div>
-    <div class="bubble child" id="b-insta" style="left:74%;top:35%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Instagram</div>
-      <div class="bsub">50/dag</div>
-    </div>
-
-    <!-- EJER (right) -->
-    <div class="bubble cat ejer" id="b-ejer" style="left:66%;top:60%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Ejerskab</div>
-    </div>
-    <div class="bubble child" id="b-jogvan" style="left:78%;top:50%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Jógvan</div>
-      <div class="bsub">80%</div>
-    </div>
-    <div class="bubble child" id="b-johannes" style="left:79%;top:67%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Johannes</div>
-      <div class="bsub">20%</div>
-    </div>
-
-    <!-- ANSATTE (bottom-center) -->
-    <div class="bubble cat ansatte" id="b-ansatte" style="left:44%;top:71%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Ansatte</div>
-    </div>
-    <div class="bubble child" id="b-malik" style="left:34%;top:85%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Malik</div>
-      <div class="bsub">Lærling</div>
-    </div>
-    <div class="bubble child" id="b-gustav" style="left:46%;top:89%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Gustav</div>
-      <div class="bsub">Underent.</div>
-    </div>
-    <div class="bubble child" id="b-seb" style="left:58%;top:85%">
-      <div class="sdot s-g"></div>
-      <div class="bname">Sebastian</div>
-      <div class="bsub">Underent.</div>
-    </div>
+  <!-- CENTER -->
+  <div class="bubble center" id="b-genno" style="left:44%;top:44%;transform:translate(-50%,-50%)">
+    <div class="center-label">GENNO</div>
+    <div class="center-sub">ApS</div>
   </div>
 
-  <!-- ══════════════ RIGHT PANEL ══════════════ -->
-  <div id="panel">
+  <!-- FORSIKRING -->
+  <div class="bubble cat forsikring" id="b-forsikring" style="left:44%;top:8%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">🛡</div>
+    <div class="bname">Forsikring</div>
+    <div class="bsub">7 policer</div>
+  </div>
 
-    <div class="p-hdr">
-      <div class="p-hdr-bar" style="background:var(--amber);box-shadow:0 0 8px rgba(255,170,0,.5)"></div>
-      Interne opgaver
-    </div>
-    <div>
-      <div class="task">
-        <div class="td" style="background:#ff3030;box-shadow:0 0 7px rgba(255,48,48,.7)"></div>
-        <div><strong>Gældstyrelsen</strong><div class="meta">Betal 33.000 kr — haster nu</div></div>
-      </div>
-      <div class="task">
-        <div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div>
-        <div><strong>Moms</strong><div class="meta">Sæt ~60.000 kr til side inden aug</div></div>
-      </div>
-      <div class="task">
-        <div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div>
-        <div><strong>Revisor1 — årsrapport</strong><div class="meta">Godkend udkast + send bankudtog</div></div>
-      </div>
-      <div class="task">
-        <div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div>
-        <div><strong>Bil til syn</strong><div class="meta">Juni måned — book tid nu</div></div>
-      </div>
-      <div class="task">
-        <div class="td" style="background:#4a8fff;box-shadow:0 0 7px rgba(74,143,255,.7)"></div>
-        <div><strong>E-conomic API</strong><div class="meta">Afventer adgang fra Johannes</div></div>
-      </div>
-      <div class="task">
-        <div class="td" style="background:#4a8fff;box-shadow:0 0 7px rgba(74,143,255,.7)"></div>
-        <div><strong>Meta Pixel → GTM</strong><div class="meta">Opsæt tracking på gennorenovering.dk</div></div>
-      </div>
-      <div class="task">
-        <div class="td" style="background:var(--green);box-shadow:0 0 7px rgba(0,255,136,.7)"></div>
-        <div><strong>Meta kampagner live ✓</strong><div class="meta">150 DKK/dag · Lead Gen + Følgere</div></div>
-      </div>
-    </div>
+  <!-- DRIFT -->
+  <div class="bubble cat drift" id="b-drift" style="left:18%;top:20%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">🔧</div>
+    <div class="bname">Drift</div>
+  </div>
 
-    <div class="p-hdr" style="margin-top:2px">
-      <div class="p-hdr-bar" style="background:var(--green);box-shadow:0 0 8px rgba(0,255,136,.5)"></div>
-      Kundeemner &amp; tilbud
-    </div>
-    <div class="p-scroll">
-      <div class="task">
-        <div class="td" style="background:#ff3030;box-shadow:0 0 7px rgba(255,48,48,.7)"></div>
-        <div><strong>3BT — 12 leads</strong><div class="meta">Ikke kontaktet — ring op i dag</div></div>
-      </div>
-      <div class="task">
-        <div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div>
-        <div><strong>3BT tilbud #1</strong><div class="meta">Afventer svar fra kunde</div></div>
-      </div>
-      <div class="task">
-        <div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div>
-        <div><strong>3BT tilbud #2</strong><div class="meta">Afventer svar fra kunde</div></div>
-      </div>
-      <div class="task">
-        <div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div>
-        <div><strong>3BT tilbud #3</strong><div class="meta">Afventer svar fra kunde</div></div>
-      </div>
-      <div class="task">
-        <div class="td" style="background:#4a8fff;box-shadow:0 0 7px rgba(74,143,255,.7)"></div>
-        <div><strong>Webflow — opdater adresse</strong><div class="meta">Laurids Skaus Gade 5, 1 tv, 2200</div></div>
-      </div>
-    </div>
+  <!-- Stark + children (Gustav & Sebastian now under Stark) -->
+  <div class="bubble child" id="b-stark" style="left:2%;top:7%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">🏗</div>
+    <div class="bname">Stark</div>
+    <div class="bsub">Materialer</div>
+  </div>
+  <div class="bubble child" id="b-gustav" style="left:0%;top:20%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">👤</div>
+    <div class="bname">Gustav</div>
+    <div class="bsub">Stark rep</div>
+  </div>
+  <div class="bubble child" id="b-seb" style="left:11%;top:18%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">👤</div>
+    <div class="bname">Sebastian</div>
+    <div class="bsub">Stark rep</div>
+  </div>
 
-    <div class="legend">
-      <span><div class="ld" style="background:var(--green);box-shadow:0 0 5px rgba(0,255,136,.7)"></div>OK</span>
-      <span><div class="ld" style="background:var(--amber);box-shadow:0 0 5px rgba(255,170,0,.7)"></div>Afventer</span>
-      <span><div class="ld" style="background:#ff3030;box-shadow:0 0 5px rgba(255,48,48,.7)"></div>Haster</span>
-      <span><div class="ld" style="background:#4a8fff;box-shadow:0 0 5px rgba(74,143,255,.7)"></div>Planlagt</span>
-    </div>
+  <!-- Bil & Webflow under Drift -->
+  <div class="bubble child" id="b-bil" style="left:4%;top:34%">
+    <div class="sdot s-y"></div>
+    <div class="b-icon">🚐</div>
+    <div class="bname">CH64444</div>
+    <div class="bsub">Syn juni</div>
+  </div>
+  <div class="bubble child" id="b-webflow" style="left:14%;top:6%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">🌐</div>
+    <div class="bname">Webflow</div>
+    <div class="bsub">CMS</div>
+  </div>
+
+  <!-- ØKONOMI -->
+  <div class="bubble cat okonomi" id="b-okonomi" style="left:17%;top:64%">
+    <div class="sdot s-y"></div>
+    <div class="b-icon">💶</div>
+    <div class="bname">Økonomi</div>
+  </div>
+  <div class="bubble child" id="b-econo" style="left:1%;top:50%">
+    <div class="sdot s-y"></div>
+    <div class="b-icon">📊</div>
+    <div class="bname">E-conomic</div>
+  </div>
+  <div class="bubble child" id="b-ordre" style="left:1%;top:69%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">📋</div>
+    <div class="bname">Ordre&shy;styring</div>
+    <div class="bsub">Gratis</div>
+  </div>
+  <div class="bubble child" id="b-moms" style="left:7%;top:83%">
+    <div class="sdot s-r"></div>
+    <div class="b-icon">🏦</div>
+    <div class="bname">Moms</div>
+    <div class="bsub">60k</div>
+  </div>
+  <div class="bubble child" id="b-bank" style="left:20%;top:87%">
+    <div class="sdot s-y"></div>
+    <div class="b-icon">🌙</div>
+    <div class="bname">Lunar</div>
+    <div class="bsub">40k saldo</div>
+  </div>
+  <div class="bubble child" id="b-skat" style="left:32%;top:83%">
+    <div class="sdot s-y"></div>
+    <div class="b-icon">🏛</div>
+    <div class="bname">Skat</div>
+  </div>
+
+  <!-- ADS -->
+  <div class="bubble cat ads" id="b-ads" style="left:65%;top:20%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">📡</div>
+    <div class="bname">Ads</div>
+  </div>
+  <div class="bubble child" id="b-adwise" style="left:70%;top:5%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon gg"><span>G</span><span>o</span><span>o</span><span>g</span></div>
+    <div class="bname">Adwise</div>
+    <div class="bsub">3.700/md</div>
+  </div>
+  <div class="bubble child" id="b-gene" style="left:82%;top:10%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">📈</div>
+    <div class="bname">Generaxion</div>
+    <div class="bsub">SEO</div>
+  </div>
+  <div class="bubble child" id="b-meta" style="left:84%;top:24%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon fb">f</div>
+    <div class="bname">Meta/FB</div>
+    <div class="bsub">100/dag</div>
+  </div>
+  <div class="bubble child" id="b-insta" style="left:74%;top:35%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon ig">📷</div>
+    <div class="bname">Instagram</div>
+    <div class="bsub">50/dag</div>
+  </div>
+
+  <!-- EJER -->
+  <div class="bubble cat ejer" id="b-ejer" style="left:66%;top:60%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">👥</div>
+    <div class="bname">Ejerskab</div>
+  </div>
+  <div class="bubble child" id="b-jogvan" style="left:78%;top:50%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">👑</div>
+    <div class="bname">Jógvan</div>
+    <div class="bsub">80%</div>
+  </div>
+  <div class="bubble child" id="b-johannes" style="left:79%;top:67%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">💻</div>
+    <div class="bname">Johannes</div>
+    <div class="bsub">20%</div>
+  </div>
+
+  <!-- ANSATTE -->
+  <div class="bubble cat ansatte" id="b-ansatte" style="left:44%;top:71%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">👷</div>
+    <div class="bname">Ansatte</div>
+  </div>
+  <div class="bubble child" id="b-malik" style="left:34%;top:85%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">🎓</div>
+    <div class="bname">Malik</div>
+    <div class="bsub">Lærling</div>
   </div>
 </div>
 
-<!-- ══════════════ INSURANCE SLIDE PANEL ══════════════ -->
-<div id="ins-panel">
-  <div class="ins-close" id="ins-close">✕</div>
-  <div class="ins-title">🛡 Forsikring</div>
-  <div class="ins-meta">Topdanmark · Kundenr. 3496 25G · CVR 44112671 · Opdateret 24. maj 2026</div>
+<!-- ══ RIGHT PANEL ══ -->
+<div id="panel">
+  <div class="p-hdr">
+    <div class="p-hdr-bar" style="background:var(--amber);box-shadow:0 0 8px rgba(255,170,0,.5)"></div>
+    Interne opgaver
+  </div>
+  <div>
+    <div class="task"><div class="td" style="background:#ff3030;box-shadow:0 0 7px rgba(255,48,48,.7)"></div><div><strong>Gældstyrelsen</strong><div class="meta">Betal 33.000 kr — haster nu</div></div></div>
+    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>Moms</strong><div class="meta">Sæt ~60.000 kr til side inden aug</div></div></div>
+    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>Revisor1 — årsrapport</strong><div class="meta">Godkend udkast + send bankudtog</div></div></div>
+    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>Bil til syn</strong><div class="meta">Juni måned — book tid nu</div></div></div>
+    <div class="task"><div class="td" style="background:#4a8fff;box-shadow:0 0 7px rgba(74,143,255,.7)"></div><div><strong>E-conomic API</strong><div class="meta">Afventer adgang fra Johannes</div></div></div>
+    <div class="task"><div class="td" style="background:#4a8fff;box-shadow:0 0 7px rgba(74,143,255,.7)"></div><div><strong>Meta Pixel → GTM</strong><div class="meta">Opsæt tracking på gennorenovering.dk</div></div></div>
+    <div class="task"><div class="td" style="background:var(--green);box-shadow:0 0 7px rgba(0,255,136,.7)"></div><div><strong>Meta kampagner live ✓</strong><div class="meta">150 DKK/dag · Lead Gen + Følgere</div></div></div>
+  </div>
+  <div class="p-hdr" style="margin-top:2px">
+    <div class="p-hdr-bar" style="background:var(--green);box-shadow:0 0 8px rgba(0,255,136,.5)"></div>
+    Kundeemner &amp; tilbud
+  </div>
+  <div class="p-scroll">
+    <div class="task"><div class="td" style="background:#ff3030;box-shadow:0 0 7px rgba(255,48,48,.7)"></div><div><strong>3BT — 12 leads</strong><div class="meta">Ikke kontaktet — ring op i dag</div></div></div>
+    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>3BT tilbud #1</strong><div class="meta">Afventer svar fra kunde</div></div></div>
+    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>3BT tilbud #2</strong><div class="meta">Afventer svar fra kunde</div></div></div>
+    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>3BT tilbud #3</strong><div class="meta">Afventer svar fra kunde</div></div></div>
+    <div class="task"><div class="td" style="background:#4a8fff;box-shadow:0 0 7px rgba(74,143,255,.7)"></div><div><strong>Webflow — opdater adresse</strong><div class="meta">Laurids Skaus Gade 5, 1 tv, 2200</div></div></div>
+  </div>
+  <div class="legend">
+    <span><div class="ld" style="background:var(--green);box-shadow:0 0 5px rgba(0,255,136,.7)"></div>OK</span>
+    <span><div class="ld" style="background:var(--amber);box-shadow:0 0 5px rgba(255,170,0,.7)"></div>Afventer</span>
+    <span><div class="ld" style="background:#ff3030;box-shadow:0 0 5px rgba(255,48,48,.7)"></div>Haster</span>
+    <span><div class="ld" style="background:#4a8fff;box-shadow:0 0 5px rgba(74,143,255,.7)"></div>Planlagt</span>
+  </div>
+</div>
+</div><!-- .main -->
 
-  <div class="ins-card">
-    <div class="ins-card-name">Lovpligtig arbejdsskadeforsikring</div>
-    <div class="ins-row"><span>Police</span><span>9813 576 811</span></div>
-    <div class="ins-row"><span>Sikrede</span><span>2 medarbejdere</span></div>
-    <div class="ins-row"><span>Dækning</span><span>Lovpligtig arbejdsulykke</span></div>
-    <div class="ins-row"><span>Max operation</span><span>764.161 kr</span></div>
-    <div class="ins-row"><span>Gælder fra</span><span>14. april 2026</span></div>
-    <div class="ins-row"><span>Pris</span><span class="price">2.018 kr/md · 24.216 kr/år</span></div>
+<!-- ══ INSURANCE SLIDE PANEL ══ -->
+<div id="ins-panel" class="slide-panel">
+  <div class="panel-close ins-close" id="ins-close">✕</div>
+  <div class="sp-title ins-title">🛡 Forsikring</div>
+  <div class="sp-meta">Topdanmark · Kundenr. 3496 25G · CVR 44112671 · 24. maj 2026</div>
+
+  <div class="sp-card ins-card">
+    <div class="sp-card-name ins-card-name">Lovpligtig arbejdsskadeforsikring</div>
+    <div class="sp-row"><span>Police</span><span>9813 576 811</span></div>
+    <div class="sp-row"><span>Sikrede</span><span>2 medarbejdere</span></div>
+    <div class="sp-row"><span>Max operation</span><span>764.161 kr</span></div>
+    <div class="sp-row"><span>Gælder fra</span><span>14. april 2026</span></div>
+    <div class="sp-row"><span>Pris</span><span class="price-pink">2.018 kr/md · 24.216 kr/år</span></div>
+  </div>
+  <div class="sp-card ins-card">
+    <div class="sp-card-name ins-card-name">Ansvarsforsikring</div>
+    <div class="sp-row"><span>Police</span><span>9813 576 811</span></div>
+    <div class="sp-row"><span>Erhvervsansvar</span><span>10.000.000 kr</span></div>
+    <div class="sp-row"><span>Produktansvar</span><span>10.000.000 kr</span></div>
+    <div class="sp-row"><span>Retshjælp</span><span>500.000 kr</span></div>
+    <div class="sp-row"><span>Dækningsområde</span><span>Europa</span></div>
+    <div class="sp-row"><span>Selvrisiko erhverv</span><span>7.031 kr</span></div>
+    <div class="sp-row"><span>Pris</span><span class="price-pink">807 kr/md · 9.684 kr/år</span></div>
+  </div>
+  <div class="sp-card ins-card">
+    <div class="sp-card-name ins-card-name">Netbankforsikring</div>
+    <div class="sp-row"><span>Police</span><span>9813 576 811</span></div>
+    <div class="sp-row"><span>Netbank max</span><span>3.515.490 kr</span></div>
+    <div class="sp-row"><span>Selvrisiko</span><span>7.031 kr</span></div>
+    <div class="sp-row"><span>Pris</span><span class="price-pink">82 kr/md · 984 kr/år</span></div>
+  </div>
+  <div class="sp-card ins-card">
+    <div class="sp-card-name ins-card-name">Transportforsikring</div>
+    <div class="sp-row"><span>Police</span><span>9813 576 811</span></div>
+    <div class="sp-row"><span>Dækker</span><span>Maskiner + IT udstyr</span></div>
+    <div class="sp-row"><span>Max pr. transport</span><span>105.465 kr</span></div>
+    <div class="sp-row"><span>Område</span><span>Danmark</span></div>
+    <div class="sp-row"><span>Pris</span><span class="price-pink">330 kr/md · 3.960 kr/år</span></div>
+  </div>
+  <div class="sp-card ins-card">
+    <div class="sp-card-name ins-card-name">Erhvervsløsøreforsikring</div>
+    <div class="sp-row"><span>Police</span><span>9813 576 811</span></div>
+    <div class="sp-row"><span>Brand/Storm/Vand/Tyveri</span><span>1.035 kr</span></div>
+    <div class="sp-row"><span>Oprydning</span><span>1.406.196 kr</span></div>
+    <div class="sp-row"><span>Område</span><span>Overalt i Danmark</span></div>
+    <div class="sp-row"><span>Pris</span><span class="price-pink">12 kr/md · 144 kr/år</span></div>
+  </div>
+  <div class="sp-card ins-card">
+    <div class="sp-card-name ins-card-name">Tophjælp Vare- og lastbil</div>
+    <div class="sp-row"><span>Police</span><span>9836 256 503</span></div>
+    <div class="sp-row"><span>Køretøj</span><span>Renault Trafic · CH64444</span></div>
+    <div class="sp-row"><span>Tophjælp bil</span><span>Selvrisiko 0 kr</span></div>
+    <div class="sp-row"><span>Årsdag</span><span>1. august</span></div>
+    <div class="sp-row"><span>Pris</span><span class="price-pink">1.256 kr/år (helårlig)</span></div>
+  </div>
+  <div class="sp-card ins-card">
+    <div class="sp-card-name ins-card-name">Varebil — Kasko + Ansvar</div>
+    <div class="sp-row"><span>Police</span><span>9842 245 688</span></div>
+    <div class="sp-row"><span>Køretøj</span><span>Renault Trafic · CH64444 · Diesel</span></div>
+    <div class="sp-row"><span>Ansvar + Kasko</span><span>Selvrisiko 7.387 kr</span></div>
+    <div class="sp-row"><span>Førerulykke</span><span>0 kr selvrisiko</span></div>
+    <div class="sp-row"><span>Dækker IKKE</span><span style="color:#ff6060">Friskade</span></div>
+    <div class="sp-row"><span>Pris</span><span class="price-pink">523 kr/md · 6.276 kr/år</span></div>
+  </div>
+  <div class="sp-total ins-total"><div><div class="sp-total-lbl">Total månedlig</div><div class="sp-total-sub">Excl. tophjælp</div></div><div class="sp-total-val ins-total-val">3.772 kr</div></div>
+  <div class="sp-total ins-total"><div><div class="sp-total-lbl">Total årlig</div><div class="sp-total-sub">Alle 7 policer</div></div><div class="sp-total-val ins-total-val">46.496 kr</div></div>
+</div>
+
+<!-- ══ ADS SLIDE PANEL ══ -->
+<div id="ads-panel" class="slide-panel">
+  <div class="panel-close ads-close" id="ads-close">✕</div>
+  <div class="sp-title ads-title">📡 Annoncering</div>
+  <div class="sp-meta">Meta Ads · Google Ads · SEO · Konto act_197053390</div>
+
+  <!-- Facebook -->
+  <div class="sp-card ads-card">
+    <div class="plat-badge badge-fb">f Facebook / Meta</div>
+    <div class="sp-card-name ads-card-name">Lead Generation Kampagne</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
+    <div class="sp-row"><span>Budget</span><span class="price-ora">100 DKK/dag</span></div>
+    <div class="sp-row"><span>Formål</span><span>Leads til tømrerarbejde</span></div>
+    <div class="sp-row"><span>Målgruppe</span><span>Husejere 32-65 år, Kbh</span></div>
+    <div class="sp-row"><span>Interesser</span><span>Renovering, DIY, Bolig</span></div>
+    <div class="sp-row"><span>Ad Account</span><span>act_197053390</span></div>
+    <div class="sp-row"><span>Pixel ID</span><span>1405859507973644</span></div>
+    <div class="sp-row"><span>Page ID</span><span>108523075614787</span></div>
   </div>
 
-  <div class="ins-card">
-    <div class="ins-card-name">Ansvarsforsikring</div>
-    <div class="ins-row"><span>Police</span><span>9813 576 811</span></div>
-    <div class="ins-row"><span>Erhvervsansvar</span><span>10.000.000 kr</span></div>
-    <div class="ins-row"><span>Produktansvar</span><span>10.000.000 kr</span></div>
-    <div class="ins-row"><span>Forurening</span><span>2.000.000 kr</span></div>
-    <div class="ins-row"><span>Fareafværgelse</span><span>2.000.000 kr</span></div>
-    <div class="ins-row"><span>Retshjælp</span><span>500.000 kr</span></div>
-    <div class="ins-row"><span>Selvrisiko erhverv</span><span>7.031 kr</span></div>
-    <div class="ins-row"><span>Dækningsområde</span><span>Europa</span></div>
-    <div class="ins-row"><span>Gælder fra</span><span>14. april 2026</span></div>
-    <div class="ins-row"><span>Pris</span><span class="price">807 kr/md · 9.684 kr/år</span></div>
+  <!-- Instagram -->
+  <div class="sp-card ads-card">
+    <div class="plat-badge badge-ig">📷 Instagram</div>
+    <div class="sp-card-name ads-card-name">Følger Kampagne</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
+    <div class="sp-row"><span>Budget</span><span class="price-ora">50 DKK/dag</span></div>
+    <div class="sp-row"><span>Formål</span><span>Byg følgerbase</span></div>
+    <div class="sp-row"><span>Profil</span><span>@genno.dk</span></div>
+    <div class="sp-row"><span>Account ID</span><span>17841460234013696</span></div>
+    <div class="sp-row"><span>Platform</span><span>Instagram Feed + Reels</span></div>
   </div>
 
-  <div class="ins-card">
-    <div class="ins-card-name">Netbankforsikring</div>
-    <div class="ins-row"><span>Police</span><span>9813 576 811</span></div>
-    <div class="ins-row"><span>Netbank max</span><span>3.515.490 kr</span></div>
-    <div class="ins-row"><span>Selvrisiko</span><span>7.031 kr</span></div>
-    <div class="ins-row"><span>Gælder fra</span><span>1. januar 2026</span></div>
-    <div class="ins-row"><span>Pris</span><span class="price">82 kr/md · 984 kr/år</span></div>
+  <!-- Google / Adwise -->
+  <div class="sp-card ads-card">
+    <div class="plat-badge badge-g"><span style="color:#4285f4">G</span><span style="color:#ea4335">o</span><span style="color:#fbbc04">o</span><span style="color:#34a853">g</span> Google Ads</div>
+    <div class="sp-card-name ads-card-name">Adwise — Google Ads Bureau</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
+    <div class="sp-row"><span>Bureau</span><span>Adwise</span></div>
+    <div class="sp-row"><span>Fokus</span><span>Lokale søgninger, Kbh</span></div>
+    <div class="sp-row"><span>Søgeord</span><span>Tømrer, renovering, tilbygning</span></div>
+    <div class="sp-row"><span>Pris</span><span class="price-ora">~3.700 kr/md</span></div>
   </div>
 
-  <div class="ins-card">
-    <div class="ins-card-name">Transportforsikring</div>
-    <div class="ins-row"><span>Police</span><span>9813 576 811</span></div>
-    <div class="ins-row"><span>Dækker</span><span>Maskiner + IT udstyr</span></div>
-    <div class="ins-row"><span>Max pr. transport</span><span>105.465 kr</span></div>
-    <div class="ins-row"><span>Selvrisiko</span><span>7.031 kr</span></div>
-    <div class="ins-row"><span>Område</span><span>Danmark</span></div>
-    <div class="ins-row"><span>Gælder fra</span><span>1. januar 2026</span></div>
-    <div class="ins-row"><span>Pris</span><span class="price">330 kr/md · 3.960 kr/år</span></div>
+  <!-- SEO / Generaxion -->
+  <div class="sp-card ads-card">
+    <div class="plat-badge badge-seo">📈 SEO</div>
+    <div class="sp-card-name ads-card-name">Generaxion — SEO & Digital Marketing</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
+    <div class="sp-row"><span>Partner</span><span>Generaxion</span></div>
+    <div class="sp-row"><span>Ydelse</span><span>SEO, indhold, synlighed</span></div>
+    <div class="sp-row"><span>Website</span><span>gennorenovering.dk</span></div>
+    <div class="sp-row"><span>Pris</span><span class="price-ora">~20.000 kr/år</span></div>
   </div>
 
-  <div class="ins-card">
-    <div class="ins-card-name">Erhvervsløsøreforsikring</div>
-    <div class="ins-row"><span>Police</span><span>9813 576 811</span></div>
-    <div class="ins-row"><span>Brand / Storm / Vand / Tyveri</span><span>1.035 kr</span></div>
-    <div class="ins-row"><span>Oprydning</span><span>1.406.196 kr</span></div>
-    <div class="ins-row"><span>Selvrisiko</span><span>7.031 kr</span></div>
-    <div class="ins-row"><span>Område</span><span>Overalt i Danmark</span></div>
-    <div class="ins-row"><span>Pris</span><span class="price">12 kr/md · 144 kr/år</span></div>
-  </div>
-
-  <div class="ins-card">
-    <div class="ins-card-name">Tophjælp Vare- og lastbil</div>
-    <div class="ins-row"><span>Police</span><span>9836 256 503</span></div>
-    <div class="ins-row"><span>Køretøj</span><span>Renault Trafic 2,0 DCI 115</span></div>
-    <div class="ins-row"><span>Reg.nr.</span><span>CH64444</span></div>
-    <div class="ins-row"><span>Første reg.</span><span>29.12.2008</span></div>
-    <div class="ins-row"><span>Tophjælp bil</span><span>Selvrisiko 0 kr</span></div>
-    <div class="ins-row"><span>Årsdag</span><span>1. august</span></div>
-    <div class="ins-row"><span>Pris</span><span class="price">1.256 kr/år (helårlig)</span></div>
-  </div>
-
-  <div class="ins-card">
-    <div class="ins-card-name">Varebil — Kasko + Ansvar</div>
-    <div class="ins-row"><span>Police</span><span>9842 245 688</span></div>
-    <div class="ins-row"><span>Køretøj</span><span>Renault Trafic 2,0 DCI 115</span></div>
-    <div class="ins-row"><span>Reg.nr.</span><span>CH64444 · Diesel</span></div>
-    <div class="ins-row"><span>Audio/teleudstyr</span><span>15.000 kr</span></div>
-    <div class="ins-row"><span>Ekstraudstyr</span><span>25.000 kr</span></div>
-    <div class="ins-row"><span>Ansvar + Kasko</span><span>Selvrisiko 7.387 kr</span></div>
-    <div class="ins-row"><span>Førerulykke</span><span>0 kr selvrisiko</span></div>
-    <div class="ins-row"><span>Dækker IKKE</span><span style="color:#ff6060">Friskade</span></div>
-    <div class="ins-row"><span>Årsdag</span><span>1. august</span></div>
-    <div class="ins-row"><span>Pris</span><span class="price">523 kr/md · 6.276 kr/år</span></div>
-  </div>
-
-  <div class="ins-total">
-    <div>
-      <div class="ins-total-lbl">Total månedlig</div>
-      <div class="ins-total-sub">Excl. tophjælp (helårlig)</div>
-    </div>
-    <div class="ins-total-val">3.772 kr</div>
-  </div>
-  <div class="ins-total">
-    <div>
-      <div class="ins-total-lbl">Total årlig</div>
-      <div class="ins-total-sub">Alle 7 policer samlet</div>
-    </div>
-    <div class="ins-total-val">46.496 kr</div>
-  </div>
+  <!-- Totals -->
+  <div class="sp-total ads-total"><div><div class="sp-total-lbl">Total / måned</div><div class="sp-total-sub">Meta + Adwise</div></div><div class="sp-total-val ads-total-val">~5.367 kr</div></div>
+  <div class="sp-total ads-total"><div><div class="sp-total-lbl">Total / år</div><div class="sp-total-sub">Inkl. Generaxion SEO</div></div><div class="sp-total-val ads-total-val">~84.404 kr</div></div>
 </div>
 
 <div id="tip"></div>
 
 <script>
-// ═══════════════════════════════════════════
-// CLOCK & DATE
-// ═══════════════════════════════════════════
+// ── Clock ──
 function tick() {
-  const now = new Date();
-  document.getElementById('hdr-time').textContent =
-    now.toLocaleTimeString('da-DK', { hour:'2-digit', minute:'2-digit' });
-  document.getElementById('hdr-date').textContent =
-    now.toLocaleDateString('da-DK', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  const n = new Date();
+  document.getElementById('hdr-time').textContent = n.toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('hdr-date').textContent = n.toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 }
-tick();
-setInterval(tick, 1000);
+tick(); setInterval(tick,1000);
 
-// ═══════════════════════════════════════════
-// STAR FIELD
-// ═══════════════════════════════════════════
-const sc = document.getElementById('starfield');
-const sx = sc.getContext('2d');
-let SW, SH, stars = [];
-
-function initStars() {
-  SW = sc.width  = window.innerWidth;
-  SH = sc.height = window.innerHeight;
-  stars = Array.from({ length: 140 }, () => ({
-    x:  Math.random() * SW,
-    y:  Math.random() * SH,
-    r:  Math.random() * 1.3 + 0.1,
-    a:  Math.random(),
-    da: (Math.random() - 0.5) * 0.004,
-  }));
+// ── Stars ──
+const sc=document.getElementById('starfield'), sx=sc.getContext('2d');
+let SW,SH,stars=[];
+function initStars(){
+  SW=sc.width=window.innerWidth; SH=sc.height=window.innerHeight;
+  stars=Array.from({length:140},()=>({x:Math.random()*SW,y:Math.random()*SH,r:Math.random()*1.3+0.1,a:Math.random(),da:(Math.random()-.5)*0.004}));
 }
-
-function drawStars() {
-  sx.clearRect(0, 0, SW, SH);
-  // Subtle center radial glow
-  const grd = sx.createRadialGradient(SW * 0.44, SH * 0.5, 0, SW * 0.44, SH * 0.5, SW * 0.4);
-  grd.addColorStop(0,   'rgba(0,50,120,0.06)');
-  grd.addColorStop(1,   'rgba(0,0,0,0)');
-  sx.fillStyle = grd;
-  sx.fillRect(0, 0, SW, SH);
-
-  stars.forEach(s => {
-    s.a += s.da;
-    if (s.a < 0.05 || s.a > 0.9) s.da *= -1;
-    sx.beginPath();
-    sx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-    sx.fillStyle = `rgba(170,200,255,${s.a * 0.45})`;
-    sx.fill();
+function drawStars(){
+  sx.clearRect(0,0,SW,SH);
+  const g=sx.createRadialGradient(SW*.44,SH*.5,0,SW*.44,SH*.5,SW*.4);
+  g.addColorStop(0,'rgba(0,50,120,0.06)'); g.addColorStop(1,'rgba(0,0,0,0)');
+  sx.fillStyle=g; sx.fillRect(0,0,SW,SH);
+  stars.forEach(s=>{
+    s.a+=s.da; if(s.a<0.05||s.a>0.9)s.da*=-1;
+    sx.beginPath(); sx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    sx.fillStyle=`rgba(170,200,255,${s.a*0.45})`; sx.fill();
   });
   requestAnimationFrame(drawStars);
 }
+window.addEventListener('resize',initStars);
+initStars(); drawStars();
 
-window.addEventListener('resize', initStars);
-initStars();
-drawStars();
-
-// ═══════════════════════════════════════════
-// CONNECTION MAP
-// ═══════════════════════════════════════════
-const conns = [
-  // Center → cats
-  ['b-genno','b-drift',      '#00d480'],
-  ['b-genno','b-okonomi',    '#3a8fff'],
-  ['b-genno','b-ads',        '#ff9000'],
-  ['b-genno','b-ejer',       '#a060f0'],
-  ['b-genno','b-ansatte',    '#00c8ff'],
-  ['b-genno','b-forsikring', '#ff4d8d'],
+// ── Connections ──
+const conns=[
+  ['b-genno','b-drift',     '#00d480'],
+  ['b-genno','b-okonomi',   '#3a8fff'],
+  ['b-genno','b-ads',       '#ff9000'],
+  ['b-genno','b-ejer',      '#a060f0'],
+  ['b-genno','b-ansatte',   '#00c8ff'],
+  ['b-genno','b-forsikring','#ff4d8d'],
   // Drift children
-  ['b-drift','b-stark',      '#00d480'],
-  ['b-drift','b-bil',        '#00d480'],
-  ['b-drift','b-webflow',    '#00d480'],
+  ['b-drift','b-stark',     '#00d480'],
+  ['b-drift','b-bil',       '#00d480'],
+  ['b-drift','b-webflow',   '#00d480'],
+  // Stark children (Gustav & Sebastian are Stark sales reps)
+  ['b-stark','b-gustav',    '#00d480'],
+  ['b-stark','b-seb',       '#00d480'],
   // Økonomi children
-  ['b-okonomi','b-econo',    '#3a8fff'],
-  ['b-okonomi','b-ordre',    '#3a8fff'],
-  ['b-okonomi','b-moms',     '#3a8fff'],
-  ['b-okonomi','b-bank',     '#3a8fff'],
-  ['b-okonomi','b-skat',     '#3a8fff'],
+  ['b-okonomi','b-econo',   '#3a8fff'],
+  ['b-okonomi','b-ordre',   '#3a8fff'],
+  ['b-okonomi','b-moms',    '#3a8fff'],
+  ['b-okonomi','b-bank',    '#3a8fff'],
+  ['b-okonomi','b-skat',    '#3a8fff'],
   // Ads children
-  ['b-ads','b-adwise',       '#ff9000'],
-  ['b-ads','b-gene',         '#ff9000'],
-  ['b-ads','b-meta',         '#ff9000'],
-  ['b-ads','b-insta',        '#ff9000'],
+  ['b-ads','b-adwise',      '#ff9000'],
+  ['b-ads','b-gene',        '#ff9000'],
+  ['b-ads','b-meta',        '#ff9000'],
+  ['b-ads','b-insta',       '#ff9000'],
   // Ejer children
-  ['b-ejer','b-jogvan',      '#a060f0'],
-  ['b-ejer','b-johannes',    '#a060f0'],
+  ['b-ejer','b-jogvan',     '#a060f0'],
+  ['b-ejer','b-johannes',   '#a060f0'],
   // Ansatte children
-  ['b-ansatte','b-malik',    '#00c8ff'],
-  ['b-ansatte','b-gustav',   '#00c8ff'],
-  ['b-ansatte','b-seb',      '#00c8ff'],
+  ['b-ansatte','b-malik',   '#00c8ff'],
 ];
 
-// Moving dots per connection
-const dots = conns.map(([a, b, col]) => ({
-  a, b, col,
-  t:     Math.random(),
-  speed: 0.0025 + Math.random() * 0.003,
-}));
+// 70% slower: multiply speed by 0.3
+const dots=conns.map(([a,b,col])=>({a,b,col,t:Math.random(),speed:(0.0025+Math.random()*0.003)*0.3}));
 
-function centre(id) {
-  const el = document.getElementById(id);
-  if (!el) return null;
-  const r = el.getBoundingClientRect();
-  const m = document.getElementById('map').getBoundingClientRect();
-  return { x: r.left + r.width/2 - m.left, y: r.top + r.height/2 - m.top };
+function centre(id){
+  const el=document.getElementById(id); if(!el)return null;
+  const r=el.getBoundingClientRect(), m=document.getElementById('map').getBoundingClientRect();
+  return{x:r.left+r.width/2-m.left,y:r.top+r.height/2-m.top};
 }
 
-// Pre-create SVG elements for performance
-const svg = document.getElementById('lines');
-const ns  = 'http://www.w3.org/2000/svg';
-
-// Build static line paths + moving dot circles once
-const lineEls = [], dotEls = [];
-conns.forEach(([a, b, col]) => {
-  const path = document.createElementNS(ns, 'path');
-  path.setAttribute('stroke', col);
-  path.setAttribute('stroke-opacity', '0.13');
-  path.setAttribute('stroke-width', '1.2');
-  path.setAttribute('fill', 'none');
-  svg.appendChild(path);
-  lineEls.push(path);
-
-  const dot = document.createElementNS(ns, 'circle');
-  dot.setAttribute('r', '2.8');
-  dot.setAttribute('fill', col);
-  svg.appendChild(dot);
-  dotEls.push(dot);
+const svg=document.getElementById('lines'), ns='http://www.w3.org/2000/svg';
+const lineEls=[],dotEls=[];
+conns.forEach(([a,b,col])=>{
+  const path=document.createElementNS(ns,'path');
+  path.setAttribute('stroke',col); path.setAttribute('stroke-opacity','0.13');
+  path.setAttribute('stroke-width','1.2'); path.setAttribute('fill','none');
+  svg.appendChild(path); lineEls.push(path);
+  const dot=document.createElementNS(ns,'circle');
+  dot.setAttribute('r','2.8'); dot.setAttribute('fill',col);
+  svg.appendChild(dot); dotEls.push(dot);
 });
 
-function animateLines() {
-  for (let i = 0; i < conns.length; i++) {
-    const [a, b] = conns[i];
-    const ca = centre(a), cb = centre(b);
-    if (!ca || !cb) continue;
-
-    // Bezier control point
-    const cx = (ca.x + cb.x) / 2 + (cb.y - ca.y) * 0.1;
-    const cy = (ca.y + cb.y) / 2 - (cb.x - ca.x) * 0.1;
-
-    lineEls[i].setAttribute('d', `M${ca.x},${ca.y} Q${cx},${cy} ${cb.x},${cb.y}`);
-
-    // Advance dot
-    const d = dots[i];
-    d.t += d.speed;
-    if (d.t > 1) d.t = 0;
-
-    const t = d.t;
-    const px = (1-t)*(1-t)*ca.x + 2*(1-t)*t*cx + t*t*cb.x;
-    const py = (1-t)*(1-t)*ca.y + 2*(1-t)*t*cy + t*t*cb.y;
-
-    dotEls[i].setAttribute('cx', px);
-    dotEls[i].setAttribute('cy', py);
-    dotEls[i].setAttribute('opacity', '0.85');
-    dotEls[i].style.filter = `drop-shadow(0 0 4px ${d.col})`;
+function animateLines(){
+  for(let i=0;i<conns.length;i++){
+    const[a,b]=conns[i], ca=centre(a), cb=centre(b);
+    if(!ca||!cb)continue;
+    const cx=(ca.x+cb.x)/2+(cb.y-ca.y)*0.1, cy=(ca.y+cb.y)/2-(cb.x-ca.x)*0.1;
+    lineEls[i].setAttribute('d',`M${ca.x},${ca.y} Q${cx},${cy} ${cb.x},${cb.y}`);
+    const d=dots[i]; d.t+=d.speed; if(d.t>1)d.t=0;
+    const t=d.t;
+    const px=(1-t)*(1-t)*ca.x+2*(1-t)*t*cx+t*t*cb.x;
+    const py=(1-t)*(1-t)*ca.y+2*(1-t)*t*cy+t*t*cb.y;
+    dotEls[i].setAttribute('cx',px); dotEls[i].setAttribute('cy',py);
+    dotEls[i].setAttribute('opacity','0.85');
+    dotEls[i].style.filter=`drop-shadow(0 0 4px ${d.col})`;
   }
   requestAnimationFrame(animateLines);
 }
-setTimeout(animateLines, 120);
+setTimeout(animateLines,120);
 
-// ═══════════════════════════════════════════
-// TOOLTIP
-// ═══════════════════════════════════════════
-const tipData = {
-  'b-genno':     { t:'GENNO ApS',                  b:'Tømrermester i København\n+45 53 64 34 44 · genno@genno.dk',    p:'★ 5.0 · 27 anmeldelser' },
-  'b-forsikring':{ t:'🛡 Forsikring — Topdanmark', b:'7 aktive policer · Alle i kraft\nKlik for fuldt overblik →',     p:'46.496 kr/år · 3.772 kr/md', hint:'Klik for at åbne' },
-  'b-drift':     { t:'Drift',                       b:'Daglig drift — materialer, bil og web' },
-  'b-stark':     { t:'Stark',                       b:'Primær materialeleverandør\nErhvervskonto aktiv' },
-  'b-bil':       { t:'Firmabil CH64444',            b:'Renault Trafic 2,0 DCI 115 · Diesel\nFørste reg: 29.12.2008',   p:'⚠️ Syn: juni 2026' },
-  'b-webflow':   { t:'Webflow',                     b:'gennorenovering.dk\nOpdater adresse mangler' },
-  'b-okonomi':   { t:'Økonomi',                     b:'Bogføring, moms, skat og bank' },
-  'b-econo':     { t:'E-conomic',                   b:'Bogføringsprogram\nAPI-adgang afventer Johannes' },
-  'b-ordre':     { t:'Ordrestyring',                b:'Bygget af Johannes — gratis\nSager, tilbud og fakturering' },
-  'b-moms':      { t:'Moms',                        b:'Sæt ca. 60.000 kr til side',                                    p:'⚠️ Frist: 1. august' },
-  'b-bank':      { t:'Lunar Bank',                  b:'Saldo: ~40.000 kr\nUdestående: ~60.000 kr skal ind' },
-  'b-skat':      { t:'Skat',                        b:'Virksomhedsskat\nHold øje med opgørelser' },
-  'b-ads':       { t:'Markedsføring',               b:'Betalt annoncering på alle platforme' },
-  'b-adwise':    { t:'Adwise',                      b:'Google Ads bureau',                                              p:'3.700 kr/md' },
-  'b-gene':      { t:'Generaxion',                  b:'SEO & digital marketing',                                        p:'~20.000 kr/år' },
-  'b-meta':      { t:'Meta / Facebook',             b:'✅ Lead Gen kampagne aktiv\nHusejere Kbh 25+',                  p:'100 DKK/dag' },
-  'b-insta':     { t:'Instagram',                   b:'✅ Følger-kampagne aktiv',                                       p:'50 DKK/dag' },
-  'b-ejer':      { t:'Ejerskab',                    b:'Selskabsstruktur i Genno ApS' },
-  'b-jogvan':    { t:'Jógvan Páll Kristiansen',     b:'80% ejer · Daglig leder\n+45 53 64 34 44' },
-  'b-johannes':  { t:'Johannes',                    b:'20% ejer · Lead Architect\nSoftwareudvikler — stille partner' },
-  'b-ansatte':   { t:'Ansatte',                     b:'Fast ansatte og underentreprenører' },
-  'b-malik':     { t:'Malik',                       b:'Lærling',                                                        p:'12.000 kr/md · 3 år til svendebrev' },
-  'b-gustav':    { t:'Gustav',                      b:'Underentreprenør' },
-  'b-seb':       { t:'Sebastian',                   b:'Underentreprenør' },
+// ── Tooltips ──
+const tipData={
+  'b-genno':     {t:'GENNO ApS',                 b:'Tømrermester i København\n+45 53 64 34 44 · genno@genno.dk',   p:'★ 5.0 · 27 anmeldelser'},
+  'b-forsikring':{t:'🛡 Forsikring — Topdanmark',b:'7 aktive policer · Alle i kraft\nKlik for fuldt overblik →',   p:'46.496 kr/år',hint:'Klik for at åbne'},
+  'b-drift':     {t:'Drift',                      b:'Daglig drift — materialer, bil, web'},
+  'b-stark':     {t:'Stark — Materialeleverandør',b:'Primær leverandør af byggematerialer\nErhvervskonto aktiv'},
+  'b-gustav':    {t:'Gustav',                     b:'Salgskonsulent · Stark\n📞 Mangler\n✉️ Mangler',              p:'Stark materialerepræsentant'},
+  'b-seb':       {t:'Sebastian',                  b:'Salgskonsulent · Stark\n📞 Mangler\n✉️ Mangler',              p:'Stark materialerepræsentant'},
+  'b-bil':       {t:'Firmabil CH64444',            b:'Renault Trafic 2,0 DCI 115 · Diesel\nFørste reg: 29.12.2008',p:'⚠️ Syn: juni 2026'},
+  'b-webflow':   {t:'Webflow',                    b:'gennorenovering.dk\nOpdater adresse mangler'},
+  'b-okonomi':   {t:'Økonomi',                    b:'Bogføring, moms, skat og bank'},
+  'b-econo':     {t:'E-conomic',                  b:'Bogføringsprogram\nAPI-adgang afventer Johannes'},
+  'b-ordre':     {t:'Ordrestyring',               b:'Bygget af Johannes — gratis\nSager, tilbud, fakturering'},
+  'b-moms':      {t:'Moms',                       b:'Sæt ca. 60.000 kr til side',                                  p:'⚠️ Frist: 1. august'},
+  'b-bank':      {t:'Lunar Bank',                 b:'Saldo: ~40.000 kr\nUdestående: ~60.000 kr'},
+  'b-skat':      {t:'Skat',                       b:'Virksomhedsskat\nHold øje med opgørelser'},
+  'b-ads':       {t:'📡 Annoncering',             b:'Betalt annoncering på alle platforme\nKlik for kampagneoverblik →', hint:'Klik for at åbne'},
+  'b-adwise':    {t:'Adwise — Google Ads',        b:'Google Ads bureau · lokale søgninger',                        p:'~3.700 kr/md'},
+  'b-gene':      {t:'Generaxion — SEO',           b:'SEO & digital marketing',                                     p:'~20.000 kr/år'},
+  'b-meta':      {t:'Meta / Facebook',            b:'✅ Lead Gen kampagne aktiv\nHusejere Kbh 32-65',              p:'100 DKK/dag'},
+  'b-insta':     {t:'Instagram',                  b:'✅ Følger-kampagne aktiv\n@genno.dk',                         p:'50 DKK/dag'},
+  'b-ejer':      {t:'Ejerskab',                   b:'Selskabsstruktur i Genno ApS'},
+  'b-jogvan':    {t:'Jógvan Páll Kristiansen',    b:'80% ejer · Daglig leder\n+45 53 64 34 44'},
+  'b-johannes':  {t:'Johannes',                   b:'20% ejer · Lead Architect\nSoftwareudvikler — stille partner'},
+  'b-ansatte':   {t:'Ansatte',                    b:'Fast ansatte og underentreprenører'},
+  'b-malik':     {t:'Malik',                      b:'Lærling',                                                     p:'12.000 kr/md · 3 år til svendebrev'},
 };
 
-const tip = document.getElementById('tip');
-document.querySelectorAll('.bubble').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    const d = tipData[el.id]; if (!d) return;
-    let html = `<strong>${d.t}</strong>${(d.b||'').replace(/\n/g,'<br>')}`;
-    if (d.p)    html += `<div class="t-price">${d.p}</div>`;
-    if (d.hint) html += `<div class="t-hint">${d.hint}</div>`;
-    tip.innerHTML = html;
-    tip.style.display = 'block';
+const tip=document.getElementById('tip');
+document.querySelectorAll('.bubble').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    const d=tipData[el.id]; if(!d)return;
+    let html=`<strong>${d.t}</strong>${(d.b||'').replace(/\n/g,'<br>')}`;
+    if(d.p)    html+=`<div class="t-price">${d.p}</div>`;
+    if(d.hint) html+=`<div class="t-hint">${d.hint}</div>`;
+    tip.innerHTML=html; tip.style.display='block';
   });
-  el.addEventListener('mousemove', e => {
-    tip.style.left = Math.min(e.clientX + 18, window.innerWidth - 250) + 'px';
-    tip.style.top  = (e.clientY - 14) + 'px';
+  el.addEventListener('mousemove',e=>{
+    tip.style.left=Math.min(e.clientX+18,window.innerWidth-250)+'px';
+    tip.style.top=(e.clientY-14)+'px';
   });
-  el.addEventListener('mouseleave', () => tip.style.display = 'none');
+  el.addEventListener('mouseleave',()=>tip.style.display='none');
 });
 
-// ═══════════════════════════════════════════
-// INSURANCE PANEL
-// ═══════════════════════════════════════════
-const insPanel = document.getElementById('ins-panel');
-document.getElementById('b-forsikring').addEventListener('click', () => insPanel.classList.add('open'));
-document.getElementById('ins-close').addEventListener('click',    () => insPanel.classList.remove('open'));
+// ── Slide panels ──
+const insPanel=document.getElementById('ins-panel');
+const adsPanel=document.getElementById('ads-panel');
+
+function closeAll(){ insPanel.classList.remove('open'); adsPanel.classList.remove('open'); }
+
+document.getElementById('b-forsikring').addEventListener('click',()=>{ closeAll(); insPanel.classList.add('open'); });
+document.getElementById('b-ads').addEventListener('click',       ()=>{ closeAll(); adsPanel.classList.add('open'); });
+document.getElementById('b-meta').addEventListener('click',      ()=>{ closeAll(); adsPanel.classList.add('open'); });
+document.getElementById('b-insta').addEventListener('click',     ()=>{ closeAll(); adsPanel.classList.add('open'); });
+document.getElementById('ins-close').addEventListener('click',   ()=>insPanel.classList.remove('open'));
+document.getElementById('ads-close').addEventListener('click',   ()=>adsPanel.classList.remove('open'));
 </script>
 </body>
 </html>
