@@ -14,6 +14,7 @@
   --pink:   #ff4d8d;
   --teal:   #00c4ff;
   --orange: #ff8c00;
+  --violet: #7c5fff;
   --muted:  #3d5068;
   --text:   #dde8f5;
 }
@@ -241,10 +242,10 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="logo-sub">ApS · Tømrermester · København</div>
   </div>
   <div class="kpis">
-    <div class="kpi"><div class="kpi-label">Forsikring / år</div><div class="kpi-val c-pink">46.496 kr</div></div>
+    <div class="kpi"><div class="kpi-label">Topdanmark / år</div><div class="kpi-val c-pink">46.496 kr</div></div>
     <div class="kpi"><div class="kpi-label">7 Policer aktive</div><div class="kpi-val c-green">● I KRAFT</div></div>
-    <div class="kpi"><div class="kpi-label">Ads / måned</div><div class="kpi-val c-amber">~7.000 kr</div></div>
-    <div class="kpi"><div class="kpi-label">Team</div><div class="kpi-val c-blue">5 pers</div></div>
+    <div class="kpi"><div class="kpi-label">Online Presence /md</div><div class="kpi-val c-amber">~7.000 kr</div></div>
+    <div class="kpi"><div class="kpi-label">Team</div><div class="kpi-val c-blue">Malik + Jógvan</div></div>
     <div class="kpi"><div class="kpi-label">Rating</div><div class="kpi-val c-green">★ 5.0</div></div>
   </div>
   <div class="hdr-right">
@@ -263,11 +264,11 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="center-sub">ApS</div>
   </div>
 
-  <!-- FORSIKRING -->
+  <!-- TOPDANMARK (forsikring) -->
   <div class="bubble cat forsikring" id="b-forsikring" style="left:44%;top:8%">
     <div class="sdot s-g"></div>
     <div class="b-icon">🛡</div>
-    <div class="bname">Forsikring</div>
+    <div class="bname">Topdanmark</div>
     <div class="bsub">7 policer</div>
   </div>
 
@@ -278,38 +279,20 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="bname">Drift</div>
   </div>
 
-  <!-- Stark + children (Gustav & Sebastian now under Stark) -->
+  <!-- Stark (Gustav + Sebastian in tooltip only) -->
   <div class="bubble child" id="b-stark" style="left:2%;top:7%">
     <div class="sdot s-g"></div>
     <div class="b-icon">🏗</div>
     <div class="bname">Stark</div>
     <div class="bsub">Materialer</div>
   </div>
-  <div class="bubble child" id="b-gustav" style="left:0%;top:20%">
-    <div class="sdot s-g"></div>
-    <div class="b-icon">👤</div>
-    <div class="bname">Gustav</div>
-    <div class="bsub">Stark rep</div>
-  </div>
-  <div class="bubble child" id="b-seb" style="left:11%;top:18%">
-    <div class="sdot s-g"></div>
-    <div class="b-icon">👤</div>
-    <div class="bname">Sebastian</div>
-    <div class="bsub">Stark rep</div>
-  </div>
 
-  <!-- Bil & Webflow under Drift -->
-  <div class="bubble child" id="b-bil" style="left:4%;top:34%">
+  <!-- Firmabil — Renault Trafic -->
+  <div class="bubble child" id="b-bil" style="left:3%;top:32%">
     <div class="sdot s-y"></div>
-    <div class="b-icon">🚐</div>
+    <div class="b-icon" style="font-size:9px;font-weight:900;color:#ffcc00;letter-spacing:-0.5px">RENAULT</div>
     <div class="bname">CH64444</div>
-    <div class="bsub">Syn juni</div>
-  </div>
-  <div class="bubble child" id="b-webflow" style="left:14%;top:6%">
-    <div class="sdot s-g"></div>
-    <div class="b-icon">🌐</div>
-    <div class="bname">Webflow</div>
-    <div class="bsub">CMS</div>
+    <div class="bsub">Syn juni ⚠️</div>
   </div>
 
   <!-- ØKONOMI -->
@@ -347,23 +330,25 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="bname">Skat</div>
   </div>
 
-  <!-- ADS -->
+  <!-- ONLINE PRESENCE (was Ads) -->
   <div class="bubble cat ads" id="b-ads" style="left:65%;top:20%">
     <div class="sdot s-g"></div>
     <div class="b-icon">📡</div>
-    <div class="bname">Ads</div>
+    <div class="bname">Online</div>
+    <div class="bsub">Presence</div>
   </div>
+  <!-- Adwise = SEO, Generaxion = Google Ads (corrected) -->
   <div class="bubble child" id="b-adwise" style="left:70%;top:5%">
     <div class="sdot s-g"></div>
-    <div class="b-icon gg"><span>G</span><span>o</span><span>o</span><span>g</span></div>
+    <div class="b-icon">🔍</div>
     <div class="bname">Adwise</div>
-    <div class="bsub">3.700/md</div>
+    <div class="bsub">SEO</div>
   </div>
   <div class="bubble child" id="b-gene" style="left:82%;top:10%">
     <div class="sdot s-g"></div>
-    <div class="b-icon">📈</div>
+    <div class="b-icon gg"><span>G</span><span>o</span><span>o</span><span>g</span></div>
     <div class="bname">Generaxion</div>
-    <div class="bsub">SEO</div>
+    <div class="bsub">Google Ads</div>
   </div>
   <div class="bubble child" id="b-meta" style="left:84%;top:24%">
     <div class="sdot s-g"></div>
@@ -378,23 +363,39 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="bsub">50/dag</div>
   </div>
 
-  <!-- EJER -->
-  <div class="bubble cat ejer" id="b-ejer" style="left:66%;top:60%">
-    <div class="sdot s-g"></div>
-    <div class="b-icon">👥</div>
-    <div class="bname">Ejerskab</div>
-  </div>
-  <div class="bubble child" id="b-jogvan" style="left:78%;top:50%">
-    <div class="sdot s-g"></div>
-    <div class="b-icon">👑</div>
-    <div class="bname">Jógvan</div>
-    <div class="bsub">80%</div>
-  </div>
-  <div class="bubble child" id="b-johannes" style="left:79%;top:67%">
-    <div class="sdot s-g"></div>
+  <!-- ONLINE & IT (new category) -->
+  <div class="bubble cat" id="b-online" style="left:68%;top:58%;background:rgba(124,95,255,0.08);border-color:rgba(124,95,255,0.35);box-shadow:0 0 28px rgba(124,95,255,0.12)">
+    <div class="sdot" style="background:#7c5fff;box-shadow:0 0 6px #7c5fff"></div>
     <div class="b-icon">💻</div>
-    <div class="bname">Johannes</div>
-    <div class="bsub">20%</div>
+    <div class="bname" style="color:#b09fff">Online & IT</div>
+  </div>
+  <!-- Webflow (moved from Drift) -->
+  <div class="bubble child" id="b-webflow" style="left:82%;top:50%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">🌐</div>
+    <div class="bname">Webflow</div>
+    <div class="bsub">Website</div>
+  </div>
+  <!-- Netgiganten (email hosting) -->
+  <div class="bubble child" id="b-netgig" style="left:82%;top:65%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">✉️</div>
+    <div class="bname">Netgiganten</div>
+    <div class="bsub">Mail host</div>
+  </div>
+  <!-- Claude AI -->
+  <div class="bubble child" id="b-claude" style="left:60%;top:72%">
+    <div class="sdot" style="background:#ff8c5a;box-shadow:0 0 6px #ff8c5a"></div>
+    <div class="b-icon">🤖</div>
+    <div class="bname">Claude</div>
+    <div class="bsub">AI assistent</div>
+  </div>
+  <!-- GitHub (under Claude) -->
+  <div class="bubble child" id="b-github" style="left:57%;top:85%">
+    <div class="sdot" style="background:#aaa;box-shadow:0 0 6px #888"></div>
+    <div class="b-icon" style="font-size:13px">🐙</div>
+    <div class="bname">GitHub</div>
+    <div class="bsub">Kode backup</div>
   </div>
 
   <!-- ANSATTE -->
@@ -403,7 +404,8 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="b-icon">👷</div>
     <div class="bname">Ansatte</div>
   </div>
-  <div class="bubble child" id="b-malik" style="left:34%;top:85%">
+  <!-- Malik moved right to avoid overlapping Skat -->
+  <div class="bubble child" id="b-malik" style="left:48%;top:84%">
     <div class="sdot s-g"></div>
     <div class="b-icon">🎓</div>
     <div class="bname">Malik</div>
@@ -449,7 +451,7 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
 <!-- ══ INSURANCE SLIDE PANEL ══ -->
 <div id="ins-panel" class="slide-panel">
   <div class="panel-close ins-close" id="ins-close">✕</div>
-  <div class="sp-title ins-title">🛡 Forsikring</div>
+  <div class="sp-title ins-title">🛡 Topdanmark Forsikring</div>
   <div class="sp-meta">Topdanmark · Kundenr. 3496 25G · CVR 44112671 · 24. maj 2026</div>
 
   <div class="sp-card ins-card">
@@ -517,8 +519,8 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
 <!-- ══ ADS SLIDE PANEL ══ -->
 <div id="ads-panel" class="slide-panel">
   <div class="panel-close ads-close" id="ads-close">✕</div>
-  <div class="sp-title ads-title">📡 Annoncering</div>
-  <div class="sp-meta">Meta Ads · Google Ads · SEO · Konto act_197053390</div>
+  <div class="sp-title ads-title">📡 Online Presence</div>
+  <div class="sp-meta">Meta Ads · Google Ads (Generaxion) · SEO (Adwise) · act_197053390</div>
 
   <!-- Facebook -->
   <div class="sp-card ads-card">
@@ -546,31 +548,31 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="sp-row"><span>Platform</span><span>Instagram Feed + Reels</span></div>
   </div>
 
-  <!-- Google / Adwise -->
+  <!-- Google Ads / Generaxion -->
   <div class="sp-card ads-card">
     <div class="plat-badge badge-g"><span style="color:#4285f4">G</span><span style="color:#ea4335">o</span><span style="color:#fbbc04">o</span><span style="color:#34a853">g</span> Google Ads</div>
-    <div class="sp-card-name ads-card-name">Adwise — Google Ads Bureau</div>
+    <div class="sp-card-name ads-card-name">Generaxion — Google Ads Bureau</div>
     <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
-    <div class="sp-row"><span>Bureau</span><span>Adwise</span></div>
+    <div class="sp-row"><span>Bureau</span><span>Generaxion</span></div>
     <div class="sp-row"><span>Fokus</span><span>Lokale søgninger, Kbh</span></div>
     <div class="sp-row"><span>Søgeord</span><span>Tømrer, renovering, tilbygning</span></div>
-    <div class="sp-row"><span>Pris</span><span class="price-ora">~3.700 kr/md</span></div>
-  </div>
-
-  <!-- SEO / Generaxion -->
-  <div class="sp-card ads-card">
-    <div class="plat-badge badge-seo">📈 SEO</div>
-    <div class="sp-card-name ads-card-name">Generaxion — SEO & Digital Marketing</div>
-    <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
-    <div class="sp-row"><span>Partner</span><span>Generaxion</span></div>
-    <div class="sp-row"><span>Ydelse</span><span>SEO, indhold, synlighed</span></div>
-    <div class="sp-row"><span>Website</span><span>gennorenovering.dk</span></div>
     <div class="sp-row"><span>Pris</span><span class="price-ora">~20.000 kr/år</span></div>
   </div>
 
+  <!-- SEO / Adwise -->
+  <div class="sp-card ads-card">
+    <div class="plat-badge badge-seo">🔍 SEO</div>
+    <div class="sp-card-name ads-card-name">Adwise — SEO Bureau</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
+    <div class="sp-row"><span>Bureau</span><span>Adwise</span></div>
+    <div class="sp-row"><span>Ydelse</span><span>SEO, søgemaskineoptimering</span></div>
+    <div class="sp-row"><span>Website</span><span>gennorenovering.dk</span></div>
+    <div class="sp-row"><span>Pris</span><span class="price-ora">~3.700 kr/md</span></div>
+  </div>
+
   <!-- Totals -->
-  <div class="sp-total ads-total"><div><div class="sp-total-lbl">Total / måned</div><div class="sp-total-sub">Meta + Adwise</div></div><div class="sp-total-val ads-total-val">~5.367 kr</div></div>
-  <div class="sp-total ads-total"><div><div class="sp-total-lbl">Total / år</div><div class="sp-total-sub">Inkl. Generaxion SEO</div></div><div class="sp-total-val ads-total-val">~84.404 kr</div></div>
+  <div class="sp-total ads-total"><div><div class="sp-total-lbl">Total / måned</div><div class="sp-total-sub">Meta + Instagram + Adwise SEO</div></div><div class="sp-total-val ads-total-val">~7.367 kr</div></div>
+  <div class="sp-total ads-total"><div><div class="sp-total-lbl">Total / år</div><div class="sp-total-sub">Inkl. Generaxion Google Ads</div></div><div class="sp-total-val ads-total-val">~108.404 kr</div></div>
 </div>
 
 <div id="tip"></div>
@@ -608,33 +610,35 @@ initStars(); drawStars();
 
 // ── Connections ──
 const conns=[
+  // Core spokes from Genno
   ['b-genno','b-drift',     '#00d480'],
   ['b-genno','b-okonomi',   '#3a8fff'],
   ['b-genno','b-ads',       '#ff9000'],
-  ['b-genno','b-ejer',      '#a060f0'],
   ['b-genno','b-ansatte',   '#00c8ff'],
   ['b-genno','b-forsikring','#ff4d8d'],
+  ['b-genno','b-online',    '#7c5fff'],
   // Drift children
   ['b-drift','b-stark',     '#00d480'],
   ['b-drift','b-bil',       '#00d480'],
-  ['b-drift','b-webflow',   '#00d480'],
-  // Stark children (Gustav & Sebastian are Stark sales reps)
-  ['b-stark','b-gustav',    '#00d480'],
-  ['b-stark','b-seb',       '#00d480'],
+  // Cross-connections (how things work together)
+  ['b-drift','b-okonomi',   '#44cc88'],  // operations feed economy
+  ['b-bil',  'b-forsikring','#ff4d8d'],  // car is insured by Topdanmark
   // Økonomi children
   ['b-okonomi','b-econo',   '#3a8fff'],
   ['b-okonomi','b-ordre',   '#3a8fff'],
   ['b-okonomi','b-moms',    '#3a8fff'],
   ['b-okonomi','b-bank',    '#3a8fff'],
   ['b-okonomi','b-skat',    '#3a8fff'],
-  // Ads children
+  // Online Presence children
   ['b-ads','b-adwise',      '#ff9000'],
   ['b-ads','b-gene',        '#ff9000'],
   ['b-ads','b-meta',        '#ff9000'],
   ['b-ads','b-insta',       '#ff9000'],
-  // Ejer children
-  ['b-ejer','b-jogvan',     '#a060f0'],
-  ['b-ejer','b-johannes',   '#a060f0'],
+  // Online & IT children
+  ['b-online','b-webflow',  '#7c5fff'],
+  ['b-online','b-netgig',   '#7c5fff'],
+  ['b-online','b-claude',   '#ff8c5a'],
+  ['b-claude','b-github',   '#aaaaaa'],
   // Ansatte children
   ['b-ansatte','b-malik',   '#00c8ff'],
 ];
@@ -680,30 +684,29 @@ setTimeout(animateLines,120);
 
 // ── Tooltips ──
 const tipData={
-  'b-genno':     {t:'GENNO ApS',                 b:'Tømrermester i København\n+45 53 64 34 44 · genno@genno.dk',   p:'★ 5.0 · 27 anmeldelser'},
-  'b-forsikring':{t:'🛡 Forsikring — Topdanmark',b:'7 aktive policer · Alle i kraft\nKlik for fuldt overblik →',   p:'46.496 kr/år',hint:'Klik for at åbne'},
-  'b-drift':     {t:'Drift',                      b:'Daglig drift — materialer, bil, web'},
-  'b-stark':     {t:'Stark — Materialeleverandør',b:'Primær leverandør af byggematerialer\nErhvervskonto aktiv'},
-  'b-gustav':    {t:'Gustav',                      b:'Salgskonsulent · Stark Nordhavn\n📞 +45 26478953\n✉️ Mangler', p:'Stark materialerepræsentant'},
-  'b-seb':       {t:'Sebastian Mortensen',          b:'Salgskonsulent · Stark Nordhavn\n📞 +45 28101383\n✉️ sebastian.mortensen@stark.dk', p:'Stark materialerepræsentant'},
-  'b-bil':       {t:'Firmabil CH64444',            b:'Renault Trafic 2,0 DCI 115 · Diesel\nFørste reg: 29.12.2008',p:'⚠️ Syn: juni 2026'},
-  'b-webflow':   {t:'Webflow',                    b:'gennorenovering.dk\nOpdater adresse mangler'},
-  'b-okonomi':   {t:'Økonomi',                    b:'Bogføring, moms, skat og bank'},
-  'b-econo':     {t:'E-conomic',                  b:'Bogføringsprogram\nAPI-adgang afventer Johannes'},
-  'b-ordre':     {t:'Ordrestyring',               b:'Bygget af Johannes — gratis\nSager, tilbud, fakturering'},
-  'b-moms':      {t:'Moms',                       b:'Sæt ca. 60.000 kr til side',                                  p:'⚠️ Frist: 1. august'},
-  'b-bank':      {t:'Lunar Bank',                 b:'Saldo: ~40.000 kr\nUdestående: ~60.000 kr'},
-  'b-skat':      {t:'Skat',                       b:'Virksomhedsskat\nHold øje med opgørelser'},
-  'b-ads':       {t:'📡 Annoncering',             b:'Betalt annoncering på alle platforme\nKlik for kampagneoverblik →', hint:'Klik for at åbne'},
-  'b-adwise':    {t:'Adwise — Google Ads',        b:'Google Ads bureau · lokale søgninger',                        p:'~3.700 kr/md'},
-  'b-gene':      {t:'Generaxion — SEO',           b:'SEO & digital marketing',                                     p:'~20.000 kr/år'},
-  'b-meta':      {t:'Meta / Facebook',            b:'✅ Lead Gen kampagne aktiv\nHusejere Kbh 32-65',              p:'100 DKK/dag'},
-  'b-insta':     {t:'Instagram',                  b:'✅ Følger-kampagne aktiv\n@genno.dk',                         p:'50 DKK/dag'},
-  'b-ejer':      {t:'Ejerskab',                   b:'Selskabsstruktur i Genno ApS'},
-  'b-jogvan':    {t:'Jógvan Páll Kristiansen',    b:'80% ejer · Daglig leder\n+45 53 64 34 44'},
-  'b-johannes':  {t:'Johannes',                   b:'20% ejer · Lead Architect\nSoftwareudvikler — stille partner'},
-  'b-ansatte':   {t:'Ansatte',                    b:'Fast ansatte og underentreprenører'},
-  'b-malik':     {t:'Malik',                      b:'Lærling',                                                     p:'12.000 kr/md · 3 år til svendebrev'},
+  'b-genno':    {t:'GENNO ApS',                  b:'Tømrermester i København\n+45 53 64 34 44 · genno@genno.dk',    p:'★ 5.0 · 27 anmeldelser'},
+  'b-forsikring':{t:'🛡 Topdanmark Forsikring',  b:'7 aktive policer · Alle i kraft\nKundenr. 3496 25G\nKlik for fuldt overblik →', p:'46.496 kr/år', hint:'Klik for at åbne'},
+  'b-drift':    {t:'Drift',                       b:'Daglig drift — materialer & bil\nForbundet til økonomi'},
+  'b-stark':    {t:'Stark Nordhavn',              b:'Primær leverandør af byggematerialer\nErhvervskonto aktiv · Kattegatvej 21\n\n👤 Gustav\n   📞 +45 26478953\n\n👤 Sebastian Mortensen\n   📞 +45 28101383\n   ✉️ sebastian.mortensen@stark.dk'},
+  'b-bil':      {t:'Renault Trafic — CH64444',   b:'2,0 DCI 115 · Diesel · Første reg: 29.12.2008\nKasko + Ansvar · Topdanmark police 9842 245 688\nTophjælp police 9836 256 503', p:'⚠️ Syn: juni 2026'},
+  'b-okonomi':  {t:'Økonomi',                    b:'Bogføring, moms, skat og bank\nForbundet til drift'},
+  'b-econo':    {t:'E-conomic',                  b:'Bogføringsprogram\nAPI-adgang afventer Johannes'},
+  'b-ordre':    {t:'Ordrestyring',               b:'Bygget af Johannes — gratis\nSager, tilbud, fakturering'},
+  'b-moms':     {t:'Moms',                       b:'Sæt ca. 60.000 kr til side',                                   p:'⚠️ Frist: 1. august'},
+  'b-bank':     {t:'Lunar Bank',                 b:'Primær erhvervskonto\nSaldo: ~40.000 kr · Udestående: ~60.000 kr'},
+  'b-skat':     {t:'Skat',                       b:'Virksomhedsskat\nHold øje med opgørelser'},
+  'b-ads':      {t:'📡 Online Presence',         b:'Betalt annoncering + SEO på alle platforme\nKlik for overblik →', hint:'Klik for at åbne'},
+  'b-adwise':   {t:'Adwise — SEO',               b:'SEO bureau · søgemaskineoptimering\ngennorenovering.dk synlighed',  p:'~3.700 kr/md'},
+  'b-gene':     {t:'Generaxion — Google Ads',    b:'Google Ads bureau · lokale søgninger\nSøgeord: tømrer, renovering, tilbygning', p:'~20.000 kr/år'},
+  'b-meta':     {t:'Meta / Facebook',            b:'✅ Lead Gen kampagne aktiv\nHusejere Kbh 32-65 · act_197053390', p:'100 DKK/dag'},
+  'b-insta':    {t:'Instagram',                  b:'✅ Følger-kampagne aktiv\n@genno.dk · ID 17841460234013696',     p:'50 DKK/dag'},
+  'b-online':   {t:'💻 Online & IT',             b:'Alt der er online og digitalt\nWebsite, mail, AI-tools, kode'},
+  'b-webflow':  {t:'Webflow — Website',          b:'gennorenovering.dk\nCMS + hosting · opdater adresse mangler',   p:'Abonnement månedligt'},
+  'b-netgig':   {t:'Netgiganten — Mail Hosting', b:'Emailhosting for gennorenovering.dk\ngenno@genno.dk og aliasser', p:'Abonnement'},
+  'b-claude':   {t:'Claude AI — Anthropic',      b:'AI-assistent til hele virksomheden\nHusker Genno · laver kode, mails, docs', p:'claude.ai'},
+  'b-github':   {t:'GitHub — jogvanpkristiansen', b:'Kode backup for alle projekter\ngenno-dashboard · genno-memory\ngenno-meta · ordrestyring', p:'github.com/jogvanpkristiansen'},
+  'b-ansatte':  {t:'Ansatte',                    b:'Fast ansatte og underentreprenører'},
+  'b-malik':    {t:'Malik',                      b:'Lærling · tømrerfaget',                                        p:'12.000 kr/md · 3 år til svendebrev'},
 };
 
 const tip=document.getElementById('tip');
@@ -728,12 +731,19 @@ const adsPanel=document.getElementById('ads-panel');
 
 function closeAll(){ insPanel.classList.remove('open'); adsPanel.classList.remove('open'); }
 
+// Insurance panel
 document.getElementById('b-forsikring').addEventListener('click',()=>{ closeAll(); insPanel.classList.add('open'); });
-document.getElementById('b-ads').addEventListener('click',       ()=>{ closeAll(); adsPanel.classList.add('open'); });
-document.getElementById('b-meta').addEventListener('click',      ()=>{ closeAll(); adsPanel.classList.add('open'); });
-document.getElementById('b-insta').addEventListener('click',     ()=>{ closeAll(); adsPanel.classList.add('open'); });
+document.getElementById('b-bil').addEventListener('click',       ()=>{ closeAll(); insPanel.classList.add('open'); });
 document.getElementById('ins-close').addEventListener('click',   ()=>insPanel.classList.remove('open'));
+// Online Presence panel
+['b-ads','b-meta','b-insta','b-adwise','b-gene'].forEach(id=>{
+  const el=document.getElementById(id); if(el) el.addEventListener('click',()=>{ closeAll(); adsPanel.classList.add('open'); });
+});
 document.getElementById('ads-close').addEventListener('click',   ()=>adsPanel.classList.remove('open'));
+// GitHub — open in new tab
+document.getElementById('b-github').addEventListener('click',()=> window.open('https://github.com/jogvanpkristiansen','_blank'));
+// Webflow — open site
+document.getElementById('b-webflow').addEventListener('click',()=>window.open('https://gennorenovering.dk','_blank'));
 </script>
 </body>
 </html>
