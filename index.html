@@ -279,6 +279,8 @@ header {
 #fin-panel::-webkit-scrollbar-thumb    { background:rgba(58,143,255,0.2); }
 #inbox-panel  { background:rgba(6,9,18,0.97); border-left:1px solid rgba(0,212,255,0.15); }
 #inbox-panel::-webkit-scrollbar-thumb  { background:rgba(0,212,255,0.15); }
+#bil-panel    { background:rgba(6,9,18,0.97); border-left:1px solid rgba(255,204,0,0.2); }
+#bil-panel::-webkit-scrollbar-thumb    { background:rgba(255,204,0,0.2); }
 
 .panel-close {
   position:absolute; top:14px; right:14px; width:30px; height:30px; border-radius:50%;
@@ -291,6 +293,7 @@ header {
 .agents-close:hover  { background:rgba(104,160,99,0.12); color:#68a063;       border-color:rgba(104,160,99,0.3); }
 .fin-close:hover     { background:rgba(58,143,255,0.12); color:var(--blue);   border-color:rgba(58,143,255,0.3); }
 .inbox-close:hover   { background:rgba(0,212,255,0.12);  color:var(--blue);   border-color:rgba(0,212,255,0.3); }
+.bil-close:hover     { background:rgba(255,204,0,0.12);  color:var(--amber);  border-color:rgba(255,204,0,0.3); }
 
 .sp-title { font-size:13px; font-weight:900; letter-spacing:2.5px; text-transform:uppercase; margin-bottom:3px; }
 .sp-meta  { font-size:9.5px; color:var(--muted); margin-bottom:18px; letter-spacing:.5px; }
@@ -463,6 +466,12 @@ body::after {
     <div class="b-icon" style="font-size:8px;font-weight:900;color:#ffcc00;letter-spacing:-.5px">RENAULT</div>
     <div class="bname">CH64444</div>
     <div class="bsub">Syn juni ⚠️</div>
+  </div>
+  <div class="bubble child urgent" id="b-easypark" style="left:1%;top:43%">
+    <div class="sdot s-r"></div>
+    <div class="b-icon" style="font-size:9px;font-weight:700;color:#ff3030">🅿️</div>
+    <div class="bname" style="font-size:8px">EasyPark</div>
+    <div class="bsub" style="font-size:7px">2.450 ⚠️</div>
   </div>
 
   <!-- ØKONOMI -->
@@ -866,6 +875,47 @@ body::after {
   <div class="sp-total ins-total"><div><div class="sp-total-lbl">Total årlig</div><div class="sp-total-sub">Alle 7 policer inkl. tophjælp</div></div><div class="sp-total-val ins-total-val">46.496 kr</div></div>
 </div>
 
+<!-- ══ BIL & TRANSPORT SLIDE PANEL ══ -->
+<div id="bil-panel" class="slide-panel">
+  <div class="panel-close bil-close" id="bil-close">✕</div>
+  <div class="sp-title" style="color:#ffcc00;text-shadow:0 0 20px rgba(255,204,0,0.4)">🚗 Bil & Transport</div>
+  <div class="sp-meta">Renault Trafic · CH64444 · EasyPark parkering</div>
+
+  <div class="sp-card" style="border-color:rgba(255,204,0,0.15)">
+    <div class="sp-card-name" style="color:#ffcc00">Renault Trafic — CH64444</div>
+    <div class="sp-row"><span>Reg.nr</span><span style="color:var(--amber);font-weight:700">CH64444</span></div>
+    <div class="sp-row"><span>Stelnr</span><span style="font-size:9px">VF1FLBHB68Y270982</span></div>
+    <div class="sp-row"><span>Motor</span><span>2,0 DCI 115 · Diesel · 84 kW</span></div>
+    <div class="sp-row"><span>Første reg</span><span>29.12.2008</span></div>
+    <div class="sp-row"><span>Købt</span><span>aug 2023 · 48.000 kr kontant</span></div>
+    <div class="sp-row"><span>Syn</span><span class="warn">⚠️ Juni 2026 — book tid nu!</span></div>
+    <div class="sp-row"><span>Bremser</span><span class="warn">⚠️ Tjek inden syn</span></div>
+    <div class="sp-row"><span>Kasko</span><span>Police 9842 245 688 · Topdanmark</span></div>
+  </div>
+
+  <div class="sp-card" style="border-color:rgba(255,48,48,0.3);background:rgba(255,30,30,0.04)">
+    <div class="sp-card-name" style="color:var(--red)">🅿️ EasyPark — FAKTURA OVERSKREDET</div>
+    <div class="sp-row"><span style="color:var(--red);font-weight:700">Status</span><span class="danger">⚠️ BETALING OVERSKREDET</span></div>
+    <div class="sp-row"><span>Beløb</span><span style="color:var(--red);font-weight:700;font-size:14px">2.449,97 kr</span></div>
+    <div class="sp-row"><span>Forfald</span><span class="danger">23. maj 2026 — overskredet!</span></div>
+    <div class="sp-row"><span>Fakturanr</span><span style="font-size:9px">261600018264094</span></div>
+    <div class="sp-row"><span>Bankkonto</span><span style="font-weight:700">5290-9010786018</span></div>
+    <div class="sp-row"><span>FIK-kode</span><span style="font-size:8.5px">+71 261600018264094 +81392463</span></div>
+    <div class="sp-row"><span>OCR/Reference</span><span style="font-size:9px">261600018264094</span></div>
+    <div class="sp-row"><span>Handling</span><span style="font-size:8.5px;color:var(--red)">Betal via netbank — renter løber!</span></div>
+  </div>
+
+  <div class="sp-card" style="border-color:rgba(255,204,0,0.1)">
+    <div class="sp-card-name" style="color:var(--amber)">🅿️ EasyPark — Konto info</div>
+    <div class="sp-row"><span>App</span><span>EasyPark · bruger: genno@genno.dk</span></div>
+    <div class="sp-row"><span>Fakturering</span><span style="font-size:9px">Månedlig samlet faktura for al parkering</span></div>
+    <div class="sp-row"><span>Email-agent</span><span class="ok" style="font-size:8.5px">✅ Overvåger automatisk</span></div>
+    <div class="sp-row"><span>Næste faktura</span><span style="font-size:9px">Hentes automatisk af email-agenten</span></div>
+  </div>
+
+  <div class="sp-total" style="border-color:rgba(255,48,48,0.3)"><div><div class="sp-total-lbl" style="color:var(--red)">Skyldigt beløb</div><div class="sp-total-sub">Betales straks via netbank — renter løber</div></div><div class="sp-total-val" style="color:var(--red)">2.449,97 kr</div></div>
+</div>
+
 <!-- ══ ADS SLIDE PANEL ══ -->
 <div id="ads-panel" class="slide-panel">
   <div class="panel-close ads-close" id="ads-close">✕</div>
@@ -1043,6 +1093,21 @@ body::after {
     <div class="sp-row"><span>2. svend</span><span style="font-size:8.5px">Anbefales ved &gt;80k/md stabilt 3 mdr</span></div>
   </div>
 
+  <!-- Lønadministration -->
+  <div class="sp-card fin-card">
+    <div class="sp-card-name fin-card-name">👷 Lønadministration</div>
+    <div class="sp-row"><span style="color:var(--muted)">── Malik (lærling) ──</span><span></span></div>
+    <div class="sp-row"><span>Bruttoløn</span><span style="color:var(--blue);font-weight:700">12.000 kr/md</span></div>
+    <div class="sp-row"><span>Feriegodtgørelse (12,5%)</span><span style="color:var(--amber)">1.500 kr/md sættes til side</span></div>
+    <div class="sp-row"><span>ATP (arbejdsgiver)</span><span>~103 kr/md</span></div>
+    <div class="sp-row"><span>Lærlingekontrakt</span><span style="font-size:8.5px">3 år tilb. · færdig ~feb 2028</span></div>
+    <div class="sp-row"><span>AUB-tilskud</span><span style="color:var(--green);font-size:8.5px">~2.000 kr/md refusion (lærling)</span></div>
+    <div class="sp-row"><span style="color:var(--muted)">── Jógvan (ejer) ──</span><span></span></div>
+    <div class="sp-row"><span>Løn/udbytte</span><span class="warn">⚠️ Opsættes via E-conomic</span></div>
+    <div class="sp-row"><span>Anbefalet netto</span><span style="color:var(--green)">Min. 30.000 kr/md</span></div>
+    <div class="sp-row"><span>Lønkørsel</span><span style="font-size:8.5px">Typisk den 25. i måneden</span></div>
+  </div>
+
   <div class="sp-total fin-total"><div><div class="sp-total-lbl">Faste udgifter / md</div><div class="sp-total-sub">Løn + forsikring + marketing + software + AI</div></div><div class="sp-total-val fin-total-val">24.401 kr</div></div>
   <div class="sp-total fin-total" style="border-color:rgba(255,48,48,0.3)"><div><div class="sp-total-lbl" style="color:var(--red)">Likvid nettoposition</div><div class="sp-total-sub">Uden ny fakturering — kræver handling</div></div><div class="sp-total-val fin-total-val" style="color:var(--red)">-19.851 kr</div></div>
 </div>
@@ -1176,6 +1241,10 @@ const conns=[
   ['b-drift','b-okonomi',    '#44cc88'],
   // Car is insured
   ['b-bil',  'b-forsikring', '#ff4d8d'],
+  // EasyPark under bil
+  ['b-bil',  'b-easypark',   '#ff3030'],
+  // EasyPark → økonomi (udgift)
+  ['b-easypark','b-okonomi', '#ff5500'],
   // Økonomi children
   ['b-okonomi','b-econo',    '#3a8fff'],
   ['b-okonomi','b-ordre',    '#3a8fff'],
@@ -1269,7 +1338,8 @@ const tipData={
   'b-drift':     {t:'Drift',                        b:'Daglig byggeplads-drift\nForbundet til økonomi via fakturering'},
   'b-stark':     {t:'Stark Nordhavn',               b:'Primær leverandør af byggematerialer\nErhvervskonto · Kattegatvej 21\n✅ Kredit fuldt betalt maj 2026\n\n👤 Gustav · +45 26478953\n👤 Sebastian Mortensen · +45 28101383', p:'Kredit betalt ✓'},
   'b-bygma':     {t:'Bygma København',              b:'Byggematerialer — Proffcenter\nbygma.dk · Kattegatvej/Amager\nKontakt: mof@bygma.dk · 44 54 17 00', p:'Aktiv leverandør'},
-  'b-bil':       {t:'Renault Trafic — CH64444',    b:'2,0 DCI 115 · Diesel · Første reg: 29.12.2008\nStelnr: VF1FLBHB68Y270982\nKøbt aug 2023 · 48.000 kr\nKasko police 9842 245 688', p:'⚠️ Syn: juni 2026'},
+  'b-bil':       {t:'Renault Trafic — CH64444',    b:'2,0 DCI 115 · Diesel · Første reg: 29.12.2008\nStelnr: VF1FLBHB68Y270982\nKøbt aug 2023 · 48.000 kr\nKasko police 9842 245 688\n⚠️ EasyPark faktura OVERSKREDET — 2.449,97 kr', p:'⚠️ Syn: juni · EasyPark betales nu!', hint:'Klik for at åbne'},
+  'b-easypark':  {t:'🅿️ EasyPark — OVERSKREDET',  b:'Faktura: 261600018264094\nBeløb: 2.449,97 kr\nForfald: 23. maj 2026 — OVERSKREDET\nKonto: 5290-9010786018\nFIK: +71 261600018264094 +81392463', p:'⚠️ BETAL NU', hint:'Klik for at åbne'},
   'b-okonomi':   {t:'💶 Økonomi',                  b:'Bogføring, moms, skat og bank\nKlik for finansoverblik →',           hint:'Klik for at åbne'},
   'b-econo':     {t:'E-conomic',                   b:'✅ Abonnement aktivt · Aftalenr. 1661439\n⚠️ Bankforbindelse udløbet apr 2026\nGenaktiver i E-conomic!',                    p:'199 kr/md'},
   'b-ordre':     {t:'Ordrestyring',                b:'Bygget af Johannes — gratis\nSager, tilbud, fakturering\nSeneste: Faktura #156 → Sóley Thomsen', p:'Faktura #156 afsendt'},
@@ -1325,8 +1395,16 @@ const agentsPanel=document.getElementById('agents-panel');
 
 function closeAll(){[insPanel,adsPanel,finPanel,inboxPanel,agentsPanel].forEach(p=>p.classList.remove('open'));}
 
+// Bil & EasyPark → bil-panel
+const bilPanel=document.getElementById('bil-panel');
+['b-bil','b-easypark'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('click',()=>{closeAll();bilPanel.classList.add('open');});
+});
+document.getElementById('bil-close').addEventListener('click',()=>bilPanel.classList.remove('open'));
+
 // Insurance
-['b-forsikring','b-bil'].forEach(id=>{
+['b-forsikring'].forEach(id=>{
   const el=document.getElementById(id);
   if(el) el.addEventListener('click',()=>{closeAll();insPanel.classList.add('open');});
 });
