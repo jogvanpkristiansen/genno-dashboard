@@ -10,23 +10,22 @@
   --blue:   #00d4ff;
   --green:  #00ff88;
   --amber:  #ffaa00;
-  --purple: #9b5de5;
   --pink:   #ff4d8d;
-  --teal:   #00c4ff;
   --orange: #ff8c00;
   --violet: #7c5fff;
+  --red:    #ff3030;
   --muted:  #3d5068;
   --text:   #dde8f5;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
-  background: var(--bg);
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  color: var(--text);
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  background:var(--bg);
+  font-family:'Segoe UI', system-ui, sans-serif;
+  color:var(--text);
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
 }
 #starfield { position:fixed; inset:0; z-index:0; pointer-events:none; }
 
@@ -34,28 +33,35 @@ body {
 header {
   position:relative; z-index:20;
   display:flex; align-items:center; justify-content:space-between;
-  padding:0 28px; height:58px;
-  background:rgba(5,8,15,0.92);
+  padding:0 22px; height:52px;
+  background:rgba(5,8,15,0.96);
   border-bottom:1px solid rgba(0,212,255,0.07);
-  backdrop-filter:blur(24px); flex-shrink:0;
+  backdrop-filter:blur(28px); flex-shrink:0;
 }
 .logo { display:flex; align-items:baseline; gap:10px; }
-.logo-main { font-size:22px; font-weight:900; letter-spacing:5px; color:#fff; text-shadow:0 0 25px rgba(0,212,255,0.5),0 0 60px rgba(0,212,255,0.2); }
-.logo-sub  { font-size:10px; letter-spacing:2.5px; color:var(--muted); text-transform:uppercase; }
-.kpis { display:flex; gap:5px; }
-.kpi { display:flex; flex-direction:column; align-items:center; padding:5px 14px; border:1px solid rgba(255,255,255,0.04); border-radius:8px; background:rgba(255,255,255,0.015); min-width:95px; }
-.kpi-label { font-size:8.5px; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted); }
-.kpi-val   { font-size:15px; font-weight:800; line-height:1.3; }
-.kpi-val.c-green { color:var(--green);  text-shadow:0 0 12px rgba(0,255,136,0.35); }
-.kpi-val.c-blue  { color:var(--blue);   text-shadow:0 0 12px rgba(0,212,255,0.35); }
-.kpi-val.c-amber { color:var(--amber);  text-shadow:0 0 12px rgba(255,170,0,0.35); }
-.kpi-val.c-pink  { color:var(--pink);   text-shadow:0 0 12px rgba(255,77,141,0.35); }
+.logo-main { font-size:21px; font-weight:900; letter-spacing:5px; color:#fff; text-shadow:0 0 25px rgba(0,212,255,0.5),0 0 60px rgba(0,212,255,0.2); }
+.logo-sub  { font-size:9px; letter-spacing:2.5px; color:var(--muted); text-transform:uppercase; }
+.kpis { display:flex; gap:4px; }
+.kpi {
+  display:flex; flex-direction:column; align-items:center;
+  padding:4px 11px; border:1px solid rgba(255,255,255,0.04); border-radius:7px;
+  background:rgba(255,255,255,0.012); min-width:82px; cursor:default;
+  transition:background .15s, border-color .15s;
+}
+.kpi:hover { background:rgba(255,255,255,0.025); border-color:rgba(255,255,255,0.07); }
+.kpi-label { font-size:7.5px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); white-space:nowrap; }
+.kpi-val   { font-size:13px; font-weight:800; line-height:1.35; }
+.c-green { color:var(--green);  text-shadow:0 0 10px rgba(0,255,136,0.4); }
+.c-blue  { color:var(--blue);   text-shadow:0 0 10px rgba(0,212,255,0.4); }
+.c-amber { color:var(--amber);  text-shadow:0 0 10px rgba(255,170,0,0.4); }
+.c-red   { color:var(--red);    text-shadow:0 0 10px rgba(255,48,48,0.6); }
+.c-pink  { color:var(--pink);   text-shadow:0 0 10px rgba(255,77,141,0.4); }
 .hdr-right { text-align:right; }
-.hdr-date  { font-size:11px; color:var(--muted); }
-.hdr-time  { font-size:18px; font-weight:700; color:rgba(255,255,255,0.15); letter-spacing:2px; }
+.hdr-date  { font-size:9.5px; color:var(--muted); }
+.hdr-time  { font-size:17px; font-weight:700; color:rgba(255,255,255,0.14); letter-spacing:2px; }
 
 /* ── MAIN ── */
-.main { display:flex; flex:1; overflow:hidden; position:relative; z-index:1; }
+.main { display:flex; flex:1; overflow:hidden; position:relative; z-index:1; min-height:0; }
 #map  { position:relative; flex:1; overflow:hidden; }
 #lines { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1; }
 
@@ -66,8 +72,8 @@ header {
   text-align:center; cursor:pointer; z-index:5; user-select:none;
   transition:transform .3s cubic-bezier(.34,1.56,.64,1), filter .25s ease, box-shadow .25s ease;
 }
-.bubble:hover { filter:brightness(1.35); z-index:30; }
-.bubble:active { transform:scale(0.93) !important; }
+.bubble:hover { filter:brightness(1.4); z-index:30; }
+.bubble:active { transform:scale(0.92) !important; }
 
 /* Center */
 .bubble.center {
@@ -98,7 +104,6 @@ header {
 .cat.drift      { background:radial-gradient(circle at 35% 32%,#00d480,#006640); box-shadow:0 0 28px rgba(0,212,128,0.22),0 0 70px rgba(0,212,128,0.07); }
 .cat.okonomi    { background:radial-gradient(circle at 35% 32%,#3a8fff,#12368a); box-shadow:0 0 28px rgba(58,143,255,0.22),0 0 70px rgba(58,143,255,0.07); }
 .cat.ads        { background:radial-gradient(circle at 35% 32%,#ff9000,#7a3800); box-shadow:0 0 28px rgba(255,144,0,0.22),0 0 70px rgba(255,144,0,0.07); }
-.cat.ejer       { background:radial-gradient(circle at 35% 32%,#a060f0,#48169e); box-shadow:0 0 28px rgba(160,96,240,0.22),0 0 70px rgba(160,96,240,0.07); }
 .cat.ansatte    { background:radial-gradient(circle at 35% 32%,#00c8ff,#004e6e); box-shadow:0 0 28px rgba(0,200,255,0.22),0 0 70px rgba(0,200,255,0.07); }
 .cat.forsikring { background:radial-gradient(circle at 35% 32%,#ff4d8d,#820030); box-shadow:0 0 28px rgba(255,77,141,0.22),0 0 70px rgba(255,77,141,0.07); }
 
@@ -110,12 +115,18 @@ header {
 }
 .bubble.child:hover { border-color:rgba(0,212,255,0.28); color:#fff; box-shadow:0 0 22px rgba(0,212,255,0.12); }
 
-/* Logo icon in bubbles */
+/* Urgent pulse for critical bubbles */
+@keyframes urgentPulse {
+  0%,100% { border-color:rgba(255,48,48,0.15); box-shadow:0 0 0 0 rgba(255,48,48,0); }
+  50%     { border-color:rgba(255,48,48,0.55); box-shadow:0 0 14px 2px rgba(255,48,48,0.28); }
+}
+.bubble.urgent { animation:urgentPulse 2.2s ease-in-out infinite; }
+
 .b-icon { font-size:15px; line-height:1; margin-bottom:1px; }
 .b-icon.fb  { font-size:13px; font-weight:900; color:#fff; background:#1877f2; width:18px; height:18px; border-radius:4px; display:flex; align-items:center; justify-content:center; margin-bottom:2px; }
 .b-icon.ig  { font-size:11px; background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); width:18px; height:18px; border-radius:5px; display:flex; align-items:center; justify-content:center; margin-bottom:2px; }
 .b-icon.gg  { font-size:12px; font-weight:900; display:flex; align-items:center; justify-content:center; margin-bottom:2px; }
-.b-icon.gg span:nth-child(1){color:#4285f4;} .b-icon.gg span:nth-child(2){color:#ea4335;} .b-icon.gg span:nth-child(3){color:#fbbc04;} .b-icon.gg span:nth-child(4){color:#34a853;}
+.b-icon.gg span:nth-child(1){color:#4285f4;}.b-icon.gg span:nth-child(2){color:#ea4335;}.b-icon.gg span:nth-child(3){color:#fbbc04;}.b-icon.gg span:nth-child(4){color:#34a853;}
 
 .bname { font-weight:700; padding:0 4px; }
 .bsub  { font-size:7.5px; color:rgba(255,255,255,0.28); margin-top:1px; }
@@ -126,28 +137,129 @@ header {
 
 /* ── RIGHT PANEL ── */
 #panel {
-  width:295px; flex-shrink:0;
-  background:rgba(5,8,15,0.88); border-left:1px solid rgba(0,212,255,0.06);
+  width:300px; flex-shrink:0;
+  background:rgba(5,8,15,0.92); border-left:1px solid rgba(0,212,255,0.06);
   display:flex; flex-direction:column; overflow:hidden; backdrop-filter:blur(24px);
 }
-.p-hdr { padding:11px 16px; border-bottom:1px solid rgba(255,255,255,0.03); font-size:8.5px; text-transform:uppercase; letter-spacing:1.6px; color:var(--muted); display:flex; align-items:center; gap:8px; flex-shrink:0; }
-.p-hdr-bar { width:3px; height:13px; border-radius:2px; flex-shrink:0; }
-.p-scroll { overflow-y:auto; flex:1; }
+.p-hdr {
+  padding:7px 14px; border-bottom:1px solid rgba(255,255,255,0.03);
+  font-size:8px; text-transform:uppercase; letter-spacing:1.6px; color:var(--muted);
+  display:flex; align-items:center; gap:7px; flex-shrink:0;
+}
+.p-hdr-bar { width:3px; height:12px; border-radius:2px; flex-shrink:0; }
+.p-cnt {
+  margin-left:auto; padding:1px 7px; border-radius:10px;
+  font-size:8px; font-weight:700; letter-spacing:.5px;
+}
+
+/* Alert rows */
+.a-row {
+  display:flex; align-items:flex-start; gap:9px;
+  padding:7px 14px; border-bottom:1px solid rgba(255,40,40,0.05);
+  background:rgba(255,40,40,0.025); transition:background .12s;
+}
+.a-row:hover { background:rgba(255,40,40,0.06); }
+.a-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+.a-row strong { display:block; font-size:11px; color:#ddb8b8; font-weight:600; line-height:1.4; }
+.a-row .meta  { font-size:9px; color:rgba(160,90,90,0.9); margin-top:1px; }
+.a-row.warn { background:rgba(255,170,0,0.025); border-bottom-color:rgba(255,170,0,0.05); }
+.a-row.warn:hover { background:rgba(255,170,0,0.055); }
+.a-row.warn strong { color:#ddccaa; }
+.a-row.warn .meta  { color:rgba(160,130,70,0.9); }
+
+/* Project cards */
+.proj {
+  padding:8px 14px 9px; border-bottom:1px solid rgba(255,255,255,0.022);
+  transition:background .12s;
+}
+.proj:hover { background:rgba(255,255,255,0.018); }
+.proj-top { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+.proj-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.proj-name { font-size:12px; font-weight:700; color:#d0e4f8; flex:1; line-height:1.2; }
+.proj-tag {
+  font-size:7.5px; font-weight:800; padding:2px 7px; border-radius:9px;
+  letter-spacing:.5px; white-space:nowrap;
+}
+.tag-g { background:rgba(0,255,136,0.09); border:1px solid rgba(0,255,136,0.22); color:var(--green); }
+.tag-y { background:rgba(255,170,0,0.09); border:1px solid rgba(255,170,0,0.22); color:var(--amber); }
+.tag-b { background:rgba(74,143,255,0.09); border:1px solid rgba(74,143,255,0.22); color:#6ab0ff; }
+.tag-p { background:rgba(176,128,255,0.09); border:1px solid rgba(176,128,255,0.22); color:#c090ff; }
+.proj-desc { font-size:9px; color:rgba(100,140,180,0.8); padding-left:17px; margin-bottom:5px; line-height:1.4; }
+.bar-bg  { margin-left:17px; height:3px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:2px; }
+
+/* Pipeline cards */
+.pipe {
+  display:flex; gap:10px; padding:7px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.02); transition:background .12s;
+}
+.pipe:hover { background:rgba(255,255,255,0.018); }
+.pipe-left { display:flex; flex-direction:column; align-items:center; padding-top:4px; }
+.pipe-vdot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.pipe-line { width:1px; flex:1; margin-top:4px; }
+.pipe-body { flex:1; }
+.pipe-name  { font-size:11.5px; color:#ccdaee; font-weight:700; line-height:1.3; }
+.pipe-stage {
+  display:inline-block; font-size:7.5px; font-weight:800;
+  padding:1.5px 6px; border-radius:8px; margin:2px 0; letter-spacing:.4px;
+}
+.st-offer   { background:rgba(255,170,0,0.09); border:1px solid rgba(255,170,0,0.22); color:var(--amber); }
+.st-contact { background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.2);  color:var(--blue); }
+.st-visit   { background:rgba(255,144,0,0.08); border:1px solid rgba(255,144,0,0.22); color:var(--orange); }
+.st-won     { background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.22); color:var(--green); }
+.pipe-desc  { font-size:9px; color:var(--muted); line-height:1.4; }
+
+/* Misc task row */
+.trow {
+  display:flex; align-items:flex-start; gap:9px;
+  padding:6px 14px; border-bottom:1px solid rgba(255,255,255,0.02); transition:background .12s;
+}
+.trow:hover { background:rgba(255,255,255,0.018); }
+.tdot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+.trow strong { display:block; font-size:11px; color:#c0d0e5; font-weight:600; }
+.trow .meta  { font-size:9px; color:var(--muted); margin-top:1px; }
+
+.p-scroll { overflow-y:auto; flex:1; min-height:0; }
 .p-scroll::-webkit-scrollbar { width:2px; }
 .p-scroll::-webkit-scrollbar-thumb { background:rgba(0,212,255,0.12); border-radius:2px; }
-.task { display:flex; align-items:flex-start; gap:10px; padding:8px 16px; border-bottom:1px solid rgba(255,255,255,0.02); transition:background .12s; }
-.task:hover { background:rgba(255,255,255,0.02); }
-.td { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:4px; }
-.task strong { display:block; font-size:11.5px; color:#c0d0e5; font-weight:600; }
-.task .meta  { font-size:9.5px; color:var(--muted); margin-top:1px; }
-.legend { display:flex; gap:12px; padding:9px 16px; border-top:1px solid rgba(255,255,255,0.03); font-size:9px; color:var(--muted); flex-shrink:0; }
-.legend span { display:flex; align-items:center; gap:5px; }
+
+.legend {
+  display:flex; gap:10px; padding:6px 14px;
+  border-top:1px solid rgba(255,255,255,0.03); font-size:8px;
+  color:var(--muted); flex-shrink:0; flex-wrap:wrap;
+}
+.legend span { display:flex; align-items:center; gap:4px; }
 .ld { width:5px; height:5px; border-radius:50%; }
 
-/* ── SLIDE PANELS (shared styles) ── */
+/* ── BOTTOM STATUS BAR ── */
+#statusbar {
+  position:relative; z-index:20;
+  height:30px; flex-shrink:0;
+  background:rgba(5,8,15,0.97);
+  border-top:1px solid rgba(0,212,255,0.05);
+  display:flex; align-items:center;
+  backdrop-filter:blur(24px);
+}
+.sb-l { display:flex; align-items:center; gap:7px; padding:0 16px; flex:1; }
+.sb-r { display:flex; align-items:center; gap:14px; padding:0 16px; border-left:1px solid rgba(255,255,255,0.04); }
+.sb-label { font-size:7.5px; text-transform:uppercase; letter-spacing:1px; color:rgba(61,80,104,0.6); }
+.pill {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:2px 8px; border-radius:10px; font-size:8.5px; font-weight:600; cursor:default;
+}
+.pill-r  { background:rgba(255,48,48,0.09); border:1px solid rgba(255,48,48,0.22); color:#ff7070; }
+.pill-y  { background:rgba(255,170,0,0.09); border:1px solid rgba(255,170,0,0.22); color:var(--amber); }
+.pill-b  { background:rgba(74,143,255,0.09); border:1px solid rgba(74,143,255,0.22); color:#6ab0ff; }
+.sb-stat { display:flex; align-items:center; gap:5px; font-size:8.5px; color:var(--muted); }
+.sb-dot { width:5px; height:5px; border-radius:50%; }
+.sb-dot.g { background:var(--green); box-shadow:0 0 5px rgba(0,255,136,.8); }
+.sb-dot.y { background:var(--amber); box-shadow:0 0 5px rgba(255,170,0,.8); }
+.sb-dot.r { background:var(--red);   box-shadow:0 0 5px rgba(255,48,48,.8); }
+
+/* ── SLIDE PANELS (shared) ── */
 .slide-panel {
-  position:fixed; top:58px; right:0;
-  width:370px; height:calc(100vh - 58px);
+  position:fixed; top:52px; right:0;
+  width:385px; height:calc(100vh - 82px);
   z-index:200; transform:translateX(100%);
   transition:transform .38s cubic-bezier(.25,.46,.45,.94);
   overflow-y:auto; padding:22px 20px 30px;
@@ -157,13 +269,16 @@ header {
 .slide-panel::-webkit-scrollbar { width:3px; }
 .slide-panel::-webkit-scrollbar-thumb { border-radius:2px; }
 
-/* Insurance panel */
-#ins-panel { background:rgba(6,9,18,0.97); border-left:1px solid rgba(255,77,141,0.18); }
-#ins-panel::-webkit-scrollbar-thumb { background:rgba(255,77,141,0.2); }
-
-/* Ads panel */
-#ads-panel { background:rgba(6,9,18,0.97); border-left:1px solid rgba(255,144,0,0.18); }
-#ads-panel::-webkit-scrollbar-thumb { background:rgba(255,144,0,0.2); }
+#ins-panel    { background:rgba(6,9,18,0.97); border-left:1px solid rgba(255,77,141,0.18); }
+#ins-panel::-webkit-scrollbar-thumb     { background:rgba(255,77,141,0.2); }
+#ads-panel    { background:rgba(6,9,18,0.97); border-left:1px solid rgba(255,144,0,0.18); }
+#ads-panel::-webkit-scrollbar-thumb    { background:rgba(255,144,0,0.2); }
+#agents-panel { background:rgba(6,9,18,0.97); border-left:1px solid rgba(104,160,99,0.22); }
+#agents-panel::-webkit-scrollbar-thumb { background:rgba(104,160,99,0.2); }
+#fin-panel    { background:rgba(6,9,18,0.97); border-left:1px solid rgba(58,143,255,0.2); }
+#fin-panel::-webkit-scrollbar-thumb    { background:rgba(58,143,255,0.2); }
+#inbox-panel  { background:rgba(6,9,18,0.97); border-left:1px solid rgba(0,212,255,0.15); }
+#inbox-panel::-webkit-scrollbar-thumb  { background:rgba(0,212,255,0.15); }
 
 .panel-close {
   position:absolute; top:14px; right:14px; width:30px; height:30px; border-radius:50%;
@@ -171,40 +286,67 @@ header {
   color:var(--muted); cursor:pointer; display:flex; align-items:center; justify-content:center;
   font-size:14px; transition:all .15s;
 }
-.ins-close:hover { background:rgba(255,77,141,0.12); color:var(--pink); border-color:rgba(255,77,141,0.3); }
-.ads-close:hover { background:rgba(255,144,0,0.12);  color:var(--orange); border-color:rgba(255,144,0,0.3); }
+.ins-close:hover     { background:rgba(255,77,141,0.12); color:var(--pink);   border-color:rgba(255,77,141,0.3); }
+.ads-close:hover     { background:rgba(255,144,0,0.12);  color:var(--orange); border-color:rgba(255,144,0,0.3); }
+.agents-close:hover  { background:rgba(104,160,99,0.12); color:#68a063;       border-color:rgba(104,160,99,0.3); }
+.fin-close:hover     { background:rgba(58,143,255,0.12); color:var(--blue);   border-color:rgba(58,143,255,0.3); }
+.inbox-close:hover   { background:rgba(0,212,255,0.12);  color:var(--blue);   border-color:rgba(0,212,255,0.3); }
 
 .sp-title { font-size:13px; font-weight:900; letter-spacing:2.5px; text-transform:uppercase; margin-bottom:3px; }
 .sp-meta  { font-size:9.5px; color:var(--muted); margin-bottom:18px; letter-spacing:.5px; }
-.ins-title { color:var(--pink);   text-shadow:0 0 18px rgba(255,77,141,0.45); }
-.ads-title { color:var(--orange); text-shadow:0 0 18px rgba(255,144,0,0.45); }
+.ins-title    { color:var(--pink);   text-shadow:0 0 18px rgba(255,77,141,0.45); }
+.ads-title    { color:var(--orange); text-shadow:0 0 18px rgba(255,144,0,0.45); }
+.agents-title { color:#68a063;       text-shadow:0 0 18px rgba(104,160,99,0.5); }
+.fin-title    { color:var(--blue);   text-shadow:0 0 18px rgba(58,143,255,0.45); }
+.inbox-title  { color:var(--blue);   text-shadow:0 0 20px rgba(0,212,255,0.5); }
 
 .sp-card { border-radius:10px; padding:13px 15px; margin-bottom:9px; transition:background .18s, border-color .18s; }
-.ins-card { background:rgba(255,77,141,0.04);  border:1px solid rgba(255,77,141,0.09); }
+.ins-card     { background:rgba(255,77,141,0.04);  border:1px solid rgba(255,77,141,0.09); }
 .ins-card:hover { background:rgba(255,77,141,0.08); border-color:rgba(255,77,141,0.16); }
-.ads-card { background:rgba(255,144,0,0.04);   border:1px solid rgba(255,144,0,0.09); }
+.ads-card     { background:rgba(255,144,0,0.04);   border:1px solid rgba(255,144,0,0.09); }
 .ads-card:hover { background:rgba(255,144,0,0.08); border-color:rgba(255,144,0,0.16); }
+.agents-card  { background:rgba(104,160,99,0.04);  border:1px solid rgba(104,160,99,0.10); }
+.agents-card:hover { background:rgba(104,160,99,0.09); border-color:rgba(104,160,99,0.18); }
+.fin-card     { background:rgba(58,143,255,0.04);  border:1px solid rgba(58,143,255,0.09); }
+.fin-card:hover { background:rgba(58,143,255,0.08); border-color:rgba(58,143,255,0.16); }
 
 .sp-card-name { font-size:11.5px; font-weight:700; margin-bottom:7px; letter-spacing:.3px; }
-.ins-card-name { color:#f0a0c0; }
-.ads-card-name { color:#ffc080; }
+.ins-card-name    { color:#f0a0c0; }
+.ads-card-name    { color:#ffc080; }
+.agents-card-name { color:#9dd99a; }
+.fin-card-name    { color:#90b8ff; }
 
 .sp-row { display:flex; justify-content:space-between; align-items:center; font-size:10px; padding:2.5px 0; border-bottom:1px solid rgba(255,255,255,0.03); color:var(--muted); }
 .sp-row:last-child { border-bottom:none; }
 .sp-row span:last-child { color:#b8cce0; font-weight:500; }
 .sp-row .price-pink { color:var(--pink)   !important; font-weight:700; }
 .sp-row .price-ora  { color:var(--orange) !important; font-weight:700; }
+.sp-row .price-blue { color:var(--blue)   !important; font-weight:700; }
 .sp-row .ok         { color:var(--green)  !important; font-weight:700; }
+.sp-row .warn       { color:var(--amber)  !important; font-weight:700; }
+.sp-row .danger     { color:var(--red)    !important; font-weight:700; }
 
-.sp-total { margin-top:14px; padding:13px 16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; }
-.sp-total + .sp-total { margin-top:8px; }
-.ins-total { background:rgba(255,77,141,0.07);  border:1px solid rgba(255,77,141,0.18); }
-.ads-total { background:rgba(255,144,0,0.07);   border:1px solid rgba(255,144,0,0.18); }
+.sp-total { margin-top:12px; padding:12px 15px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; }
+.sp-total + .sp-total { margin-top:7px; }
+.ins-total    { background:rgba(255,77,141,0.07);  border:1px solid rgba(255,77,141,0.18); }
+.ads-total    { background:rgba(255,144,0,0.07);   border:1px solid rgba(255,144,0,0.18); }
+.agents-total { background:rgba(104,160,99,0.07);  border:1px solid rgba(104,160,99,0.20); }
+.fin-total    { background:rgba(58,143,255,0.07);  border:1px solid rgba(58,143,255,0.20); }
 .sp-total-lbl { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); }
 .sp-total-sub { font-size:9px; color:rgba(61,80,104,0.7); margin-top:2px; }
 .sp-total-val { font-size:20px; font-weight:900; }
-.ins-total-val { color:var(--pink);   text-shadow:0 0 18px rgba(255,77,141,0.45); }
-.ads-total-val { color:var(--orange); text-shadow:0 0 18px rgba(255,144,0,0.45); }
+.ins-total-val    { color:var(--pink);   text-shadow:0 0 18px rgba(255,77,141,0.45); }
+.ads-total-val    { color:var(--orange); text-shadow:0 0 18px rgba(255,144,0,0.45); }
+.agents-total-val { color:#68a063;       text-shadow:0 0 18px rgba(104,160,99,0.5); }
+.fin-total-val    { color:var(--blue);   text-shadow:0 0 18px rgba(58,143,255,0.45); }
+
+/* Finance bar */
+.fin-bar { display:flex; align-items:center; gap:9px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+.fin-bar:last-child { border-bottom:none; }
+.fin-bar-lbl { font-size:9.5px; color:var(--muted); width:90px; flex-shrink:0; }
+.fin-bar-track { flex:1; height:5px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; }
+.fin-bar-fill  { height:100%; border-radius:3px; }
+.fin-bar-val   { font-size:10px; font-weight:700; width:70px; text-align:right; flex-shrink:0; }
 
 /* Platform badge */
 .plat-badge { display:inline-flex; align-items:center; gap:5px; padding:2px 8px; border-radius:20px; font-size:9px; font-weight:700; margin-bottom:8px; }
@@ -213,26 +355,50 @@ header {
 .badge-g    { background:rgba(66,133,244,0.12); border:1px solid rgba(66,133,244,0.3); color:#90b8ff; }
 .badge-seo  { background:rgba(52,168,83,0.12);  border:1px solid rgba(52,168,83,0.3);  color:#80e090; }
 
-/* stat row with icon */
-.stat-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.025); font-size:10px; }
+.stat-row { display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.025); font-size:10px; }
 .stat-row:last-child { border-bottom:none; }
 .stat-label { color:var(--muted); }
-.stat-val { color:#c8d8f0; font-weight:600; font-size:11px; }
+.stat-val { color:#c8d8f0; font-weight:600; }
 .stat-val.live { color:var(--green); }
 
-/* ── TOOLTIP ── */
-#tip { position:fixed; background:rgba(6,10,20,0.96); border:1px solid rgba(0,212,255,0.14); border-radius:12px; padding:12px 16px; font-size:12px; pointer-events:none; z-index:999; display:none; max-width:230px; line-height:1.6; color:var(--muted); box-shadow:0 10px 36px rgba(0,0,0,.65),0 0 24px rgba(0,212,255,0.05); backdrop-filter:blur(24px); }
+/* Inbox panel */
+.inbox-meta  { font-size:10px; color:var(--muted); margin-bottom:16px; }
+.inbox-card  { background:rgba(0,212,255,0.04); border:1px solid rgba(0,212,255,0.10); border-radius:10px; padding:12px 14px; margin-bottom:10px; transition:background .2s; }
+.inbox-card:hover { background:rgba(0,212,255,0.08); }
+.inbox-action { display:inline-flex; align-items:center; padding:2px 8px; border-radius:20px; font-size:9px; font-weight:700; margin-bottom:6px; }
+.action-møde     { background:rgba(74,134,232,0.15); border:1px solid rgba(74,134,232,0.3); color:#6ab0ff; }
+.action-lead     { background:rgba(0,255,136,0.12);  border:1px solid rgba(0,255,136,0.3);  color:#00ff88; }
+.action-deadline { background:rgba(255,48,48,0.12);  border:1px solid rgba(255,48,48,0.3);  color:#ff6060; }
+.action-regnskab { background:rgba(255,170,0,0.12);  border:1px solid rgba(255,170,0,0.3);  color:#ffaa00; }
+.action-vigtig   { background:rgba(155,93,229,0.12); border:1px solid rgba(155,93,229,0.3); color:#c490ff; }
+.inbox-from    { font-size:11px; font-weight:700; color:#c8d8f0; margin-bottom:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.inbox-subject { font-size:10px; color:var(--muted); margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.inbox-summary { font-size:10px; color:#8aa8c8; line-height:1.5; }
+.inbox-date    { font-size:9px; color:rgba(61,80,104,0.8); float:right; margin-top:2px; }
+.inbox-empty   { text-align:center; padding:30px 10px; color:var(--muted); font-size:12px; line-height:1.8; }
+.inbox-last-run { font-size:9px; color:rgba(0,212,255,0.35); text-align:center; margin-top:12px; padding-top:12px; border-top:1px solid rgba(0,212,255,0.07); }
+
+/* Tooltip */
+#tip {
+  position:fixed; background:rgba(6,10,20,0.97); border:1px solid rgba(0,212,255,0.16);
+  border-radius:12px; padding:12px 16px; font-size:12px; pointer-events:none;
+  z-index:999; display:none; max-width:250px; line-height:1.6; color:var(--muted);
+  box-shadow:0 10px 36px rgba(0,0,0,.7),0 0 24px rgba(0,212,255,0.06);
+  backdrop-filter:blur(24px);
+}
 #tip strong { display:block; color:#e8f0fa; margin-bottom:3px; font-size:13px; font-weight:700; }
 #tip .t-price { color:var(--green); font-weight:700; font-size:11px; margin-top:4px; }
 #tip .t-hint  { font-size:9.5px; color:rgba(0,212,255,0.5); margin-top:4px; font-style:italic; }
-#tip .t-contact { font-size:10px; color:#5a8aaa; margin-top:3px; }
 
 /* Scanlines */
-body::after { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.025) 3px,rgba(0,0,0,0.025) 4px); pointer-events:none; z-index:500; }
+body::after {
+  content:''; position:fixed; inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.02) 3px,rgba(0,0,0,0.02) 4px);
+  pointer-events:none; z-index:500;
+}
 </style>
 </head>
 <body>
-
 <canvas id="starfield"></canvas>
 
 <!-- ══ HEADER ══ -->
@@ -242,11 +408,13 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="logo-sub">ApS · Tømrermester · København</div>
   </div>
   <div class="kpis">
-    <div class="kpi"><div class="kpi-label">Topdanmark / år</div><div class="kpi-val c-pink">46.496 kr</div></div>
-    <div class="kpi"><div class="kpi-label">7 Policer aktive</div><div class="kpi-val c-green">● I KRAFT</div></div>
-    <div class="kpi"><div class="kpi-label">Online Presence /md</div><div class="kpi-val c-amber">~7.000 kr</div></div>
-    <div class="kpi"><div class="kpi-label">Team</div><div class="kpi-val c-blue">Malik + Jógvan</div></div>
-    <div class="kpi"><div class="kpi-label">Rating</div><div class="kpi-val c-green">★ 5.0</div></div>
+    <div class="kpi"><div class="kpi-label">Bank saldo</div><div class="kpi-val c-blue">40.000 kr</div></div>
+    <div class="kpi"><div class="kpi-label">Udestående</div><div class="kpi-val c-green">~60.000 kr</div></div>
+    <div class="kpi"><div class="kpi-label">⚠️ Gæld</div><div class="kpi-val c-red">33.000 kr</div></div>
+    <div class="kpi"><div class="kpi-label">Moms reserve</div><div class="kpi-val c-amber">~60.000 kr</div></div>
+    <div class="kpi"><div class="kpi-label">Forsikring / år</div><div class="kpi-val c-pink">46.496 kr</div></div>
+    <div class="kpi"><div class="kpi-label">Rating ⚠️ Elite↓</div><div class="kpi-val c-amber">★ 5.0</div></div>
+    <div class="kpi"><div class="kpi-label">Team</div><div class="kpi-val c-blue">Malik + JP</div></div>
   </div>
   <div class="hdr-right">
     <div class="hdr-time" id="hdr-time"></div>
@@ -264,7 +432,7 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="center-sub">ApS</div>
   </div>
 
-  <!-- TOPDANMARK (forsikring) -->
+  <!-- FORSIKRING -->
   <div class="bubble cat forsikring" id="b-forsikring" style="left:44%;top:8%">
     <div class="sdot s-g"></div>
     <div class="b-icon">🛡</div>
@@ -273,76 +441,109 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
   </div>
 
   <!-- DRIFT -->
-  <div class="bubble cat drift" id="b-drift" style="left:18%;top:20%">
+  <div class="bubble cat drift" id="b-drift" style="left:17%;top:20%">
     <div class="sdot s-g"></div>
     <div class="b-icon">🔧</div>
     <div class="bname">Drift</div>
   </div>
-
-  <!-- Stark (Gustav + Sebastian in tooltip only) -->
-  <div class="bubble child" id="b-stark" style="left:2%;top:7%">
+  <div class="bubble child" id="b-stark" style="left:1%;top:6%">
     <div class="sdot s-g"></div>
     <div class="b-icon">🏗</div>
     <div class="bname">Stark</div>
     <div class="bsub">Materialer</div>
   </div>
-
-  <!-- Firmabil — Renault Trafic -->
-  <div class="bubble child" id="b-bil" style="left:3%;top:32%">
+  <div class="bubble child" id="b-bygma" style="left:9%;top:4%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">🪵</div>
+    <div class="bname">Bygma</div>
+    <div class="bsub">Materialer</div>
+  </div>
+  <div class="bubble child" id="b-bil" style="left:2%;top:30%">
     <div class="sdot s-y"></div>
-    <div class="b-icon" style="font-size:9px;font-weight:900;color:#ffcc00;letter-spacing:-0.5px">RENAULT</div>
+    <div class="b-icon" style="font-size:8px;font-weight:900;color:#ffcc00;letter-spacing:-.5px">RENAULT</div>
     <div class="bname">CH64444</div>
     <div class="bsub">Syn juni ⚠️</div>
   </div>
 
   <!-- ØKONOMI -->
-  <div class="bubble cat okonomi" id="b-okonomi" style="left:17%;top:64%">
+  <div class="bubble cat okonomi" id="b-okonomi" style="left:16%;top:63%">
     <div class="sdot s-y"></div>
     <div class="b-icon">💶</div>
     <div class="bname">Økonomi</div>
   </div>
-  <div class="bubble child" id="b-econo" style="left:1%;top:50%">
-    <div class="sdot s-y"></div>
+  <div class="bubble child" id="b-econo" style="left:0%;top:49%">
+    <div class="sdot s-g"></div>
     <div class="b-icon">📊</div>
     <div class="bname">E-conomic</div>
   </div>
-  <div class="bubble child" id="b-ordre" style="left:1%;top:69%">
+  <div class="bubble child" id="b-ordre" style="left:0%;top:67%">
     <div class="sdot s-g"></div>
     <div class="b-icon">📋</div>
     <div class="bname">Ordre&shy;styring</div>
     <div class="bsub">Gratis</div>
   </div>
-  <div class="bubble child" id="b-moms" style="left:7%;top:83%">
+  <div class="bubble child urgent" id="b-moms" style="left:5%;top:82%">
     <div class="sdot s-r"></div>
-    <div class="b-icon">🏦</div>
+    <div class="b-icon">⚡</div>
     <div class="bname">Moms</div>
-    <div class="bsub">60k</div>
+    <div class="bsub">60k ⚠️</div>
   </div>
-  <div class="bubble child" id="b-bank" style="left:20%;top:87%">
-    <div class="sdot s-y"></div>
+  <div class="bubble child" id="b-bank" style="left:18%;top:87%">
+    <div class="sdot s-g"></div>
     <div class="b-icon">🌙</div>
     <div class="bname">Lunar</div>
     <div class="bsub">40k saldo</div>
   </div>
-  <div class="bubble child" id="b-skat" style="left:32%;top:83%">
+  <div class="bubble child" id="b-skat" style="left:30%;top:82%">
     <div class="sdot s-y"></div>
     <div class="b-icon">🏛</div>
     <div class="bname">Skat</div>
   </div>
+  <div class="bubble child urgent" id="b-gaeld" style="left:8%;top:71%">
+    <div class="sdot s-r"></div>
+    <div class="b-icon" style="font-size:13px">⚠️</div>
+    <div class="bname" style="font-size:8px">Gælds&shy;styrelsen</div>
+    <div class="bsub">33k</div>
+  </div>
+  <div class="bubble child" id="b-revisor" style="left:28%;top:72%">
+    <div class="sdot s-y"></div>
+    <div class="b-icon">📝</div>
+    <div class="bname">Revisor1</div>
+    <div class="bsub">Årsrapport</div>
+  </div>
+  <div class="bubble child" id="b-pension" style="left:31%;top:61%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">🏦</div>
+    <div class="bname">Nordea</div>
+    <div class="bsub">Pension</div>
+  </div>
 
-  <!-- ONLINE PRESENCE (was Ads) -->
+  <!-- KALENDER -->
+  <div class="bubble cat" id="b-kalender" style="left:56%;top:10%;background:radial-gradient(circle at 35% 32%,#00c8a0,#005e4a);box-shadow:0 0 28px rgba(0,200,160,0.22),0 0 70px rgba(0,200,160,0.07)">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">📅</div>
+    <div class="bname" style="color:#fff">Kalender</div>
+    <div class="bsub" style="color:rgba(255,255,255,0.5)">& Ferie</div>
+  </div>
+  <div class="bubble child" id="b-sas" style="left:50%;top:2%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon">✈️</div>
+    <div class="bname">Boston</div>
+    <div class="bsub">26. jun</div>
+  </div>
+
+  <!-- ONLINE PRESENCE -->
   <div class="bubble cat ads" id="b-ads" style="left:65%;top:20%">
     <div class="sdot s-g"></div>
     <div class="b-icon">📡</div>
     <div class="bname">Online</div>
     <div class="bsub">Presence</div>
   </div>
-  <!-- Adwise = SEO, Generaxion = Google Ads (corrected) -->
   <div class="bubble child" id="b-adwise" style="left:70%;top:5%">
-    <div class="sdot s-g"></div>
+    <div class="sdot s-r"></div>
     <div class="b-icon">🔍</div>
     <div class="bname">Adwise</div>
-    <div class="bsub">SEO</div>
+    <div class="bsub">TVIST ⚠️</div>
   </div>
   <div class="bubble child" id="b-gene" style="left:82%;top:10%">
     <div class="sdot s-g"></div>
@@ -362,40 +563,60 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="bname">Instagram</div>
     <div class="bsub">50/dag</div>
   </div>
+  <div class="bubble child" id="b-anmeld" style="left:89%;top:4%">
+    <div class="sdot s-y"></div>
+    <div class="b-icon">🔨</div>
+    <div class="bname" style="font-size:7.5px">AnmeldH.</div>
+    <div class="bsub">Elite ⚠️</div>
+  </div>
+  <div class="bubble child" id="b-3bt-bubble" style="left:90%;top:16%">
+    <div class="sdot s-y"></div>
+    <div class="b-icon">🏗</div>
+    <div class="bname" style="font-size:8px">3bygtilbud</div>
+    <div class="bsub">2 aktive</div>
+  </div>
 
-  <!-- ONLINE & IT (new category) -->
-  <div class="bubble cat" id="b-online" style="left:68%;top:58%;background:rgba(124,95,255,0.08);border-color:rgba(124,95,255,0.35);box-shadow:0 0 28px rgba(124,95,255,0.12)">
+  <!-- ONLINE & IT -->
+  <div class="bubble cat" id="b-online" style="left:68%;top:58%;background:rgba(124,95,255,0.08);border:1px solid rgba(124,95,255,0.3);box-shadow:0 0 28px rgba(124,95,255,0.12)">
     <div class="sdot" style="background:#7c5fff;box-shadow:0 0 6px #7c5fff"></div>
     <div class="b-icon">💻</div>
     <div class="bname" style="color:#b09fff">Online & IT</div>
   </div>
-  <!-- Webflow (moved from Drift) -->
   <div class="bubble child" id="b-webflow" style="left:82%;top:50%">
     <div class="sdot s-g"></div>
     <div class="b-icon">🌐</div>
     <div class="bname">Webflow</div>
     <div class="bsub">Website</div>
   </div>
-  <!-- Netgiganten (email hosting) -->
   <div class="bubble child" id="b-netgig" style="left:82%;top:65%">
     <div class="sdot s-g"></div>
     <div class="b-icon">✉️</div>
     <div class="bname">Netgiganten</div>
     <div class="bsub">Mail host</div>
   </div>
-  <!-- Claude AI -->
   <div class="bubble child" id="b-claude" style="left:60%;top:72%">
     <div class="sdot" style="background:#ff8c5a;box-shadow:0 0 6px #ff8c5a"></div>
     <div class="b-icon">🤖</div>
     <div class="bname">Claude</div>
-    <div class="bsub">AI assistent</div>
+    <div class="bsub">Max · 6 AI</div>
   </div>
-  <!-- GitHub (under Claude) -->
   <div class="bubble child" id="b-github" style="left:57%;top:85%">
-    <div class="sdot" style="background:#aaa;box-shadow:0 0 6px #888"></div>
+    <div class="sdot" style="background:#aaa;box-shadow:0 0 5px #888"></div>
     <div class="b-icon" style="font-size:13px">🐙</div>
     <div class="bname">GitHub</div>
     <div class="bsub">Kode backup</div>
+  </div>
+  <div class="bubble child" id="b-nodejs" style="left:75%;top:82%">
+    <div class="sdot s-g"></div>
+    <div class="b-icon" style="font-size:11px;color:#b88aff;font-weight:900">☁️</div>
+    <div class="bname">Railway</div>
+    <div class="bsub">Live 🟢</div>
+  </div>
+  <div class="bubble child" id="b-inbox" style="left:88%;top:78%">
+    <div class="sdot" style="background:#00d4ff;box-shadow:0 0 6px #00d4ff"></div>
+    <div class="b-icon">📬</div>
+    <div class="bname">Inbox AI</div>
+    <div class="bsub" id="inbox-badge">klar</div>
   </div>
 
   <!-- ANSATTE -->
@@ -404,61 +625,193 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="b-icon">👷</div>
     <div class="bname">Ansatte</div>
   </div>
-  <!-- Malik moved right to avoid overlapping Skat -->
   <div class="bubble child" id="b-malik" style="left:48%;top:84%">
     <div class="sdot s-g"></div>
     <div class="b-icon">🎓</div>
     <div class="bname">Malik</div>
     <div class="bsub">Lærling</div>
   </div>
-</div>
+</div><!-- #map -->
 
 <!-- ══ RIGHT PANEL ══ -->
 <div id="panel">
+
+  <!-- KRITISK -->
   <div class="p-hdr">
-    <div class="p-hdr-bar" style="background:var(--amber);box-shadow:0 0 8px rgba(255,170,0,.5)"></div>
-    Interne opgaver
+    <div class="p-hdr-bar" style="background:var(--red);box-shadow:0 0 8px rgba(255,48,48,.7)"></div>
+    Kritisk
+    <span class="p-cnt" style="color:#ff7070;background:rgba(255,48,48,0.09);border:1px solid rgba(255,48,48,0.18)">3</span>
   </div>
-  <div>
-    <div class="task"><div class="td" style="background:#ff3030;box-shadow:0 0 7px rgba(255,48,48,.7)"></div><div><strong>Gældstyrelsen</strong><div class="meta">Betal 33.000 kr — haster nu</div></div></div>
-    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>Moms</strong><div class="meta">Sæt ~60.000 kr til side inden aug</div></div></div>
-    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>Revisor1 — årsrapport</strong><div class="meta">Godkend udkast + send bankudtog</div></div></div>
-    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>Bil til syn</strong><div class="meta">Juni måned — book tid nu</div></div></div>
-    <div class="task"><div class="td" style="background:#4a8fff;box-shadow:0 0 7px rgba(74,143,255,.7)"></div><div><strong>E-conomic API</strong><div class="meta">Afventer adgang fra Johannes</div></div></div>
-    <div class="task"><div class="td" style="background:#4a8fff;box-shadow:0 0 7px rgba(74,143,255,.7)"></div><div><strong>Meta Pixel → GTM</strong><div class="meta">Opsæt tracking på gennorenovering.dk</div></div></div>
-    <div class="task"><div class="td" style="background:var(--green);box-shadow:0 0 7px rgba(0,255,136,.7)"></div><div><strong>Meta kampagner live ✓</strong><div class="meta">150 DKK/dag · Lead Gen + Følgere</div></div></div>
+  <div class="a-row">
+    <div class="a-dot" style="background:var(--red);box-shadow:0 0 6px rgba(255,48,48,.9)"></div>
+    <div><strong>Gældstyrelsen — 33.000 kr</strong><div class="meta">Betal hurtigst muligt — haster</div></div>
   </div>
-  <div class="p-hdr" style="margin-top:2px">
+  <div class="a-row warn">
+    <div class="a-dot" style="background:var(--amber);box-shadow:0 0 6px rgba(255,170,0,.9)"></div>
+    <div><strong>Adwise — Frederik Hansen ringer</strong><div class="meta">Mandag 2. juni · forbered modkrav på tvist</div></div>
+  </div>
+  <div class="a-row warn">
+    <div class="a-dot" style="background:var(--amber);box-shadow:0 0 6px rgba(255,170,0,.9)"></div>
+    <div><strong>Elite Håndværker-status tabt ⚠️</strong><div class="meta">anmeld-haandvaerker.dk · log ind og udbedre</div></div>
+  </div>
+
+  <!-- AKTIVE PROJEKTER -->
+  <div class="p-hdr" style="margin-top:1px">
     <div class="p-hdr-bar" style="background:var(--green);box-shadow:0 0 8px rgba(0,255,136,.5)"></div>
-    Kundeemner &amp; tilbud
+    Aktive projekter
+    <span class="p-cnt" style="color:var(--green);background:rgba(0,255,136,0.07)">4</span>
+  </div>
+  <div class="proj">
+    <div class="proj-top">
+      <div class="proj-dot" style="background:var(--green);box-shadow:0 0 7px rgba(0,255,136,.7)"></div>
+      <div class="proj-name">Mora / Rumdeler</div>
+      <div class="proj-tag tag-g">I GANG</div>
+    </div>
+    <div class="proj-desc">Rumdeler + Temptech CLX30DB vinkøleskab · denne uge</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:75%;background:linear-gradient(90deg,#00ff88,#00c060)"></div></div>
+  </div>
+  <div class="proj">
+    <div class="proj-top">
+      <div class="proj-dot" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div>
+      <div class="proj-name">Erik / Dørmontering</div>
+      <div class="proj-tag tag-y">NÆSTEN FÆRDIG</div>
+    </div>
+    <div class="proj-desc">Dør monteres torsdag 29. maj ✓</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:90%;background:linear-gradient(90deg,#ffaa00,#ff7700)"></div></div>
+  </div>
+  <div class="proj">
+    <div class="proj-top">
+      <div class="proj-dot" style="background:#4a8fff;box-shadow:0 0 7px rgba(74,143,255,.7)"></div>
+      <div class="proj-name">Rikke / Terrasse</div>
+      <div class="proj-tag tag-b">NÆSTE UGE</div>
+    </div>
+    <div class="proj-desc">Terrassebyggeri · opstart uge 23</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:5%;background:linear-gradient(90deg,#4a8fff,#1a50cc)"></div></div>
+  </div>
+  <div class="proj">
+    <div class="proj-top">
+      <div class="proj-dot" style="background:#b080ff;box-shadow:0 0 7px rgba(176,128,255,.7)"></div>
+      <div class="proj-name">Sóley / Istandsættelse</div>
+      <div class="proj-tag tag-p">AFVENTER</div>
+    </div>
+    <div class="proj-desc">Jogvan færdig ✓ · maling + el (underleverandører)</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:92%;background:linear-gradient(90deg,#b080ff,#7040cc)"></div></div>
+  </div>
+
+  <!-- LEAD PIPELINE -->
+  <div class="p-hdr" style="margin-top:1px">
+    <div class="p-hdr-bar" style="background:var(--amber);box-shadow:0 0 8px rgba(255,170,0,.5)"></div>
+    Lead pipeline
+    <span class="p-cnt" style="color:var(--amber);background:rgba(255,170,0,0.07)">3</span>
   </div>
   <div class="p-scroll">
-    <div class="task"><div class="td" style="background:#ff3030;box-shadow:0 0 7px rgba(255,48,48,.7)"></div><div><strong>3BT — 12 leads</strong><div class="meta">Ikke kontaktet — ring op i dag</div></div></div>
-    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>3BT tilbud #1</strong><div class="meta">Afventer svar fra kunde</div></div></div>
-    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>3BT tilbud #2</strong><div class="meta">Afventer svar fra kunde</div></div></div>
-    <div class="task"><div class="td" style="background:var(--amber);box-shadow:0 0 7px rgba(255,170,0,.7)"></div><div><strong>3BT tilbud #3</strong><div class="meta">Afventer svar fra kunde</div></div></div>
-    <div class="task"><div class="td" style="background:#4a8fff;box-shadow:0 0 7px rgba(74,143,255,.7)"></div><div><strong>Webflow — opdater adresse</strong><div class="meta">Laurids Skaus Gade 5, 1 tv, 2200</div></div></div>
+    <div class="pipe">
+      <div class="pipe-left">
+        <div class="pipe-vdot" style="background:var(--amber);box-shadow:0 0 5px rgba(255,170,0,.7)"></div>
+        <div class="pipe-line" style="background:rgba(255,170,0,0.15)"></div>
+      </div>
+      <div class="pipe-body">
+        <div class="pipe-name">Kata Horvath-Sarlos</div>
+        <span class="pipe-stage st-offer">TILBUD MANGLER</span>
+        <div class="pipe-desc">Besøgt ✓ · Højseng/hems med trappe + opbevaring</div>
+      </div>
+    </div>
+    <div class="pipe">
+      <div class="pipe-left">
+        <div class="pipe-vdot" style="background:var(--blue);box-shadow:0 0 5px rgba(0,212,255,.6)"></div>
+        <div class="pipe-line" style="background:rgba(0,212,255,0.12)"></div>
+      </div>
+      <div class="pipe-body">
+        <div class="pipe-name">Oliver Heldmann</div>
+        <span class="pipe-stage st-contact">FINDER TIDSPUNKT</span>
+        <div class="pipe-desc">Kontakt ✓ · Vægflytning · stresset pt.</div>
+      </div>
+    </div>
+
+    <!-- MISC / PLANLAGT -->
+    <div class="p-hdr" style="margin-top:1px">
+      <div class="p-hdr-bar" style="background:#4a8fff;box-shadow:0 0 8px rgba(74,143,255,.4)"></div>
+      Planlagt & info
+    </div>
+    <div class="trow">
+      <div class="tdot" style="background:var(--amber);box-shadow:0 0 5px rgba(255,170,0,.7)"></div>
+      <div><strong>Moms — sæt 60.000 kr til side</strong><div class="meta">Frist 1. august 2026</div></div>
+    </div>
+    <div class="trow">
+      <div class="tdot" style="background:var(--amber);box-shadow:0 0 5px rgba(255,170,0,.7)"></div>
+      <div><strong>Bil til syn — book tid</strong><div class="meta">CH64444 · tjek bremser INDEN syn</div></div>
+    </div>
+    <div class="trow">
+      <div class="tdot" style="background:#4a8fff;box-shadow:0 0 5px rgba(74,143,255,.7)"></div>
+      <div><strong>SAS — CPH → Boston</strong><div class="meta">26. jun – 5. jul · Ref: XBVFNK</div></div>
+    </div>
+    <div class="trow">
+      <div class="tdot" style="background:var(--amber);box-shadow:0 0 5px rgba(255,170,0,.7)"></div>
+      <div><strong>AnmeldH. — Elite-status tabt</strong><div class="meta">Bed kunder om nye anmeldelser</div></div>
+    </div>
+    <div class="trow">
+      <div class="tdot" style="background:var(--green);box-shadow:0 0 5px rgba(0,255,136,.7)"></div>
+      <div><strong>Stark kredit betalt ✓</strong><div class="meta">Maj 2026 · kredit nulstillet</div></div>
+    </div>
+    <div class="trow">
+      <div class="tdot" style="background:var(--green);box-shadow:0 0 5px rgba(0,255,136,.7)"></div>
+      <div><strong>Meta kampagner live ✓</strong><div class="meta">150 DKK/dag · Lead Gen + Følgere</div></div>
+    </div>
+    <div class="trow">
+      <div class="tdot" style="background:var(--green);box-shadow:0 0 5px rgba(0,255,136,.7)"></div>
+      <div><strong>Nordea Pension oprettet ✓</strong><div class="meta">11. maj 2026 · aktiv</div></div>
+    </div>
+    <div class="trow" style="border-bottom:none">
+      <div class="tdot" style="background:#4a8fff;box-shadow:0 0 5px rgba(74,143,255,.7)"></div>
+      <div><strong>Webflow — opdater adresse</strong><div class="meta">Laurids Skaus Gade 5, 1 tv, 2200</div></div>
+    </div>
   </div>
+
   <div class="legend">
-    <span><div class="ld" style="background:var(--green);box-shadow:0 0 5px rgba(0,255,136,.7)"></div>OK</span>
-    <span><div class="ld" style="background:var(--amber);box-shadow:0 0 5px rgba(255,170,0,.7)"></div>Afventer</span>
-    <span><div class="ld" style="background:#ff3030;box-shadow:0 0 5px rgba(255,48,48,.7)"></div>Haster</span>
-    <span><div class="ld" style="background:#4a8fff;box-shadow:0 0 5px rgba(74,143,255,.7)"></div>Planlagt</span>
+    <span><div class="ld" style="background:var(--green);box-shadow:0 0 4px rgba(0,255,136,.7)"></div>OK</span>
+    <span><div class="ld" style="background:var(--amber);box-shadow:0 0 4px rgba(255,170,0,.7)"></div>Afventer</span>
+    <span><div class="ld" style="background:var(--red);box-shadow:0 0 4px rgba(255,48,48,.7)"></div>Haster</span>
+    <span><div class="ld" style="background:#4a8fff;box-shadow:0 0 4px rgba(74,143,255,.7)"></div>Planlagt</span>
+    <span><div class="ld" style="background:#b080ff;box-shadow:0 0 4px rgba(176,128,255,.7)"></div>Afventer 3.</span>
   </div>
 </div>
 </div><!-- .main -->
+
+<!-- ══ BOTTOM STATUS BAR ══ -->
+<div id="statusbar">
+  <div class="sb-l">
+    <span class="sb-label">Deadlines</span>
+    <span class="pill pill-r">⚠️ Frederik Hansen · 2. jun</span>
+    <span class="pill pill-y">🔧 Bilsyn · juni</span>
+    <span class="pill pill-y">💶 Moms · 1. aug</span>
+    <span class="pill pill-b">✈️ Boston · 26. jun</span>
+    <span class="pill pill-y">🏆 Elite status · udbedres</span>
+  </div>
+  <div class="sb-r">
+    <div class="sb-stat">
+      <div class="sb-dot g"></div>
+      <span>☁️ Railway · online</span>
+    </div>
+    <div class="sb-stat">
+      <div class="sb-dot g"></div>
+      <span>🤖 6 agenter · aktive</span>
+    </div>
+    <div class="sb-stat">
+      <div class="sb-dot g"></div>
+      <span id="sb-inbox-status">📬 Inbox AI · sidst: 27. maj</span>
+    </div>
+  </div>
+</div>
 
 <!-- ══ INSURANCE SLIDE PANEL ══ -->
 <div id="ins-panel" class="slide-panel">
   <div class="panel-close ins-close" id="ins-close">✕</div>
   <div class="sp-title ins-title">🛡 Topdanmark Forsikring</div>
-  <div class="sp-meta">Topdanmark · Kundenr. 3496 25G · CVR 44112671 · 24. maj 2026</div>
-
+  <div class="sp-meta">Kundenr. 3496 25G · 7 aktive policer · opdateret maj 2026</div>
   <div class="sp-card ins-card">
     <div class="sp-card-name ins-card-name">Lovpligtig arbejdsskadeforsikring</div>
     <div class="sp-row"><span>Police</span><span>9813 576 811</span></div>
-    <div class="sp-row"><span>Sikrede</span><span>2 medarbejdere</span></div>
-    <div class="sp-row"><span>Max operation</span><span>764.161 kr</span></div>
+    <div class="sp-row"><span>Dækning</span><span>2 medarbejdere · max 764.161 kr</span></div>
     <div class="sp-row"><span>Gælder fra</span><span>14. april 2026</span></div>
     <div class="sp-row"><span>Pris</span><span class="price-pink">2.018 kr/md · 24.216 kr/år</span></div>
   </div>
@@ -467,136 +820,273 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="sp-row"><span>Police</span><span>9813 576 811</span></div>
     <div class="sp-row"><span>Erhvervsansvar</span><span>10.000.000 kr</span></div>
     <div class="sp-row"><span>Produktansvar</span><span>10.000.000 kr</span></div>
-    <div class="sp-row"><span>Retshjælp</span><span>500.000 kr</span></div>
-    <div class="sp-row"><span>Dækningsområde</span><span>Europa</span></div>
-    <div class="sp-row"><span>Selvrisiko erhverv</span><span>7.031 kr</span></div>
+    <div class="sp-row"><span>Retshjælp</span><span>500.000 kr · Europa</span></div>
+    <div class="sp-row"><span>Selvrisiko</span><span>7.031 kr</span></div>
     <div class="sp-row"><span>Pris</span><span class="price-pink">807 kr/md · 9.684 kr/år</span></div>
   </div>
   <div class="sp-card ins-card">
     <div class="sp-card-name ins-card-name">Netbankforsikring</div>
     <div class="sp-row"><span>Police</span><span>9813 576 811</span></div>
-    <div class="sp-row"><span>Netbank max</span><span>3.515.490 kr</span></div>
-    <div class="sp-row"><span>Selvrisiko</span><span>7.031 kr</span></div>
+    <div class="sp-row"><span>Netbank max</span><span>3.515.490 kr · selvrisiko 7.031 kr</span></div>
     <div class="sp-row"><span>Pris</span><span class="price-pink">82 kr/md · 984 kr/år</span></div>
   </div>
   <div class="sp-card ins-card">
     <div class="sp-card-name ins-card-name">Transportforsikring</div>
     <div class="sp-row"><span>Police</span><span>9813 576 811</span></div>
-    <div class="sp-row"><span>Dækker</span><span>Maskiner + IT udstyr</span></div>
-    <div class="sp-row"><span>Max pr. transport</span><span>105.465 kr</span></div>
-    <div class="sp-row"><span>Område</span><span>Danmark</span></div>
+    <div class="sp-row"><span>Dækker</span><span>Maskiner + IT · max 105.465 kr</span></div>
     <div class="sp-row"><span>Pris</span><span class="price-pink">330 kr/md · 3.960 kr/år</span></div>
   </div>
   <div class="sp-card ins-card">
-    <div class="sp-card-name ins-card-name">Erhvervsløsøreforsikring</div>
+    <div class="sp-card-name ins-card-name">Erhvervsløsøre</div>
     <div class="sp-row"><span>Police</span><span>9813 576 811</span></div>
-    <div class="sp-row"><span>Brand/Storm/Vand/Tyveri</span><span>1.035 kr</span></div>
-    <div class="sp-row"><span>Oprydning</span><span>1.406.196 kr</span></div>
-    <div class="sp-row"><span>Område</span><span>Overalt i Danmark</span></div>
+    <div class="sp-row"><span>Brand/Storm/Vand/Tyveri</span><span>Overalt i DK</span></div>
     <div class="sp-row"><span>Pris</span><span class="price-pink">12 kr/md · 144 kr/år</span></div>
   </div>
   <div class="sp-card ins-card">
-    <div class="sp-card-name ins-card-name">Tophjælp Vare- og lastbil</div>
+    <div class="sp-card-name ins-card-name">Tophjælp — Vare- og lastbil</div>
     <div class="sp-row"><span>Police</span><span>9836 256 503</span></div>
     <div class="sp-row"><span>Køretøj</span><span>Renault Trafic · CH64444</span></div>
-    <div class="sp-row"><span>Tophjælp bil</span><span>Selvrisiko 0 kr</span></div>
-    <div class="sp-row"><span>Årsdag</span><span>1. august</span></div>
     <div class="sp-row"><span>Pris</span><span class="price-pink">1.256 kr/år (helårlig)</span></div>
   </div>
   <div class="sp-card ins-card">
     <div class="sp-card-name ins-card-name">Varebil — Kasko + Ansvar</div>
     <div class="sp-row"><span>Police</span><span>9842 245 688</span></div>
     <div class="sp-row"><span>Køretøj</span><span>Renault Trafic · CH64444 · Diesel</span></div>
-    <div class="sp-row"><span>Ansvar + Kasko</span><span>Selvrisiko 7.387 kr</span></div>
-    <div class="sp-row"><span>Førerulykke</span><span>0 kr selvrisiko</span></div>
-    <div class="sp-row"><span>Dækker IKKE</span><span style="color:#ff6060">Friskade</span></div>
+    <div class="sp-row"><span>Selvrisiko kasko</span><span>7.387 kr</span></div>
+    <div class="sp-row"><span>Dækker IKKE</span><span class="danger">Friskade</span></div>
     <div class="sp-row"><span>Pris</span><span class="price-pink">523 kr/md · 6.276 kr/år</span></div>
   </div>
-  <div class="sp-total ins-total"><div><div class="sp-total-lbl">Total månedlig</div><div class="sp-total-sub">Excl. tophjælp</div></div><div class="sp-total-val ins-total-val">3.772 kr</div></div>
-  <div class="sp-total ins-total"><div><div class="sp-total-lbl">Total årlig</div><div class="sp-total-sub">Alle 7 policer</div></div><div class="sp-total-val ins-total-val">46.496 kr</div></div>
+  <div class="sp-total ins-total"><div><div class="sp-total-lbl">Total månedlig</div><div class="sp-total-sub">Excl. tophjælp (helårlig)</div></div><div class="sp-total-val ins-total-val">3.772 kr</div></div>
+  <div class="sp-total ins-total"><div><div class="sp-total-lbl">Total årlig</div><div class="sp-total-sub">Alle 7 policer inkl. tophjælp</div></div><div class="sp-total-val ins-total-val">46.496 kr</div></div>
 </div>
 
 <!-- ══ ADS SLIDE PANEL ══ -->
 <div id="ads-panel" class="slide-panel">
   <div class="panel-close ads-close" id="ads-close">✕</div>
   <div class="sp-title ads-title">📡 Online Presence</div>
-  <div class="sp-meta">Meta Ads · Google Ads (Generaxion) · SEO (Adwise) · act_197053390</div>
-
-  <!-- Facebook -->
+  <div class="sp-meta">Meta Ads · Google Ads (Generaxion) · SEO (Adwise TVIST) · act_197053390</div>
   <div class="sp-card ads-card">
     <div class="plat-badge badge-fb">f Facebook / Meta</div>
     <div class="sp-card-name ads-card-name">Lead Generation Kampagne</div>
     <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
     <div class="sp-row"><span>Budget</span><span class="price-ora">100 DKK/dag</span></div>
-    <div class="sp-row"><span>Formål</span><span>Leads til tømrerarbejde</span></div>
     <div class="sp-row"><span>Målgruppe</span><span>Husejere 32-65 år, Kbh</span></div>
-    <div class="sp-row"><span>Interesser</span><span>Renovering, DIY, Bolig</span></div>
     <div class="sp-row"><span>Ad Account</span><span>act_197053390</span></div>
     <div class="sp-row"><span>Pixel ID</span><span>1405859507973644</span></div>
     <div class="sp-row"><span>Page ID</span><span>108523075614787</span></div>
   </div>
-
-  <!-- Instagram -->
   <div class="sp-card ads-card">
     <div class="plat-badge badge-ig">📷 Instagram</div>
     <div class="sp-card-name ads-card-name">Følger Kampagne</div>
     <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
     <div class="sp-row"><span>Budget</span><span class="price-ora">50 DKK/dag</span></div>
-    <div class="sp-row"><span>Formål</span><span>Byg følgerbase</span></div>
-    <div class="sp-row"><span>Profil</span><span>@genno.dk</span></div>
-    <div class="sp-row"><span>Account ID</span><span>17841460234013696</span></div>
-    <div class="sp-row"><span>Platform</span><span>Instagram Feed + Reels</span></div>
+    <div class="sp-row"><span>Profil</span><span>@genno.dk · ID 17841460234013696</span></div>
   </div>
-
-  <!-- Google Ads / Generaxion -->
   <div class="sp-card ads-card">
     <div class="plat-badge badge-g"><span style="color:#4285f4">G</span><span style="color:#ea4335">o</span><span style="color:#fbbc04">o</span><span style="color:#34a853">g</span> Google Ads</div>
     <div class="sp-card-name ads-card-name">Generaxion — Google Ads Bureau</div>
     <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
-    <div class="sp-row"><span>Bureau</span><span>Generaxion</span></div>
     <div class="sp-row"><span>Fokus</span><span>Lokale søgninger, Kbh</span></div>
-    <div class="sp-row"><span>Søgeord</span><span>Tømrer, renovering, tilbygning</span></div>
     <div class="sp-row"><span>Pris</span><span class="price-ora">~20.000 kr/år</span></div>
   </div>
-
-  <!-- SEO / Adwise -->
   <div class="sp-card ads-card">
-    <div class="plat-badge badge-seo">🔍 SEO</div>
+    <div class="plat-badge badge-seo">🔍 SEO — TVIST</div>
     <div class="sp-card-name ads-card-name">Adwise — SEO Bureau</div>
-    <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
-    <div class="sp-row"><span>Bureau</span><span>Adwise</span></div>
-    <div class="sp-row"><span>Ydelse</span><span>SEO, søgemaskineoptimering</span></div>
-    <div class="sp-row"><span>Website</span><span>gennorenovering.dk</span></div>
+    <div class="sp-row"><span>Status</span><span class="danger">⚠️ Opsigelse sendt · TVIST</span></div>
+    <div class="sp-row"><span>Opsigelsesdato</span><span>24. maj 2026</span></div>
+    <div class="sp-row"><span>Adwise påstand</span><span style="font-size:9px">SEO-skift aftalt telefonisk 23. mar</span></div>
+    <div class="sp-row"><span>Vores påstand</span><span style="font-size:9px">Ydelse ændret uden skriftlig aftale</span></div>
+    <div class="sp-row"><span>Afventer</span><span class="warn">Frederik Hansen 2. jun</span></div>
+    <div class="sp-row"><span>Kontakt</span><span>niv@adwise.dk · Niclas Vingaard</span></div>
     <div class="sp-row"><span>Pris</span><span class="price-ora">~3.700 kr/md</span></div>
   </div>
-
-  <!-- Totals -->
+  <div class="sp-card ads-card">
+    <div class="plat-badge" style="background:rgba(255,120,40,0.12);border:1px solid rgba(255,120,40,0.3);color:#ff9060">🔨 AnmeldHåndværker</div>
+    <div class="sp-card-name ads-card-name">AnmeldHåndværker.dk</div>
+    <div class="sp-row"><span>Status</span><span class="warn">⚠️ Elite-status tabt 26. maj</span></div>
+    <div class="sp-row"><span>Krav</span><span style="font-size:9px">Min. 3 anmeldelser &lt; 6 mdr + snit ≥ 4.0</span></div>
+    <div class="sp-row"><span>Rating</span><span style="color:var(--green);font-weight:700">★ 5.0 · 27 anmeldelser</span></div>
+    <div class="sp-row"><span>Handling</span><span style="font-size:9px;color:var(--amber)">Bed kunder om anmeldelser nu!</span></div>
+  </div>
+  <div class="sp-card ads-card">
+    <div class="plat-badge" style="background:rgba(0,200,100,0.10);border:1px solid rgba(0,200,100,0.28);color:#60e0a0">🏗 3bygtilbud</div>
+    <div class="sp-card-name ads-card-name">3bygtilbud.dk — Lead Generation</div>
+    <div class="sp-row"><span>🟡 Aktiv sag 1</span><span>Oliver Heldmann — vægflytning</span></div>
+    <div class="sp-row"><span>🟡 Aktiv sag 2</span><span>Kata Horvath-Sarlos — hems</span></div>
+    <div class="sp-row"><span>Mail</span><span>info@3byggetilbud.dk</span></div>
+  </div>
   <div class="sp-total ads-total"><div><div class="sp-total-lbl">Total / måned</div><div class="sp-total-sub">Meta + Instagram + Adwise SEO</div></div><div class="sp-total-val ads-total-val">~7.367 kr</div></div>
   <div class="sp-total ads-total"><div><div class="sp-total-lbl">Total / år</div><div class="sp-total-sub">Inkl. Generaxion Google Ads</div></div><div class="sp-total-val ads-total-val">~108.404 kr</div></div>
 </div>
 
+<!-- ══ FINANSOVERBLIK SLIDE PANEL ══ -->
+<div id="fin-panel" class="slide-panel">
+  <div class="panel-close fin-close" id="fin-close">✕</div>
+  <div class="sp-title fin-title">💶 Finansoverblik</div>
+  <div class="sp-meta">Lunar Bank · E-conomic · Skat · maj 2026</div>
+
+  <div class="sp-card fin-card">
+    <div class="sp-card-name fin-card-name">Likviditet — nu</div>
+    <div class="fin-bar">
+      <div class="fin-bar-lbl">Bank saldo</div>
+      <div class="fin-bar-track"><div class="fin-bar-fill" style="width:40%;background:linear-gradient(90deg,#3a8fff,#1a60cc)"></div></div>
+      <div class="fin-bar-val" style="color:#6ab0ff">40.000 kr</div>
+    </div>
+    <div class="fin-bar">
+      <div class="fin-bar-lbl">Udestående</div>
+      <div class="fin-bar-track"><div class="fin-bar-fill" style="width:60%;background:linear-gradient(90deg,#00ff88,#00b060)"></div></div>
+      <div class="fin-bar-val" style="color:var(--green)">~60.000 kr</div>
+    </div>
+    <div class="fin-bar">
+      <div class="fin-bar-lbl">Gæld (Gælds.)</div>
+      <div class="fin-bar-track"><div class="fin-bar-fill" style="width:33%;background:linear-gradient(90deg,#ff3030,#bb0000)"></div></div>
+      <div class="fin-bar-val" style="color:var(--red)">33.000 kr</div>
+    </div>
+    <div class="fin-bar">
+      <div class="fin-bar-lbl">Moms (reserve)</div>
+      <div class="fin-bar-track"><div class="fin-bar-fill" style="width:60%;background:linear-gradient(90deg,#ffaa00,#cc7700)"></div></div>
+      <div class="fin-bar-val" style="color:var(--amber)">~60.000 kr</div>
+    </div>
+  </div>
+
+  <div class="sp-card fin-card">
+    <div class="sp-card-name fin-card-name">Faste månedlige udgifter</div>
+    <div class="sp-row"><span>Topdanmark (forsikring)</span><span class="price-pink">3.772 kr/md</span></div>
+    <div class="sp-row"><span>Malik (lærlingeløn)</span><span class="price-blue">12.000 kr/md</span></div>
+    <div class="sp-row"><span>Meta Ads (Facebook + IG)</span><span class="price-ora">~4.650 kr/md</span></div>
+    <div class="sp-row"><span>Adwise SEO</span><span class="price-ora">~3.700 kr/md</span></div>
+    <div class="sp-row"><span>E-conomic</span><span>199 kr/md</span></div>
+    <div class="sp-row"><span>Webflow / hosting</span><span>~200 kr/md</span></div>
+    <div class="sp-row"><span>Netgiganten (mail)</span><span>~50 kr/md</span></div>
+    <div class="sp-row"><span>Claude Max (AI assistent)</span><span class="price-blue">~700 kr/md</span></div>
+    <div class="sp-row"><span>Railway Pro (cloud server)</span><span class="price-blue">~140 kr/md</span></div>
+    <div class="sp-row"><span>Anthropic API (agenter)</span><span>variabel</span></div>
+  </div>
+
+  <div class="sp-card fin-card">
+    <div class="sp-card-name fin-card-name">Bankkonto — Lunar</div>
+    <div class="sp-row"><span>Saldo</span><span style="color:var(--blue);font-weight:700">~40.000 kr</span></div>
+    <div class="sp-row"><span>E-conomic bankforbindelse</span><span class="warn">⚠️ Udløbet apr 2026</span></div>
+    <div class="sp-row"><span>Handling</span><span style="font-size:9px;color:var(--amber)">Genaktiver i E-conomic</span></div>
+  </div>
+
+  <div class="sp-card fin-card">
+    <div class="sp-card-name fin-card-name">Skat & Forpligtelser</div>
+    <div class="sp-row"><span>Gældstyrelsen</span><span class="danger">⚠️ 33.000 kr — HASTER</span></div>
+    <div class="sp-row"><span>Moms frist</span><span class="warn">1. august 2026</span></div>
+    <div class="sp-row"><span>Årsrapport 2025</span><span class="ok">✅ Indberettet 27. maj</span></div>
+    <div class="sp-row"><span>Revisor1</span><span style="color:var(--green)">mg@revisor1.dk ✓</span></div>
+  </div>
+
+  <div class="sp-card fin-card">
+    <div class="sp-card-name fin-card-name">Nordea Pension</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Aktiv</span></div>
+    <div class="sp-row"><span>Oprettet</span><span>11. maj 2026</span></div>
+    <div class="sp-row"><span>Via</span><span>Nordea Erhverv</span></div>
+  </div>
+
+  <div class="sp-total fin-total"><div><div class="sp-total-lbl">Faste udgifter / md</div><div class="sp-total-sub">Forsikring + løn + marketing + software + AI</div></div><div class="sp-total-val fin-total-val">~25.611 kr</div></div>
+</div>
+
+<!-- ══ INBOX AI SLIDE PANEL ══ -->
+<div id="inbox-panel" class="slide-panel">
+  <div class="panel-close inbox-close" id="inbox-close">✕</div>
+  <div class="sp-title inbox-title">📬 Inbox Intelligence</div>
+  <div class="inbox-meta">Auto-behandler mails fra jogvanpkristiansen@gmail.com + genno@genno.dk hvert 30. min</div>
+  <div id="inbox-feed-container">
+    <div class="inbox-empty">📭 Ingen data endnu.<br>Agenten starter så snart .env er klar.<br><br>Vigtige mails → kalender, leads & noter vises her.</div>
+  </div>
+  <div class="inbox-last-run" id="inbox-last-run">Sidst kørt: aldrig</div>
+</div>
+
+<!-- ══ AGENTS SLIDE PANEL ══ -->
+<div id="agents-panel" class="slide-panel">
+  <div class="panel-close agents-close" id="agents-close">✕</div>
+  <div class="sp-title agents-title">⚡ AI Agenter & Automation</div>
+  <div class="sp-meta">6 agenter · Claude Code Scheduled Tasks · Railway Memory Cloud</div>
+
+  <div class="sp-card agents-card">
+    <div class="plat-badge" style="background:rgba(184,138,255,0.12);border:1px solid rgba(184,138,255,0.3);color:#c8a0ff">☁️ Railway Cloud</div>
+    <div class="sp-card-name agents-card-name">genno-memory — PostgreSQL + MCP Server</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Online · Pro plan</span></div>
+    <div class="sp-row"><span>URL</span><span style="font-size:8px">genno-memory-production.up.railway.app</span></div>
+    <div class="sp-row"><span>Database</span><span style="font-size:8px">zephyr.proxy.rlwy.net:27586</span></div>
+    <div class="sp-row"><span>Stop hook</span><span class="ok">✅ Auto-gem session til memory</span></div>
+    <div class="sp-row"><span>Plan</span><span>Railway Pro · ~140 kr/md</span></div>
+  </div>
+
+  <div class="sp-card agents-card">
+    <div class="plat-badge" style="background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.3);color:#60d4ff">📬 Email Agent</div>
+    <div class="sp-card-name agents-card-name">genno-email-agent</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Hvert 30. min</span></div>
+    <div class="sp-row"><span>Handling</span><span style="font-size:9px">Gmail → kalender, leads, noter, ordrestyring</span></div>
+    <div class="sp-row"><span>Klassificerer</span><span style="font-size:9px">MØDE · DEADLINE · NY_KUNDE · REGNSKAB · VIGTIG</span></div>
+    <div class="sp-row"><span>Sidst kørt</span><span style="font-size:9px">27. maj · 21 emails behandlet</span></div>
+  </div>
+
+  <div class="sp-card agents-card">
+    <div class="plat-badge" style="background:rgba(255,200,80,0.12);border:1px solid rgba(255,200,80,0.3);color:#ffd080">☀️ Morgen Briefing</div>
+    <div class="sp-card-name agents-card-name">genno-morning-briefing</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Hverdage kl 07:00</span></div>
+    <div class="sp-row"><span>Indhold</span><span style="font-size:9px">Kalender · opgaver · leads · sager · emails</span></div>
+    <div class="sp-row"><span>Sender til</span><span style="font-size:9px">jogvanpkristiansen@gmail.com</span></div>
+  </div>
+
+  <div class="sp-card agents-card">
+    <div class="plat-badge" style="background:rgba(104,160,99,0.12);border:1px solid rgba(104,160,99,0.3);color:#9dd99a">📊 Ugentlig Rapport</div>
+    <div class="sp-card-name agents-card-name">genno-weekly-pulse</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Fredag kl 16:00</span></div>
+    <div class="sp-row"><span>Indhold</span><span style="font-size:9px">Økonomi · sager · leads · kampagner · næste uge</span></div>
+  </div>
+
+  <div class="sp-card agents-card">
+    <div class="plat-badge" style="background:rgba(58,143,255,0.12);border:1px solid rgba(58,143,255,0.3);color:#80b0ff">💰 Faktura Check</div>
+    <div class="sp-card-name agents-card-name">genno-invoice-checker</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Mandag kl 09:00</span></div>
+    <div class="sp-row"><span>Tjekker</span><span style="font-size:9px">Ufakturerede sager · ubetalte fakturaer · tilbud</span></div>
+  </div>
+
+  <div class="sp-card agents-card">
+    <div class="plat-badge" style="background:rgba(255,100,150,0.12);border:1px solid rgba(255,100,150,0.3);color:#ff90c0">📞 Lead Follow-up</div>
+    <div class="sp-card-name agents-card-name">genno-lead-followup</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ Hverdage kl 12:00</span></div>
+    <div class="sp-row"><span>Regler</span><span style="font-size:9px">Ny &gt;1 dag · kontaktet &gt;5 dage · tilbud &gt;7 dage</span></div>
+    <div class="sp-row"><span>+ Review</span><span style="font-size:9px">Bed om anmeldelse 14 dage efter afsluttet sag</span></div>
+  </div>
+
+  <div class="sp-card agents-card">
+    <div class="plat-badge" style="background:rgba(255,170,0,0.12);border:1px solid rgba(255,170,0,0.3);color:#ffcc60">⚠️ Moms Alert</div>
+    <div class="sp-card-name agents-card-name">genno-moms-alert</div>
+    <div class="sp-row"><span>Status</span><span class="ok">✅ 1. mar · 1. jun · 1. sep · 1. dec</span></div>
+    <div class="sp-row"><span>Sender</span><span style="font-size:9px">Momsfrister · beløb at reservere · handlingsliste</span></div>
+  </div>
+
+  <div class="sp-total agents-total"><div><div class="sp-total-lbl">Aktive agenter</div><div class="sp-total-sub">Claude Code · local scheduled tasks · Railway memory</div></div><div class="sp-total-val agents-total-val">6</div></div>
+</div>
+
 <div id="tip"></div>
 
+<script src="inbox-data.js" onerror="window.INBOX_FEED=[];window.INBOX_LAST_UPDATED='aldrig';"></script>
 <script>
 // ── Clock ──
-function tick() {
-  const n = new Date();
-  document.getElementById('hdr-time').textContent = n.toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('hdr-date').textContent = n.toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+function tick(){
+  const n=new Date();
+  document.getElementById('hdr-time').textContent=n.toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('hdr-date').textContent=n.toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 }
 tick(); setInterval(tick,1000);
 
 // ── Stars ──
-const sc=document.getElementById('starfield'), sx=sc.getContext('2d');
+const sc=document.getElementById('starfield'),sx=sc.getContext('2d');
 let SW,SH,stars=[];
 function initStars(){
   SW=sc.width=window.innerWidth; SH=sc.height=window.innerHeight;
-  stars=Array.from({length:140},()=>({x:Math.random()*SW,y:Math.random()*SH,r:Math.random()*1.3+0.1,a:Math.random(),da:(Math.random()-.5)*0.004}));
+  stars=Array.from({length:150},()=>({x:Math.random()*SW,y:Math.random()*SH,r:Math.random()*1.3+0.1,a:Math.random(),da:(Math.random()-.5)*0.004}));
 }
 function drawStars(){
   sx.clearRect(0,0,SW,SH);
-  const g=sx.createRadialGradient(SW*.44,SH*.5,0,SW*.44,SH*.5,SW*.4);
-  g.addColorStop(0,'rgba(0,50,120,0.06)'); g.addColorStop(1,'rgba(0,0,0,0)');
+  const g=sx.createRadialGradient(SW*.44,SH*.5,0,SW*.44,SH*.5,SW*.42);
+  g.addColorStop(0,'rgba(0,40,110,0.07)'); g.addColorStop(1,'rgba(0,0,0,0)');
   sx.fillStyle=g; sx.fillRect(0,0,SW,SH);
   stars.forEach(s=>{
     s.a+=s.da; if(s.a<0.05||s.a>0.9)s.da*=-1;
@@ -610,49 +1100,78 @@ initStars(); drawStars();
 
 // ── Connections ──
 const conns=[
-  // Core spokes from Genno
-  ['b-genno','b-drift',     '#00d480'],
-  ['b-genno','b-okonomi',   '#3a8fff'],
-  ['b-genno','b-ads',       '#ff9000'],
-  ['b-genno','b-ansatte',   '#00c8ff'],
-  ['b-genno','b-forsikring','#ff4d8d'],
-  ['b-genno','b-online',    '#7c5fff'],
+  // Core from GENNO center
+  ['b-genno','b-drift',      '#00d480'],
+  ['b-genno','b-okonomi',    '#3a8fff'],
+  ['b-genno','b-ads',        '#ff9000'],
+  ['b-genno','b-ansatte',    '#00c8ff'],
+  ['b-genno','b-forsikring', '#ff4d8d'],
+  ['b-genno','b-online',     '#7c5fff'],
+  ['b-genno','b-kalender',   '#00c8a0'],
   // Drift children
-  ['b-drift','b-stark',     '#00d480'],
-  ['b-drift','b-bil',       '#00d480'],
-  // Cross-connections (how things work together)
-  ['b-drift','b-okonomi',   '#44cc88'],  // operations feed economy
-  ['b-bil',  'b-forsikring','#ff4d8d'],  // car is insured by Topdanmark
+  ['b-drift','b-stark',      '#00d480'],
+  ['b-drift','b-bygma',      '#00d480'],
+  ['b-drift','b-bil',        '#00d480'],
+  // Drift → Økonomi (work generates revenue)
+  ['b-drift','b-okonomi',    '#44cc88'],
+  // Car is insured
+  ['b-bil',  'b-forsikring', '#ff4d8d'],
   // Økonomi children
-  ['b-okonomi','b-econo',   '#3a8fff'],
-  ['b-okonomi','b-ordre',   '#3a8fff'],
-  ['b-okonomi','b-moms',    '#3a8fff'],
-  ['b-okonomi','b-bank',    '#3a8fff'],
-  ['b-okonomi','b-skat',    '#3a8fff'],
+  ['b-okonomi','b-econo',    '#3a8fff'],
+  ['b-okonomi','b-ordre',    '#3a8fff'],
+  ['b-okonomi','b-moms',     '#3a8fff'],
+  ['b-okonomi','b-bank',     '#3a8fff'],
+  ['b-okonomi','b-skat',     '#3a8fff'],
+  ['b-okonomi','b-revisor',  '#3a8fff'],
+  ['b-okonomi','b-pension',  '#3a8fff'],
+  ['b-okonomi','b-gaeld',    '#ff4444'],
+  // Kalender children
+  ['b-kalender','b-sas',     '#00c8a0'],
   // Online Presence children
-  ['b-ads','b-adwise',      '#ff9000'],
-  ['b-ads','b-gene',        '#ff9000'],
-  ['b-ads','b-meta',        '#ff9000'],
-  ['b-ads','b-insta',       '#ff9000'],
+  ['b-ads','b-adwise',       '#ff9000'],
+  ['b-ads','b-gene',         '#ff9000'],
+  ['b-ads','b-meta',         '#ff9000'],
+  ['b-ads','b-insta',        '#ff9000'],
+  ['b-ads','b-anmeld',       '#ff9000'],
+  ['b-ads','b-3bt-bubble',   '#ff9000'],
   // Online & IT children
-  ['b-online','b-webflow',  '#7c5fff'],
-  ['b-online','b-netgig',   '#7c5fff'],
-  ['b-online','b-claude',   '#ff8c5a'],
-  ['b-claude','b-github',   '#aaaaaa'],
+  ['b-online','b-webflow',   '#7c5fff'],
+  ['b-online','b-netgig',    '#7c5fff'],
+  ['b-online','b-claude',    '#ff8c5a'],
+  ['b-claude','b-github',    '#aaaaaa'],
+  ['b-claude','b-inbox',     '#00d4ff'],
+  ['b-claude','b-nodejs',    '#68a063'],
+  ['b-nodejs','b-inbox',     '#68a063'],
+  ['b-netgig','b-inbox',     '#00c4ff'],
   // Ansatte children
-  ['b-ansatte','b-malik',   '#00c8ff'],
+  ['b-ansatte','b-malik',    '#00c8ff'],
+  // Cross-system connections
+  ['b-ordre',  'b-econo',    '#3a8fff'],  // ordrestyring → E-conomic
+  ['b-stark',  'b-okonomi',  '#3a8fff'],  // Stark fakturaer → økonomi
+  ['b-bank',   'b-moms',     '#3a8fff'],  // moms betales fra Lunar
+  ['b-revisor','b-skat',     '#5599ff'],  // revisor → Skat
+  ['b-revisor','b-econo',    '#5599ff'],  // revisor arbejder i E-conomic
+  ['b-gaeld',  'b-skat',     '#ff4444'],  // Gældstyrelsen under Skat
+  ['b-ansatte','b-drift',    '#00c8ff'],  // ansatte udfører arbejdet
+  ['b-forsikring','b-ansatte','#ff4d8d'], // forsikring dækker ansatte
+  ['b-gene',   'b-webflow',  '#ff9000'],  // Google Ads → landing page
+  ['b-meta',   'b-webflow',  '#ff9000'],  // Meta pixel på websitet
+  ['b-meta',   'b-insta',    '#ff9000'],  // Meta ejer Instagram
+  ['b-3bt-bubble','b-ordre', '#ff9000'],  // leads → ordrestyring
+  ['b-inbox',  'b-kalender', '#00c8a0'],  // mails → kalender
+  ['b-anmeld', 'b-drift',    '#00d480'],  // anmeldelser afspejler jobs
+  ['b-netgig', 'b-webflow',  '#7c5fff'],  // deler genno.dk domænet
 ];
 
-// 70% slower: multiply speed by 0.3
 const dots=conns.map(([a,b,col])=>({a,b,col,t:Math.random(),speed:(0.0025+Math.random()*0.003)*0.3}));
 
 function centre(id){
   const el=document.getElementById(id); if(!el)return null;
-  const r=el.getBoundingClientRect(), m=document.getElementById('map').getBoundingClientRect();
+  const r=el.getBoundingClientRect(),m=document.getElementById('map').getBoundingClientRect();
   return{x:r.left+r.width/2-m.left,y:r.top+r.height/2-m.top};
 }
 
-const svg=document.getElementById('lines'), ns='http://www.w3.org/2000/svg';
+const svg=document.getElementById('lines'),ns='http://www.w3.org/2000/svg';
 const lineEls=[],dotEls=[];
 conns.forEach(([a,b,col])=>{
   const path=document.createElementNS(ns,'path');
@@ -666,9 +1185,9 @@ conns.forEach(([a,b,col])=>{
 
 function animateLines(){
   for(let i=0;i<conns.length;i++){
-    const[a,b]=conns[i], ca=centre(a), cb=centre(b);
+    const[a,b]=conns[i],ca=centre(a),cb=centre(b);
     if(!ca||!cb)continue;
-    const cx=(ca.x+cb.x)/2+(cb.y-ca.y)*0.1, cy=(ca.y+cb.y)/2-(cb.x-ca.x)*0.1;
+    const cx=(ca.x+cb.x)/2+(cb.y-ca.y)*0.1,cy=(ca.y+cb.y)/2-(cb.x-ca.x)*0.1;
     lineEls[i].setAttribute('d',`M${ca.x},${ca.y} Q${cx},${cy} ${cb.x},${cb.y}`);
     const d=dots[i]; d.t+=d.speed; if(d.t>1)d.t=0;
     const t=d.t;
@@ -684,29 +1203,39 @@ setTimeout(animateLines,120);
 
 // ── Tooltips ──
 const tipData={
-  'b-genno':    {t:'GENNO ApS',                  b:'Tømrermester i København\n+45 53 64 34 44 · genno@genno.dk',    p:'★ 5.0 · 27 anmeldelser'},
-  'b-forsikring':{t:'🛡 Topdanmark Forsikring',  b:'7 aktive policer · Alle i kraft\nKundenr. 3496 25G\nKlik for fuldt overblik →', p:'46.496 kr/år', hint:'Klik for at åbne'},
-  'b-drift':    {t:'Drift',                       b:'Daglig drift — materialer & bil\nForbundet til økonomi'},
-  'b-stark':    {t:'Stark Nordhavn',              b:'Primær leverandør af byggematerialer\nErhvervskonto aktiv · Kattegatvej 21\n\n👤 Gustav\n   📞 +45 26478953\n\n👤 Sebastian Mortensen\n   📞 +45 28101383\n   ✉️ sebastian.mortensen@stark.dk'},
-  'b-bil':      {t:'Renault Trafic — CH64444',   b:'2,0 DCI 115 · Diesel · Første reg: 29.12.2008\nKasko + Ansvar · Topdanmark police 9842 245 688\nTophjælp police 9836 256 503', p:'⚠️ Syn: juni 2026'},
-  'b-okonomi':  {t:'Økonomi',                    b:'Bogføring, moms, skat og bank\nForbundet til drift'},
-  'b-econo':    {t:'E-conomic',                  b:'Bogføringsprogram\nAPI-adgang afventer Johannes'},
-  'b-ordre':    {t:'Ordrestyring',               b:'Bygget af Johannes — gratis\nSager, tilbud, fakturering'},
-  'b-moms':     {t:'Moms',                       b:'Sæt ca. 60.000 kr til side',                                   p:'⚠️ Frist: 1. august'},
-  'b-bank':     {t:'Lunar Bank',                 b:'Primær erhvervskonto\nSaldo: ~40.000 kr · Udestående: ~60.000 kr'},
-  'b-skat':     {t:'Skat',                       b:'Virksomhedsskat\nHold øje med opgørelser'},
-  'b-ads':      {t:'📡 Online Presence',         b:'Betalt annoncering + SEO på alle platforme\nKlik for overblik →', hint:'Klik for at åbne'},
-  'b-adwise':   {t:'Adwise — SEO',               b:'SEO bureau · søgemaskineoptimering\ngennorenovering.dk synlighed',  p:'~3.700 kr/md'},
-  'b-gene':     {t:'Generaxion — Google Ads',    b:'Google Ads bureau · lokale søgninger\nSøgeord: tømrer, renovering, tilbygning', p:'~20.000 kr/år'},
-  'b-meta':     {t:'Meta / Facebook',            b:'✅ Lead Gen kampagne aktiv\nHusejere Kbh 32-65 · act_197053390', p:'100 DKK/dag'},
-  'b-insta':    {t:'Instagram',                  b:'✅ Følger-kampagne aktiv\n@genno.dk · ID 17841460234013696',     p:'50 DKK/dag'},
-  'b-online':   {t:'💻 Online & IT',             b:'Alt der er online og digitalt\nWebsite, mail, AI-tools, kode'},
-  'b-webflow':  {t:'Webflow — Website',          b:'gennorenovering.dk\nCMS + hosting · opdater adresse mangler',   p:'Abonnement månedligt'},
-  'b-netgig':   {t:'Netgiganten — Mail Hosting', b:'Emailhosting for gennorenovering.dk\ngenno@genno.dk og aliasser', p:'Abonnement'},
-  'b-claude':   {t:'Claude AI — Anthropic',      b:'AI-assistent til hele virksomheden\nHusker Genno · laver kode, mails, docs', p:'claude.ai'},
-  'b-github':   {t:'GitHub — jogvanpkristiansen', b:'Kode backup for alle projekter\ngenno-dashboard · genno-memory\ngenno-meta · ordrestyring', p:'github.com/jogvanpkristiansen'},
-  'b-ansatte':  {t:'Ansatte',                    b:'Fast ansatte og underentreprenører'},
-  'b-malik':    {t:'Malik',                      b:'Lærling · tømrerfaget',                                        p:'12.000 kr/md · 3 år til svendebrev'},
+  'b-genno':     {t:'GENNO ApS',                   b:'Tømrermester · København\n+45 53 64 34 44 · genno@genno.dk\nCVR: 44112671 (verificer)', p:'★ 5.0 · 27 anmeldelser'},
+  'b-forsikring':{t:'🛡 Topdanmark Forsikring',    b:'7 aktive policer · alle i kraft\nKundenr. 3496 25G\nKlik for fuldt overblik →',          p:'46.496 kr/år', hint:'Klik for at åbne'},
+  'b-drift':     {t:'Drift',                        b:'Daglig byggeplads-drift\nForbundet til økonomi via fakturering'},
+  'b-stark':     {t:'Stark Nordhavn',               b:'Primær leverandør af byggematerialer\nErhvervskonto · Kattegatvej 21\n✅ Kredit fuldt betalt maj 2026\n\n👤 Gustav · +45 26478953\n👤 Sebastian Mortensen · +45 28101383', p:'Kredit betalt ✓'},
+  'b-bygma':     {t:'Bygma København',              b:'Byggematerialer — Proffcenter\nbygma.dk · Kattegatvej/Amager\nKontakt: mof@bygma.dk · 44 54 17 00', p:'Aktiv leverandør'},
+  'b-bil':       {t:'Renault Trafic — CH64444',    b:'2,0 DCI 115 · Diesel · Første reg: 29.12.2008\nStelnr: VF1FLBHB68Y270982\nKøbt aug 2023 · 48.000 kr\nKasko police 9842 245 688', p:'⚠️ Syn: juni 2026'},
+  'b-okonomi':   {t:'💶 Økonomi',                  b:'Bogføring, moms, skat og bank\nKlik for finansoverblik →',           hint:'Klik for at åbne'},
+  'b-econo':     {t:'E-conomic',                   b:'✅ Abonnement aktivt · Aftalenr. 1661439\n⚠️ Bankforbindelse udløbet apr 2026\nGenaktiver i E-conomic!',                    p:'199 kr/md'},
+  'b-ordre':     {t:'Ordrestyring',                b:'Bygget af Johannes — gratis\nSager, tilbud, fakturering\nSeneste: Faktura #156 → Sóley Thomsen', p:'Faktura #156 afsendt'},
+  'b-moms':      {t:'⚡ Moms',                     b:'Sæt ca. 60.000 kr til side\nFrist: 1. august 2026',                  p:'⚠️ Handle nu'},
+  'b-gaeld':     {t:'⚠️ Gældstyrelsen',           b:'Udestående gæld: 33.000 kr\nBetal hurtigst muligt — haster!',        p:'⚠️ HASTER'},
+  'b-bank':      {t:'Lunar Bank',                  b:'Primær erhvervskonto · ~40.000 kr\nUdestående: ~60.000 kr\n⚠️ E-conomic bankforbindelse udløbet'},
+  'b-skat':      {t:'Skat',                        b:'Virksomhedsskat · hold øje med opgørelser\nForbundet til Gældstyrelsen'},
+  'b-revisor':   {t:'Revisor1 ApS',                b:'⚠️ Bankfil mangler → bank@revisor1.dk\n⚠️ Årsrapport godkendelse afventer\nKontakt: mg@revisor1.dk',                       p:'Afventer handling'},
+  'b-pension':   {t:'Nordea Pension',              b:'Firmapension oprettet 11. maj 2026\nNordea Erhverv · Status: Aktiv',   p:'✅ Aktiv'},
+  'b-kalender':  {t:'📅 Kalender & Rejser',        b:'Synkroniseret med Google Kalender\nKommende: Boston 26. jun – 5. jul'},
+  'b-sas':       {t:'✈️ SAS — CPH → Boston',      b:'Afgang: 26. juni 2026\nHjemkomst: 5. juli 2026\nBooking ref: XBVFNK',                         p:'Bekræftet'},
+  'b-ads':       {t:'📡 Online Presence',          b:'Meta Ads · Google Ads · SEO · Anmeldelser\nKlik for overblik →',      hint:'Klik for at åbne'},
+  'b-adwise':    {t:'Adwise — TVIST',              b:'⚠️ Opsigelse sendt 24. maj 2026\nTvist: ydelse ændret uden aftale\nFrederik Hansen ringer 2. juni',                       p:'TVIST ⚠️'},
+  'b-gene':      {t:'Generaxion — Google Ads',     b:'Google Ads bureau · lokale søgninger\nSøgeord: tømrer, renovering, tilbygning',              p:'~20.000 kr/år'},
+  'b-meta':      {t:'Meta / Facebook',             b:'✅ Lead Gen kampagne aktiv\nHusejere Kbh 32-65 · act_197053390',     p:'100 DKK/dag'},
+  'b-insta':     {t:'Instagram',                   b:'✅ Følger-kampagne aktiv\n@genno.dk · ID 17841460234013696',          p:'50 DKK/dag'},
+  'b-anmeld':    {t:'🔨 AnmeldHåndværker',         b:'⚠️ ELITE-STATUS TABT 26. maj!\nKrav: 3 anmeldelser &lt;6 mdr + snit ≥4.0\nBed kunder om at skrive anmeldelse nu!',        p:'★ 5.0 — Elite tabt ⚠️'},
+  'b-3bt-bubble':{t:'🏗 3bygtilbud.dk',           b:'🟡 Oliver Heldmann\n   Vægflytning · finder tidspunkt\n\n🟡 Kata Horvath-Sarlos\n   Højseng/hems · tilbud mangler',        hint:'Klik for at åbne'},
+  'b-online':    {t:'💻 Online & IT',              b:'Website, mail, AI-tools, kode'},
+  'b-webflow':   {t:'Webflow — Website',           b:'gennorenovering.dk\nCMS + hosting\n⚠️ Opdater adresse: Laurids Skaus Gade 5',               p:'Abonnement'},
+  'b-netgig':    {t:'Netgiganten — Mail Hosting',  b:'Emailhosting for genno.dk\ngenno@genno.dk og aliasser',               p:'Abonnement'},
+  'b-claude':    {t:'Claude Max — Anthropic',       b:'AI-assistent + 6 autonome agenter\nHusker Genno på tværs af sessioner\nRailway memory cloud · API nøgle aktiv\nKlik for agentoverblik →',                         hint:'Klik for at åbne'},
+  'b-github':    {t:'GitHub',                      b:'Kode backup for alle projekter\ngenno-dashboard · genno-server\ngithub.com/jogvanpkristiansen',                            p:'Privat repo'},
+  'b-nodejs':    {t:'☁️ Railway Cloud',             b:'genno-memory · PostgreSQL + MCP\n✅ Online · Pro plan · $20/md\ngenno-memory-production.up.railway.app\nStop hook: auto-gem session\nKlik for agentoverblik →',                  hint:'Klik for at åbne'},
+  'b-inbox':     {t:'📬 Inbox AI',                b:'Auto-analyse hvert 30. min\nKalender, leads & vigtige beskeder\nKlik for seneste aktivitet →',  hint:'Klik for at åbne'},
+  'b-ansatte':   {t:'Ansatte',                     b:'Fast ansatte + underentreprenører\nForsikring dækker alle ansatte'},
+  'b-malik':     {t:'Malik',                       b:'Lærling · tømrerfaget\n3 år til svendebrev',                          p:'12.000 kr/md'},
 };
 
 const tip=document.getElementById('tip');
@@ -719,8 +1248,8 @@ document.querySelectorAll('.bubble').forEach(el=>{
     tip.innerHTML=html; tip.style.display='block';
   });
   el.addEventListener('mousemove',e=>{
-    tip.style.left=Math.min(e.clientX+18,window.innerWidth-250)+'px';
-    tip.style.top=(e.clientY-14)+'px';
+    tip.style.left=Math.min(e.clientX+18,window.innerWidth-265)+'px';
+    tip.style.top=Math.max(4,(e.clientY-14))+'px';
   });
   el.addEventListener('mouseleave',()=>tip.style.display='none');
 });
@@ -728,22 +1257,86 @@ document.querySelectorAll('.bubble').forEach(el=>{
 // ── Slide panels ──
 const insPanel=document.getElementById('ins-panel');
 const adsPanel=document.getElementById('ads-panel');
+const finPanel=document.getElementById('fin-panel');
+const inboxPanel=document.getElementById('inbox-panel');
+const agentsPanel=document.getElementById('agents-panel');
 
-function closeAll(){ insPanel.classList.remove('open'); adsPanel.classList.remove('open'); }
+function closeAll(){[insPanel,adsPanel,finPanel,inboxPanel,agentsPanel].forEach(p=>p.classList.remove('open'));}
 
-// Insurance panel
-document.getElementById('b-forsikring').addEventListener('click',()=>{ closeAll(); insPanel.classList.add('open'); });
-document.getElementById('b-bil').addEventListener('click',       ()=>{ closeAll(); insPanel.classList.add('open'); });
-document.getElementById('ins-close').addEventListener('click',   ()=>insPanel.classList.remove('open'));
-// Online Presence panel
-['b-ads','b-meta','b-insta','b-adwise','b-gene'].forEach(id=>{
-  const el=document.getElementById(id); if(el) el.addEventListener('click',()=>{ closeAll(); adsPanel.classList.add('open'); });
+// Insurance
+['b-forsikring','b-bil'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('click',()=>{closeAll();insPanel.classList.add('open');});
 });
-document.getElementById('ads-close').addEventListener('click',   ()=>adsPanel.classList.remove('open'));
-// GitHub — open in new tab
-document.getElementById('b-github').addEventListener('click',()=> window.open('https://github.com/jogvanpkristiansen','_blank'));
-// Webflow — open site
+document.getElementById('ins-close').addEventListener('click',()=>insPanel.classList.remove('open'));
+
+// Ads / Online Presence
+['b-ads','b-meta','b-insta','b-adwise','b-gene','b-anmeld','b-3bt-bubble'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('click',()=>{closeAll();adsPanel.classList.add('open');});
+});
+document.getElementById('ads-close').addEventListener('click',()=>adsPanel.classList.remove('open'));
+
+// Finances
+['b-okonomi','b-econo','b-ordre','b-moms','b-bank','b-skat','b-revisor','b-pension','b-gaeld'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('click',()=>{closeAll();finPanel.classList.add('open');});
+});
+document.getElementById('fin-close').addEventListener('click',()=>finPanel.classList.remove('open'));
+
+// Inbox AI
+document.getElementById('b-inbox').addEventListener('click',()=>{closeAll();inboxPanel.classList.add('open');});
+document.getElementById('inbox-close').addEventListener('click',()=>inboxPanel.classList.remove('open'));
+
+// Agents
+['b-nodejs','b-claude'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('click',()=>{closeAll();agentsPanel.classList.add('open');});
+});
+document.getElementById('agents-close').addEventListener('click',()=>agentsPanel.classList.remove('open'));
+
+// External links
+document.getElementById('b-github').addEventListener('click',()=>window.open('https://github.com/jogvanpkristiansen','_blank'));
 document.getElementById('b-webflow').addEventListener('click',()=>window.open('https://gennorenovering.dk','_blank'));
+
+// ── Inbox feed renderer ──
+function renderInboxFeed(){
+  const feed=window.INBOX_FEED||[];
+  const lastRun=window.INBOX_LAST_UPDATED||'aldrig';
+  const container=document.getElementById('inbox-feed-container');
+  const lastRunEl=document.getElementById('inbox-last-run');
+  const badge=document.getElementById('inbox-badge');
+  const sbStatus=document.getElementById('sb-inbox-status');
+  if(lastRunEl) lastRunEl.textContent='Sidst kørt: '+lastRun;
+  if(badge) badge.textContent=feed.length?feed.length+' mails':'klar';
+  if(sbStatus&&lastRun&&lastRun!=='aldrig') sbStatus.textContent='📬 Inbox AI · sidst: '+lastRun.split('T')[0];
+  if(!feed.length){
+    container.innerHTML='<div class="inbox-empty">📭 Ingen behandlede mails endnu.<br>Agenten kører hvert 30. minut.</div>';
+    return;
+  }
+  const AM={
+    'MØDE':     {cls:'action-møde',    lbl:'📅 MØDE'},
+    'AFTALE':   {cls:'action-møde',    lbl:'📅 AFTALE'},
+    'DEADLINE': {cls:'action-deadline',lbl:'⚠️ DEADLINE'},
+    'NY_KUNDE': {cls:'action-lead',    lbl:'🧲 NY KUNDE'},
+    'LEAD':     {cls:'action-lead',    lbl:'🧲 LEAD'},
+    'REGNSKAB': {cls:'action-regnskab',lbl:'💶 REGNSKAB'},
+    'LEVERANDØR':{cls:'action-regnskab',lbl:'🏗 LEVERANDØR'},
+    'REVISOR':  {cls:'action-regnskab',lbl:'📊 REVISOR'},
+    'VIGTIG':   {cls:'action-vigtig',  lbl:'🔔 VIGTIG'},
+  };
+  container.innerHTML=feed.map(item=>{
+    const am=AM[item.action]||{cls:'action-vigtig',lbl:'📌 '+(item.action||'?')};
+    return`<div class="inbox-card">
+      <span class="inbox-date">${item.date||''}</span>
+      <span class="inbox-action ${am.cls}">${am.lbl}</span>
+      <div class="inbox-from">${item.from||''}</div>
+      <div class="inbox-subject">${item.subject||''}</div>
+      <div class="inbox-summary">${item.summary||''}</div>
+    </div>`;
+  }).join('');
+}
+renderInboxFeed();
 </script>
 </body>
 </html>
