@@ -575,6 +575,12 @@ body::after {
     <div class="bname" style="font-size:8px">3bygtilbud</div>
     <div class="bsub">2 aktive</div>
   </div>
+  <div class="bubble child" id="b-linkedin" style="left:91%;top:30%">
+    <div class="sdot s-y"></div>
+    <div class="b-icon" style="color:#0a66c2;font-size:14px;font-weight:900">in</div>
+    <div class="bname">LinkedIn</div>
+    <div class="bsub">API ⏳</div>
+  </div>
 
   <!-- ONLINE & IT -->
   <div class="bubble cat" id="b-online" style="left:68%;top:58%;background:rgba(124,95,255,0.08);border:1px solid rgba(124,95,255,0.3);box-shadow:0 0 28px rgba(124,95,255,0.12)">
@@ -915,6 +921,17 @@ body::after {
     <div class="sp-row"><span>🟡 Aktiv sag 2</span><span>Kata Horvath-Sarlos — hems</span></div>
     <div class="sp-row"><span>Mail</span><span>info@3byggetilbud.dk</span></div>
   </div>
+  <div class="sp-card ads-card">
+    <div class="plat-badge" style="background:rgba(10,102,194,0.12);border:1px solid rgba(10,102,194,0.4);color:#4da6ff">in LinkedIn — LinkupAPI MCP</div>
+    <div class="sp-card-name ads-card-name">LinkedIn Automation via Claude</div>
+    <div class="sp-row"><span>MCP Server</span><span style="color:var(--blue)">mcp.linkupapi.com</span></div>
+    <div class="sp-row"><span>Status</span><span class="warn">⏳ Afventer API-nøgle</span></div>
+    <div class="sp-row"><span>Funktioner</span><span style="font-size:8.5px">Søg profiler · connect requests · beskeder · email finder</span></div>
+    <div class="sp-row"><span>Plan</span><span style="font-size:9px">Basic — 500 credits/md</span></div>
+    <div class="sp-row"><span>Pris</span><span class="price-blue">$29/md (~200 kr)</span></div>
+    <div class="sp-row"><span>Aktivering</span><span style="font-size:8.5px;color:var(--amber)">Sign up på linkupapi.com → giv mig API-nøglen</span></div>
+  </div>
+
   <div class="sp-total ads-total"><div><div class="sp-total-lbl">Total / måned</div><div class="sp-total-sub">Meta + Instagram + Adwise SEO</div></div><div class="sp-total-val ads-total-val">~7.367 kr</div></div>
   <div class="sp-total ads-total"><div><div class="sp-total-lbl">Total / år</div><div class="sp-total-sub">Inkl. Generaxion Google Ads</div></div><div class="sp-total-val ads-total-val">~108.404 kr</div></div>
 </div>
@@ -1177,6 +1194,7 @@ const conns=[
   ['b-ads','b-insta',        '#ff9000'],
   ['b-ads','b-anmeld',       '#ff9000'],
   ['b-ads','b-3bt-bubble',   '#ff9000'],
+  ['b-ads','b-linkedin',     '#0a66c2'],
   // Online & IT children
   ['b-online','b-webflow',   '#7c5fff'],
   ['b-online','b-netgig',    '#7c5fff'],
@@ -1270,6 +1288,7 @@ const tipData={
   'b-insta':     {t:'Instagram',                   b:'✅ Følger-kampagne aktiv\n@genno.dk · ID 17841460234013696',          p:'50 DKK/dag'},
   'b-anmeld':    {t:'🔨 AnmeldHåndværker',         b:'⚠️ ELITE-STATUS TABT 26. maj!\nKrav: 3 anmeldelser &lt;6 mdr + snit ≥4.0\nBed kunder om at skrive anmeldelse nu!',        p:'★ 5.0 — Elite tabt ⚠️'},
   'b-3bt-bubble':{t:'🏗 3bygtilbud.dk',           b:'🟡 Oliver Heldmann\n   Vægflytning · finder tidspunkt\n\n🟡 Kata Horvath-Sarlos\n   Højseng/hems · tilbud mangler',        hint:'Klik for at åbne'},
+  'b-linkedin':  {t:'LinkedIn — LinkupAPI MCP',   b:'⏳ Afventer API-nøgle\nMCP server: mcp.linkupapi.com\n20 tools: søg profiler, send beskeder,\nconnect requests, email finder',        p:'$29/md — klar til aktivering'},
   'b-online':    {t:'💻 Online & IT',              b:'Website, mail, AI-tools, kode'},
   'b-webflow':   {t:'Webflow — Website',           b:'gennorenovering.dk\nCMS + hosting\n⚠️ Opdater adresse: Laurids Skaus Gade 5',               p:'Abonnement'},
   'b-netgig':    {t:'Netgiganten — Mail Hosting',  b:'Emailhosting for genno.dk\ngenno@genno.dk og aliasser',               p:'Abonnement'},
@@ -1314,7 +1333,7 @@ function closeAll(){[insPanel,adsPanel,finPanel,inboxPanel,agentsPanel].forEach(
 document.getElementById('ins-close').addEventListener('click',()=>insPanel.classList.remove('open'));
 
 // Ads / Online Presence
-['b-ads','b-meta','b-insta','b-adwise','b-gene','b-anmeld','b-3bt-bubble'].forEach(id=>{
+['b-ads','b-meta','b-insta','b-adwise','b-gene','b-anmeld','b-3bt-bubble','b-linkedin'].forEach(id=>{
   const el=document.getElementById(id);
   if(el) el.addEventListener('click',()=>{closeAll();adsPanel.classList.add('open');});
 });
