@@ -1315,15 +1315,16 @@ function renderInboxFeed(){
     return;
   }
   const AM={
-    'MØDE':     {cls:'action-møde',    lbl:'📅 MØDE'},
-    'AFTALE':   {cls:'action-møde',    lbl:'📅 AFTALE'},
-    'DEADLINE': {cls:'action-deadline',lbl:'⚠️ DEADLINE'},
-    'NY_KUNDE': {cls:'action-lead',    lbl:'🧲 NY KUNDE'},
-    'LEAD':     {cls:'action-lead',    lbl:'🧲 LEAD'},
-    'REGNSKAB': {cls:'action-regnskab',lbl:'💶 REGNSKAB'},
+    'MØDE':      {cls:'action-møde',    lbl:'📅 MØDE'},
+    'AFTALE':    {cls:'action-møde',    lbl:'📅 AFTALE'},
+    'DEADLINE':  {cls:'action-deadline',lbl:'⚠️ DEADLINE'},
+    'PARKERING': {cls:'action-deadline',lbl:'🅿️ PARKERING'},
+    'NY_KUNDE':  {cls:'action-lead',    lbl:'🧲 NY KUNDE'},
+    'LEAD':      {cls:'action-lead',    lbl:'🧲 LEAD'},
+    'REGNSKAB':  {cls:'action-regnskab',lbl:'💶 REGNSKAB'},
     'LEVERANDØR':{cls:'action-regnskab',lbl:'🏗 LEVERANDØR'},
-    'REVISOR':  {cls:'action-regnskab',lbl:'📊 REVISOR'},
-    'VIGTIG':   {cls:'action-vigtig',  lbl:'🔔 VIGTIG'},
+    'REVISOR':   {cls:'action-regnskab',lbl:'📊 REVISOR'},
+    'VIGTIG':    {cls:'action-vigtig',  lbl:'🔔 VIGTIG'},
   };
   container.innerHTML=feed.map(item=>{
     const am=AM[item.action]||{cls:'action-vigtig',lbl:'📌 '+(item.action||'?')};
